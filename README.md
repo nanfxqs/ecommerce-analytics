@@ -9,7 +9,7 @@
 宿主机先启动现有集群和三个 Kafka broker，确认 SSH `h1` 可用；不要替换已有 Hadoop/Java/Kafka 配置。需要 `uv`、curl、tar、SSH。安装只在 edge 节点 `~/opt` 添加独立运行时：
 
 ```bash
-uv sync --python 3.11 --extra spark --extra dev --frozen
+uv sync --python 3.11.16 --extra spark --extra dev --frozen
 scripts/install-edge-runtime.sh h1
 ssh h1 'mkdir -p ~/opt/ecommerce-analytics ~/opt/retailrocket-source-v2'
 scp -r retailrocket scripts h1:~/opt/ecommerce-analytics/
