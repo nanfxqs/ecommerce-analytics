@@ -78,7 +78,7 @@ def _commit_delta(batch, batch_id, output, run_id):
         if not _exists(spark,raw_path+'/_SUCCESS'):
             fs,path=_filesystem(spark,raw_path)
             if fs.exists(path):fs.delete(path,True)
-            batch.filter("kind = 'message'").select(F.col('payload').alias('value'),'topic','partition','offset').write.parquet(raw_path)
+            batch.filter("kind = 'message'").select(F.col('payload').alias('value'),'topic','partition','offset').coalesce(2).write.parquet(raw_path)
         quality=snapshot['quality']
         counts={kind:0 for kind in ['source','content','visitor','message']}
         daily={(row['event_date'],row['event']):row['count'] for row in snapshot['daily']}
