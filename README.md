@@ -153,4 +153,4 @@ uv run python -m retailrocket.api --store /operator/published \
   --cluster-config /operator/local-cluster.json --poll-seconds 0.25
 ```
 
-edge 的正常输入 profile 设置 `observation_interval_seconds: 0.1`、`wait_for_stream_ready: true`、`cursor_flush_records: 100`、`cursor_flush_seconds: 1`，小样本默认2个状态分区。全量突发 profile 使用 `max_offsets: 100000`、默认24个状态分区；切换操作者配置前必须确认没有活动轮次，恢复时保持原状态分区数。完整配置、普通负载速率及验收结果见 [V2 运行记录](docs/operations/v2-acceptance.md)。上述较低后台等待不改变页面每2秒轮询的行为，也不并发启动无界 SSH 查询。
+edge 的正常输入 profile 设置 `observation_interval_seconds: 0.1`、`wait_for_stream_ready: true`、`cursor_flush_records: 100`、`cursor_flush_seconds: 1`、`rocksdb_changelog: true`，小样本默认2个状态分区。全量突发 profile 使用 `max_offsets: 100000`、默认24个状态分区及本次已验收的 `rocksdb_changelog: false`；切换操作者配置前必须确认没有活动轮次，恢复时保持原状态分区数。完整配置、普通负载速率及验收结果见 [V2 运行记录](docs/operations/v2-acceptance.md)。上述较低后台等待不改变页面每2秒轮询的行为，也不并发启动无界 SSH 查询。

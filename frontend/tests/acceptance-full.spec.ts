@@ -18,6 +18,8 @@ test('full registered input becomes complete history and realtime view without l
   await expect(page.getByTestId('quality-suspected_duplicate_count')).toHaveText('460');
   await page.getByRole('menuitem', { name: '实时监控' }).click();
   await expect(page.getByText('完整历史分析已通过校验并发布')).toBeVisible();
+  await expect(page.getByTestId('physical-messages')).toHaveText('2,756,101');
+  await expect(page.getByTestId('source-cursor')).toHaveText('2,756,101');
   await expect(page.getByTestId('live-valid')).toHaveText('2,756,101');
   await expect(page.getByTestId('live-visitors')).toHaveText('1,407,580');
   await page.screenshot({ path: '/tmp/ecommerce-v2-agent/acceptance-full-browser.png', fullPage: true });

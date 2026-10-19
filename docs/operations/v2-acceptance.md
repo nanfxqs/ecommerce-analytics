@@ -17,6 +17,7 @@ worker operator JSON 支持：
 | `wait_for_stream_ready` | false | 正常延迟验收true |
 | `audit_ack_log` | false | 正常延迟验收true |
 | `observation_interval_seconds` | 1 | 正常延迟验收0.1 |
+| `rocksdb_changelog` | false | 正常延迟验收true；全量突发保持原false |
 
 `stream_profile` 固定轮次状态分区数；恢复拒绝改变分区配置，旧版未记录 profile 的检查点按原2分区处理。更改分区数创建新轮次，不迁移或覆盖旧检查点。游标批量落盘仅影响故障重发上界，源身份精确去重保证结果；暂停、停止、EOF 强制落盘。正常验收的 readiness 在专属空 topic 上等待 executor 注册与空查询预热后才允许生产，第一条 ACK 也纳入统计，没有隐藏数据预热或启动样本排除。
 
@@ -57,3 +58,8 @@ python scripts/benchmark-cursor.py --help
 
 
 120秒最终观察路径预检的607条普通窗口 ACK 全部匹配首次页面绘制，但P95保守上界13621.7ms，未达到10秒；原始证据保留，未直接开始900秒。故意关闭浏览器15秒测试独立通过，后台源游标629→712、提交量610→682，重新打开同轮次后结果可见，提前停止后751条消息排空且旧完整历史保持不变。后续优化使用上述0.1秒驱动观察与0.25秒后台等待，并删除旧 Spark 样本收集动作；新的真实预检及900秒正式结果待完成，不下调目标。
+
+
+增量检查点单项验证使用 Spark 3.5.6 官方支持的 `spark.sql.streaming.stateStore.rocksdb.changelogCheckpointing.enabled=true`（[官方说明](https://spark.apache.org/docs/3.5.6/structured-streaming-programming-guide.html#rocksdb-state-store-changelog-checkpointing)）。它把本批状态变化持久化并周期生成后台快照，不改变精确去重或提交 offset 的一致性。保持2状态分区、原始输出布局、资源和调度配置不变后，状态提交由约800–1400ms降到约90–250ms，warm trigger约2.8–4秒。该值是作业诊断，不替代实际浏览器P95。
+
+真实同轮恢复已通过：`v2-6af43e90fc5e4ff0a3d997e639c5ee1e` 应用0023→0024，ACK200后游标199、物理消息203；同一已有状态的检查点手动恢复后，359唯一有效源记录对应363物理消息、精确重试4，积压0，提前停止不发布部分历史。新 profile 固定检查点模式；旧未记录模式的 profile 归一为false。该故障阶段独立报告，不计入正常性能。首次尝试另遇新topic元数据传播暂不可见，cursor0且无Spark；新增仅启动创建阶段的有界等待并保留失败目录，观察/恢复仍对缺失topic报错。
