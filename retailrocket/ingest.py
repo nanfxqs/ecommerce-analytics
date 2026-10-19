@@ -2,11 +2,15 @@
 import csv
 import hashlib
 import json
+import shutil
+from collections import deque
 from datetime import datetime, timezone
 from pathlib import Path
 
 
 def prepare(source, destination, version, limit=None):
+    if limit is not None and limit < 0:
+        raise ValueError("limit must be nonnegative")
     source, destination = Path(source), Path(destination)
     destination.mkdir(parents=True, exist_ok=False)
     digest = hashlib.sha256()
@@ -14,6 +18,7 @@ def prepare(source, destination, version, limit=None):
         for chunk in iter(lambda: stream.read(1024 * 1024), b''):
             digest.update(chunk)
     checksum = digest.hexdigest()
+    shutil.copyfile(source, destination / "source.csv")
     count = 0
     with source.open(newline='') as stream, (destination / 'events.jsonl').open('w') as output:
         for line, row in enumerate(csv.DictReader(stream), 2):
@@ -25,7 +30,7 @@ def prepare(source, destination, version, limit=None):
             count += 1
     manifest = dict(dataset_version=version, source_file=source.name, source_sha256=checksum,
                     rows=count, first_source_line=2 if count else None, last_source_line=count + 1 if count else None,
-                    events='events.jsonl', mode='historical_replay', timezone='UTC')
+                    events='events.jsonl', raw_source='source.csv', mode='historical_replay', timezone='UTC')
     path = destination / 'input.json'
     path.write_text(json.dumps(manifest, indent=2))
     return path
@@ -47,14 +52,21 @@ def replay(manifest, brokers, topic, batch_id, output):
         raise ValueError('Topic must exist before replay')
     assigned = [TopicPartition(topic, p) for p in sorted(partitions)]
     start = consumer.end_offsets(assigned)
-    producer = KafkaProducer(bootstrap_servers=brokers, acks='all', retries=10,
-                             value_serializer=lambda value: json.dumps(value).encode())
+    producer = None
     count = 0
     try:
+        producer = KafkaProducer(bootstrap_servers=brokers, acks='all', retries=10,
+                                 linger_ms=20, batch_size=65536,
+                                 value_serializer=lambda value: json.dumps(value).encode())
+        pending = deque()
         for row in records(manifest):
             row.update(batch_id=batch_id, replay_time=datetime.now(timezone.utc).isoformat())
-            producer.send(topic, key=row['source_record_id'].encode(), value=row).get(timeout=120)
+            pending.append(producer.send(topic, key=row['source_record_id'].encode(), value=row))
+            if len(pending) >= 10000:
+                pending.popleft().get(timeout=120)
             count += 1
+        for future in pending:
+            future.get(timeout=120)
         producer.flush(timeout=120)
         end = consumer.end_offsets(assigned)
         result = dict(batch_id=batch_id, topic=topic, rows=count, replay_confirmed=True,
@@ -66,5 +78,6 @@ def replay(manifest, brokers, topic, batch_id, output):
         Path(output).write_text(json.dumps(result, indent=2))
         return result
     finally:
-        producer.close()
+        if producer is not None:
+            producer.close()
         consumer.close()
