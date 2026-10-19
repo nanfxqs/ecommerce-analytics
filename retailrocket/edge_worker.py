@@ -156,7 +156,7 @@ def work(config,run_id,resume=False):
     state.update(phase='starting', complete=False)
     state.pop('error',None)
     atomic(root/'state.json',state)
-    stream=None; producer=None; consumer=None
+    stream=None; producer=None; consumer=None; checkpoint=None; ack_log=None
     try:
         manifest,metadata,events=dataset(config,run['dataset'])
         from kafka import KafkaProducer
@@ -179,14 +179,35 @@ def work(config,run_id,resume=False):
             consumer=kafka(config); starting=ends(consumer,run_id)
         atomic(root/'input.json',metadata)
         command=[str(Path(config['code'])/'scripts/submit-stream.sh'),'--brokers',config['brokers'],'--topic',run_id,'--run-id',run_id,'--output',state['output'],'--checkpoint',state['checkpoint'],'--max-offsets',str(config.get('max_offsets',1000)),'--stop-file',str(root/'stop-stream'),'--observation-file',str(root/'stream-observation.json')]
+        if config.get('wait_for_stream_ready'):command+=['--ready-file',str(root/'stream-ready.json')]
         log=(root/'stream.log').open('a')
         environment=dict(os.environ); environment['RETAILROCKET_SHUFFLE_PARTITIONS']='2'
         stream=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,env=environment,start_new_session=True)
         from retailrocket.edge_recovery import process_identity
         state.update(phase='running',stream_pid=stream.pid,stream_identity=process_identity(stream.pid),starting=starting,input=metadata,stream_released=False)
         atomic(root/'state.json',state)
+        if config.get('wait_for_stream_ready'):
+            state['phase']='starting';atomic(root/'state.json',state)
+            deadline=time.monotonic()+240
+            while not (root/'stream-ready.json').exists():
+                if stream.poll() is not None:raise RuntimeError('Streaming driver exited before readiness')
+                if time.monotonic()>deadline:raise TimeoutError('Streaming readiness timed out')
+                time.sleep(.1)
+            if json.loads((root/'stream-ready.json').read_text())['run_id']!=run_id:raise ValueError('Readiness identity mismatch')
+            state.update(phase='running',ready_at=datetime.now(timezone.utc).isoformat());atomic(root/'state.json',state)
         producer=KafkaProducer(bootstrap_servers=config['brokers'].split(','),acks='all',retries=10,value_serializer=lambda row:json.dumps(row).encode(),linger_ms=20,batch_size=65536)
+        from retailrocket.cursor_checkpoint import CursorCheckpoint
+        checkpoint=CursorCheckpoint(state,lambda value:atomic(root/'state.json',value),
+            records=config.get('cursor_flush_records',1),seconds=config.get('cursor_flush_seconds',1))
         began=time.monotonic(); pending=deque(); confirmed=state.get('cursor',0); initial_confirmed=confirmed
+        if config.get('audit_ack_log'):
+            from threading import Lock
+            ack_lock=Lock();ack_log=(root/'acknowledgements.jsonl').open('a',buffering=1)
+            def traced_ack(metadata,position,record_id):
+                record=dict(run_id=run_id,source_line=position+1,source_record_id=record_id,
+                    topic=metadata.topic,partition=metadata.partition,offset=metadata.offset,
+                    ack_monotonic_ns=time.monotonic_ns(),ack_wall_ns=time.time_ns())
+                with ack_lock:ack_log.write(json.dumps(record)+'\n')
         def acknowledge():
             nonlocal confirmed
             position,future=pending.popleft(); future.get(timeout=120)
@@ -196,8 +217,7 @@ def work(config,run_id,resume=False):
                 atomic(crash_marker, dict(position=position,run_id=run_id))
                 os._exit(86)
             confirmed+=1
-            state.update(cursor=position,confirmed=confirmed,rate=(confirmed-initial_confirmed)/max(.001,time.monotonic()-began))
-            atomic(root/'state.json',state)
+            checkpoint.acknowledged(cursor=position,confirmed=confirmed,rate=(confirmed-initial_confirmed)/max(.001,time.monotonic()-began))
         def desired():
             return json.loads((root/'control.json').read_text()) if (root/'control.json').exists() else None
         stopped = state.get('early_stopped',False)
@@ -218,9 +238,8 @@ def work(config,run_id,resume=False):
                             acknowledge()
                         target_phase = 'paused' if action == 'pause' else 'stopping'
                         if state['phase'] != target_phase or state.get('last_control', {}).get('operation_id') != intent['operation_id']:
-                            state['last_control'] = dict(intent, acknowledged=True)
-                            state['phase'] = target_phase
-                            atomic(root/'state.json', state)
+                            state.update(last_control=dict(intent,acknowledged=True),phase=target_phase)
+                            checkpoint.save()
                         if action == 'stop':
                             stopped = True
                             break
@@ -229,7 +248,7 @@ def work(config,run_id,resume=False):
                         continue
                     if state['phase'] == 'paused':
                         state.update(phase='running', last_control=dict(intent, acknowledged=True))
-                        atomic(root/'state.json', state)
+                        checkpoint.save()
                     if time.monotonic() >= next_send:
                         break
                     time.sleep(max(0, min(.1, next_send-time.monotonic())))
@@ -237,10 +256,12 @@ def work(config,run_id,resume=False):
                     break
                 next_send = time.monotonic() + 1/run['requested_rate']
                 row['replay_time'] = datetime.now(timezone.utc).isoformat()
-                pending.append((position,producer.send(run_id,key=row['source_record_id'].encode(),value=row)))
+                future=producer.send(run_id,key=row['source_record_id'].encode(),value=row)
+                if ack_log:future.add_callback(traced_ack,position,row['source_record_id'])
+                pending.append((position,future))
                 if len(pending)>=min(1000,max(1,int(run['requested_rate']))): acknowledge()
             while pending: acknowledge()
-        producer.flush(timeout=120); final=ends(consumer,run_id)
+        producer.flush(timeout=120); checkpoint.save(); final=ends(consumer,run_id)
         if resume and 'final' in state and final != state['final']:
             raise ValueError('Final Kafka range changed after producer EOF')
         replay=dict(batch_id=run_id,topic=run_id,rows=sum(final[p]-starting[p] for p in final),replay_confirmed=True,startingOffsets={run_id:starting},endingOffsets={run_id:final},input=metadata)
@@ -252,7 +273,7 @@ def work(config,run_id,resume=False):
             state.update(phase='draining', final=final, early_stopped=stopped)
             if intent:
                 state['last_control'] = dict(intent, acknowledged=True)
-            atomic(root/'state.json',state)
+            checkpoint.save()
         deadline=time.monotonic()+config.get('drain_timeout',1800)
         while True:
             if stream.poll() is not None: raise RuntimeError('Stream exited before committed drain')
@@ -264,15 +285,19 @@ def work(config,run_id,resume=False):
         stream.wait(timeout=120)
         if stream.returncode: raise RuntimeError('Streaming shutdown failed')
         state.update(phase='stopped' if stopped else 'completed',complete=not stopped,stream_released=True)
-        atomic(root/'state.json',state)
+        checkpoint.save()
     except Exception as error:
-        state.update(phase='failed',error=str(error)); atomic(root/'state.json',state)
+        state.update(phase='failed',error=str(error))
+        if checkpoint:checkpoint.save()
+        else:atomic(root/'state.json',state)
         if stream and stream.poll() is None:
             (root/'stop-stream').touch()
             try: stream.wait(timeout=60)
             except subprocess.TimeoutExpired: os.killpg(stream.pid,signal.SIGTERM)
     finally:
+        if checkpoint:checkpoint.close()
         if producer: producer.close(timeout=30)
+        if ack_log:ack_log.close()
         if consumer: consumer.close()
         lease.close()
 

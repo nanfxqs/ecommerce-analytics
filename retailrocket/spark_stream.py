@@ -236,6 +236,7 @@ def main():
     parser.add_argument('--max-offsets', type=int, default=10000)
     parser.add_argument('--trigger-seconds', type=int, default=2)
     parser.add_argument('--available-now', action='store_true')
+    parser.add_argument('--ready-file', help='Driver-local readiness barrier before producer starts')
     parser.add_argument('--observation-file', help='Atomic driver-local committed result cache')
     parser.add_argument('--stop-file', help='Driver-local graceful shutdown request')
     parser.add_argument('--evidence', help='Driver-local JSON evidence after query exits successfully')
@@ -250,6 +251,18 @@ def main():
                              checkpoint=args.checkpoint, run_id=args.run_id,
                              starting_offsets=args.starting_offsets, max_offsets=args.max_offsets,
                              trigger_seconds=args.trigger_seconds, available_now=args.available_now)
+        if args.ready_file:
+            # No producer ACK is hidden: wait on an empty dedicated topic before
+            # allowing normal-load production, including executor registration.
+            import time
+            deadline=time.monotonic()+180
+            while spark.sparkContext._jsc.sc().getExecutorMemoryStatus().size()<3:
+                if time.monotonic()>deadline:raise TimeoutError('Executors did not become ready')
+                time.sleep(.1)
+            query.processAllAvailable()
+            marker=Path(args.ready_file);temporary=marker.with_suffix('.tmp')
+            temporary.write_text(json.dumps(dict(run_id=args.run_id,application_id=spark.sparkContext.applicationId)))
+            temporary.replace(marker)
         if args.stop_file or args.observation_file:
             while query.isActive:
                 if args.observation_file:
