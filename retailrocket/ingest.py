@@ -6,6 +6,7 @@ import shutil
 from collections import deque
 from datetime import datetime, timezone
 from pathlib import Path
+from retailrocket.provenance import file_sha256
 
 
 def prepare(source, destination, version, limit=None):
@@ -13,11 +14,7 @@ def prepare(source, destination, version, limit=None):
         raise ValueError("limit must be nonnegative")
     source, destination = Path(source), Path(destination)
     destination.mkdir(parents=True, exist_ok=False)
-    digest = hashlib.sha256()
-    with source.open('rb') as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b''):
-            digest.update(chunk)
-    checksum = digest.hexdigest()
+    checksum = file_sha256(source)
     shutil.copyfile(source, destination / "source.csv")
     count = 0
     with source.open(newline='') as stream, (destination / 'events.jsonl').open('w') as output:
