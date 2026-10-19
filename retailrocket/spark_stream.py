@@ -162,6 +162,7 @@ def main():
     parser.add_argument('--max-offsets', type=int, default=10000)
     parser.add_argument('--trigger-seconds', type=int, default=2)
     parser.add_argument('--available-now', action='store_true')
+    parser.add_argument('--stop-file', help='Driver-local graceful shutdown request')
     parser.add_argument('--evidence', help='Driver-local JSON evidence after query exits successfully')
     args = parser.parse_args()
     spark = SparkSession.builder.appName('retailrocket-stream-' + args.run_id).getOrCreate()
@@ -174,7 +175,16 @@ def main():
                              checkpoint=args.checkpoint, run_id=args.run_id,
                              starting_offsets=args.starting_offsets, max_offsets=args.max_offsets,
                              trigger_seconds=args.trigger_seconds, available_now=args.available_now)
-        query.awaitTermination()
+        if args.stop_file:
+            while query.isActive:
+                if Path(args.stop_file).exists():
+                    query.stop()
+                    break
+                query.awaitTermination(1)
+            if query.exception():
+                raise RuntimeError(str(query.exception()))
+        else:
+            query.awaitTermination()
         if args.evidence:
             Path(args.evidence).write_text(json.dumps(dict(snapshot=read_snapshot(spark,args.output),
                 progress=query.recentProgress), indent=2))

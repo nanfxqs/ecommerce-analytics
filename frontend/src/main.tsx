@@ -6,6 +6,7 @@ import * as echarts from 'echarts';
 import { type HistoryResponse, type Overview } from './api';
 import { HistoryPages, fetchHistoryPage, historyLabels, initialHistoryOptions, type HistoryPage } from './HistoryPages';
 import './style.css';
+import { ReplayPage } from './ReplayPage';
 
 const { Title, Text } = Typography;
 function Trend({ rows }: { rows: Overview['trend'] }) {
@@ -24,6 +25,7 @@ function Trend({ rows }: { rows: Overview['trend'] }) {
 }
 
 function App() {
+  const [replay, setReplay] = useState(false);
   const [result, setResult] = useState<HistoryResponse<unknown> | null>(null);
   const [page, setPage] = useState<HistoryPage>('overview');
   const [options, setOptions] = useState(initialHistoryOptions);
@@ -32,6 +34,7 @@ function App() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    if (replay) return;
     let live = true;
     let controller: AbortController | undefined;
     let timer: ReturnType<typeof setTimeout>;
@@ -50,7 +53,7 @@ function App() {
     };
     setLoading(true); void refresh();
     return () => { live = false; controller?.abort(); clearTimeout(timer); };
-  }, [range, page, options]);
+  }, [range, page, options, replay]);
   const snapshot = result?.snapshot;
   const data = result?.data as Overview | null;
   const apply = () => {
@@ -62,10 +65,11 @@ function App() {
     <Layout className="shell">
       <Layout.Sider theme="light" width={220} className="sidebar">
         <div className="brand">Retailrocket<Text type="secondary">电商行为分析</Text></div>
-        <Menu selectedKeys={[page]} onClick={({ key }) => { if (key !== page) { setResult(null); setPage(key as HistoryPage); } }} items={[{ key: 'history', type: 'group', label: '历史分析', children: Object.entries(historyLabels).map(([key, label]) => ({ key, label })) }]} />
+        <Menu selectedKeys={[replay ? 'replay' : page]} onClick={({ key }) => { setReplay(key === 'replay'); if (key !== 'replay' && key !== page) { setResult(null); setPage(key as HistoryPage); } }} items={[{ key: 'replay', label: '实时监控' }, { key: 'history', type: 'group', label: '历史分析', children: Object.entries(historyLabels).map(([key, label]) => ({ key, label })) }]} />
         <div className="sidebar-note">公开历史数据<br />UTC 事件时间</div>
       </Layout.Sider>
       <Layout.Content className="content">
+        {replay ? <ReplayPage /> : <>
         <header><div><Text type="secondary">分析工作台 / 历史分析</Text><Title level={2}>{historyLabels[page]}</Title></div><Tag color="blue">历史数据回放</Tag></header>
         <Text type="secondary">浏览、加购与购买行为的历史统计，访客以 visitorid 区分。</Text>
         {error && <Alert type="error" showIcon message={error} className="section" />}
@@ -80,6 +84,7 @@ function App() {
           </> : <Card className="section"><Empty description="无有效事件数据" /></Card>}
         </>}
         <footer>Retailrocket 公开历史数据 · 页面每 2 秒查询已发布结果 · 历史活动不代表当前访问</footer>
+        </>}
       </Layout.Content>
     </Layout>
   </ConfigProvider>;
