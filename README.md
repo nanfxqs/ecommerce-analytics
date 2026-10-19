@@ -108,3 +108,30 @@ JAVA_HOME=/path/to/jdk8 PYSPARK_PYTHON=$PWD/.venv/bin/python uv run --extra spar
 ```
 
 固定全量输入的事件数应为：浏览2,664,312，加购69,332，购买22,457。分类覆盖率、异常与疑似重复数以实际批次质量输出为准。资源参数为两个512MiB heap+384MiB overhead executor、一个512MiB AM，每个1core，默认24个 shuffle 分区；`RETAILROCKET_SHUFFLE_PARTITIONS` 可按实测调整。保留既有 YARN 内存校验，JVM class-space/code-cache 分别限制64MiB。不要宣称无依据的性能保证。
+
+## V2 本机 React 历史概览
+
+V2 页面查询既有成功发布的不可变分析批次；刷新页面不会启动 Spark。两个服务均绑定 `127.0.0.1`。保持下列两个终端运行：
+
+```bash
+uv sync --extra dev
+uv run python -m retailrocket.api --store /home/nanfl/.cache/retailrocket-published
+```
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+浏览器打开 `http://127.0.0.1:5173`。日期为 UTC，包含结束日全天；页面每 2 秒查询。`npm run build` 检查 TypeScript 并生成静态产物，`npm run preview` 可在本机预览构建（API 仍须运行）。
+
+HTTP 与浏览器测试复用经过完整 Spark 处理及发布校验的已知输入，不能用这些本地测试替代 YARN 分布式验收：
+
+```bash
+JAVA_HOME=/path/to/jdk8 PYSPARK_PYTHON=$PWD/.venv/bin/python uv run --extra spark --extra dev pytest tests/test_history_api.py -q
+JAVA_HOME=/path/to/jdk8 PYSPARK_PYTHON=$PWD/.venv/bin/python uv run --extra spark python tests/history_fixture.py .scratch/browser-history
+npm --prefix frontend run test:e2e
+```
+
+浏览器测试使用 `/usr/bin/chromium`，也可通过 `CHROMIUM_PATH` 指定现有 Chromium。测试占用本机 8000 和 5173 端口，运行前停止相同端口的开发服务。再次生成夹具时使用新的目录或保留原有夹具直接运行浏览器测试。
