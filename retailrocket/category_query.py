@@ -7,7 +7,7 @@ def category_analysis(directory, start, end):
     with duckdb.connect() as conn:
         def aggregate(name, key):
             rows = conn.execute(f'''SELECT {key},sum(events)::BIGINT events,
-                sum(views)::BIGINT views,sum(addtocarts)::BIGINT addtocarts,
+                sum("views")::BIGINT AS "views",sum(addtocarts)::BIGINT addtocarts,
                 sum(transactions)::BIGINT transactions FROM read_parquet(?)
                 WHERE event_date BETWEEN cast(? AS DATE) AND cast(? AS DATE)
                 GROUP BY {key} ORDER BY events DESC,{key}''',

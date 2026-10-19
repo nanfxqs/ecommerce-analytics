@@ -64,7 +64,7 @@ def analyze(raw, replay, output, reuse_raw=False, references=None):
                    retry_count=consumed - unique_count, suspected_duplicate_count=suspected)
     if references:
         associated = valid.filter(F.col('categoryid') != 'unknown').count()
-        quality.update(category_associated_count=associated, category_unknown_count=valid_count-associated, category_coverage=associated/valid_count if valid_count else None)
+        quality.update(category_associated_count=associated, category_unknown_count=valid_count-associated, category_coverage=associated/valid_count if valid_count else 0.0)
     valid.write.mode('overwrite').parquet(output + '/events')
     valid.select(F.to_date('event_time').alias('event_date'), 'visitorid', 'event').distinct().write.mode('overwrite').parquet(output + '/visitor_events')
     daily = valid.withColumn('event_date', F.to_date('event_time'))
