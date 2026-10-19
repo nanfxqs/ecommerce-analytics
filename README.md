@@ -141,3 +141,6 @@ V2 历史分析导航还提供购买关联、分类偏好、用户画像及数�
 V2 产物默认永久保留。需要释放空间时，使用[离线手动清理命令](docs/operations/cleanup.md)：先停止 API 并等待集群空闲，默认预览，显式 `--apply` 才删除已结束轮次。当前发布批次、活动轮次及未知路径受保护。
 
 正常完整回放自动顺序执行 YARN 历史分析、导出传回和完整校验发布。需要在 edge 注册参考文件校验和；配置、阶段与失败重试见[自动历史发布说明](docs/operations/automatic-publication.md)。提前停止不进入历史发布，失败继续展示此前成功批次。
+
+
+V2 实时回放、控制、手动恢复与最终验收分别见 [回放说明](docs/operations/replay.md)、[流处理说明](docs/operations/streaming.md) 和 [验收运行记录](docs/operations/v2-acceptance.md)。流任务使用两个 512MiB heap + 512MiB overhead executor、128MiB RocksDB 共享原生缓存及 512MiB AM；历史任务仍采用原批处理资源。分区数影响完整精确状态的资源压力：小样本默认 2，全量部署使用已验证的 24；检查点固定状态分区数，调整须使用新隔离轮次。未完成最终全量与 15 分钟浏览器性能验收前，不声称 V2 已完成或保证实测之外的速率。

@@ -159,6 +159,14 @@ def work(config,run_id,resume=False):
     stream=None; producer=None; consumer=None; checkpoint=None; ack_log=None
     try:
         manifest,metadata,events=dataset(config,run['dataset'])
+        partitions=config.get('shuffle_partitions',24 if run['dataset']=='full' else 2)
+        if type(partitions) is not int or not 1 <= partitions <= 200:
+            raise ValueError('shuffle_partitions must be an integer in 1..200')
+        profile=dict(shuffle_partitions=partitions)
+        if resume and state.get('stream_profile',dict(shuffle_partitions=2)) != profile:
+            raise ValueError('Stream profile changed; checkpoint state partitions cannot migrate')
+        state['stream_profile']=profile
+        atomic(root/'state.json',state)
         from kafka import KafkaProducer
         from kafka.admin import KafkaAdminClient,NewTopic
         if resume:
@@ -179,9 +187,11 @@ def work(config,run_id,resume=False):
             consumer=kafka(config); starting=ends(consumer,run_id)
         atomic(root/'input.json',metadata)
         command=[str(Path(config['code'])/'scripts/submit-stream.sh'),'--brokers',config['brokers'],'--topic',run_id,'--run-id',run_id,'--output',state['output'],'--checkpoint',state['checkpoint'],'--max-offsets',str(config.get('max_offsets',1000)),'--stop-file',str(root/'stop-stream'),'--observation-file',str(root/'stream-observation.json')]
-        if config.get('wait_for_stream_ready'):command+=['--ready-file',str(root/'stream-ready.json')]
+        if config.get('wait_for_stream_ready'):
+            (root/'stream-ready.json').unlink(missing_ok=True)
+            command+=['--ready-file',str(root/'stream-ready.json')]
         log=(root/'stream.log').open('a')
-        environment=dict(os.environ); environment['RETAILROCKET_SHUFFLE_PARTITIONS']='2'
+        environment=dict(os.environ); environment['RETAILROCKET_SHUFFLE_PARTITIONS']=str(partitions)
         stream=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,env=environment,start_new_session=True)
         from retailrocket.edge_recovery import process_identity
         state.update(phase='running',stream_pid=stream.pid,stream_identity=process_identity(stream.pid),starting=starting,input=metadata,stream_released=False)
