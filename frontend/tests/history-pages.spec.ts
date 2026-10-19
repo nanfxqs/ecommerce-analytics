@@ -1,0 +1,43 @@
+import { test, expect } from '@playwright/test';
+test('all historical pages share UTC filters and preserve lookup, pagination and quarantine', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByText('批次 known')).toBeVisible();
+  await page.getByLabel('开始日期').fill('1970-01-01');
+  await page.getByLabel('结束日期').fill('1970-01-02');
+  await page.getByRole('button', { name: '应用日期' }).click();
+  await expect(page.getByTestId('count-view')).toHaveText('3');
+  await page.getByRole('menuitem', { name: '购买关联' }).click();
+  await expect(page.getByTestId('view-purchase-rate')).toHaveText('100.00%');
+  await expect(page.getByLabel('结束日期')).toHaveValue('1970-01-02');
+  await page.getByRole('menuitem', { name: '分类偏好' }).click();
+  await expect(page.getByText('83.33%')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'unknown', exact: true })).toBeVisible();
+  await page.getByRole('menuitem', { name: '用户画像' }).click();
+  await page.getByLabel('访客 ID（精确查询）').fill('1');
+  await page.getByRole('button', { name: '查询访客' }).click();
+  await expect(page.getByTestId('profile-total')).toHaveText('1');
+  await expect(page.getByText('分类 10 · 浏览 2 · 购买 1')).toBeVisible();
+  await page.getByLabel('访客 ID（精确查询）').fill('missing');
+  await page.getByRole('button', { name: '查询访客' }).click();
+  await expect(page.getByText('当前查询或页码无访客数据')).toBeVisible();
+  await page.getByLabel('访客 ID（精确查询）').fill('');
+  await page.getByRole('button', { name: '查询访客' }).click();
+  await page.getByLabel('页码').fill('999');
+  await page.getByRole('button', { name: '跳转页码' }).click();
+  await expect(page.getByText('当前查询或页码无访客数据')).toBeVisible();
+  await page.getByRole('menuitem', { name: '数据质量' }).click();
+  await expect(page.getByTestId('quality-invalid_count')).toHaveText('1');
+  await expect(page.getByRole('cell', { name: 'bad', exact: true })).toBeVisible();
+  await page.getByLabel('异常查看范围').selectOption('range');
+  await expect(page.getByText('该范围没有异常记录')).toBeVisible();
+  await page.getByLabel('开始日期').fill('1970-01-03');
+  await page.getByLabel('结束日期').fill('1970-01-03');
+  await page.getByRole('button', { name: '应用日期' }).click();
+  for (const name of ['购买关联', '分类偏好', '用户画像']) {
+    await page.getByRole('menuitem', { name }).click();
+    await expect(page.getByLabel('开始日期')).toHaveValue('1970-01-03');
+    if (name === '购买关联') await expect(page.getByTestId('view-purchase-rate')).toHaveText('无数据');
+    if (name === '分类偏好') await expect(page.getByText('所选日期范围无商品分类数据')).toBeVisible();
+    if (name === '用户画像') await expect(page.getByText('当前查询或页码无访客数据')).toBeVisible();
+  }
+});

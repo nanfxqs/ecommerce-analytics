@@ -104,6 +104,8 @@ def create_app(store, *, run_store=None, cluster=None, poll_seconds=2):
         except (FileNotFoundError, KeyError, OSError) as error:
             raise HTTPException(503, '已发布批次暂不可用，请检查发布存储') from error
 
+    from retailrocket.history_pages import history_router
+    app.include_router(history_router(app.state.history))
     return app
 
 
