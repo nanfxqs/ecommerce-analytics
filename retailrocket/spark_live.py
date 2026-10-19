@@ -6,25 +6,15 @@ stateless message branch retains every raw Kafka message, including retries.
 from datetime import datetime, timezone
 import json
 from pyspark.sql import functions as F
+from retailrocket.event_classification import classify_events
 from retailrocket.spark_stream import (SCHEMA, _exists, _filesystem, _commit_text,
                                       _snapshot_at, read_snapshot)
-
-
-def _classified(rows):
-    events = rows.withColumn('event_time', F.expr('''CASE
-        WHEN try_cast(timestamp AS bigint) BETWEEN -62135596800000 AND 253402300799999
-        THEN timestamp_millis(try_cast(timestamp AS bigint)) END'''))
-    return events.withColumn('invalid_reason',
-        F.when(F.col('event_time').isNull(), 'invalid_timestamp')
-        .when(F.col('visitorid').isNull() | (F.trim('visitorid') == ''), 'missing_visitor')
-        .when(F.col('itemid').isNull() | (F.trim('itemid') == ''), 'missing_item')
-        .when(F.col('event').isNull() | ~F.col('event').isin('view', 'addtocart', 'transaction'), 'invalid_event'))
 
 
 def _identities(raw):
     envelope = raw.select(F.col('value').cast('string').alias('payload'), 'topic', 'partition', 'offset')
     records = envelope.select('*', F.from_json('payload', SCHEMA).alias('r')).select('payload','topic','partition','offset','r.*')
-    canonical = _classified(records.dropDuplicates(['dataset_version','source_file','source_line']))
+    canonical = classify_events(records.dropDuplicates(['dataset_version','source_file','source_line']))
     def entity(kind, key):
         return F.struct(F.lit(kind).alias('kind'), key.alias('key'))
     source = F.to_json(F.struct('dataset_version','source_file','source_line'), {'ignoreNullFields':'false'})
@@ -53,7 +43,7 @@ def _commit_delta(batch, batch_id, output, run_id):
     try:
         # Exhaust BOTH stateful branches, including replay of an already durable
         # external snapshot. Never advance checkpoint without StateStore versions.
-        records = _classified(batch.select('*',F.from_json('payload',SCHEMA).alias('r')).select('*','r.*').drop('r'))
+        records = classify_events(batch.select('*',F.from_json('payload',SCHEMA).alias('r')).select('*','r.*').drop('r'))
         bad_identity=(F.col('batch_id').isNull() | (F.col('batch_id') != run_id) |
             F.col('source_line').isNull() | (F.col('source_line') < 2) |
             F.col('source_file').isNull() | (F.trim('source_file') == '') |

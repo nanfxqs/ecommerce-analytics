@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from pyspark.sql import SparkSession, functions as F
+from retailrocket.event_classification import classify_events
 
 SCHEMA = ('timestamp STRING,visitorid STRING,event STRING,itemid STRING,transactionid STRING,'
           'source_record_id STRING,source_line LONG,source_file STRING,dataset_version STRING,'
@@ -165,14 +166,7 @@ def commit_microbatch(raw, batch_id, output, run_id):
     if any(r.invalid_identity for r in partition_stats):
         raise ValueError('Missing source provenance or incorrect replay run identity')
     unique = records.drop('topic', 'partition', 'offset').dropDuplicates(['dataset_version', 'source_file', 'source_line'])
-    events = unique.withColumn('event_time', F.expr('''CASE
-        WHEN try_cast(timestamp AS bigint) BETWEEN -62135596800000 AND 253402300799999
-        THEN timestamp_millis(try_cast(timestamp AS bigint)) END'''))
-    reason = (F.when(F.col('event_time').isNull(), 'invalid_timestamp')
-              .when(F.col('visitorid').isNull() | (F.trim('visitorid') == ''), 'missing_visitor')
-              .when(F.col('itemid').isNull() | (F.trim('itemid') == ''), 'missing_item')
-              .when(F.col('event').isNull() | ~F.col('event').isin('view', 'addtocart', 'transaction'), 'invalid_event'))
-    events = events.withColumn('invalid_reason', reason).cache()
+    events = classify_events(unique).cache()
     try:
         consumed = sum(r.consumed for r in partition_stats)
         contents = ['timestamp', 'visitorid', 'event', 'itemid', 'transactionid']
