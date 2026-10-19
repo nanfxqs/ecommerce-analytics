@@ -77,14 +77,15 @@ class Runs:
             self._save()
             try:
                 result = self.cluster.recover(dict(state))
+                candidate = dict(state, **result)
+                if hasattr(self, '_historical_gate'):
+                    candidate = self._historical_gate(candidate)
             except Exception as error:
                 state['recovery_error'] = str(error)
                 self._save()
                 raise RuntimeError('恢复失败，原检查点及轮次已保留：' + str(error)) from error
-            state.update(result)
-            if hasattr(self, '_historical_gate'):
-                state = self._historical_gate(state)
-                self.current = state
+            state = candidate
+            self.current = state
             state.pop('recovery_error', None)
             state.pop('pending_control', None)
             state.pop('error', None)
