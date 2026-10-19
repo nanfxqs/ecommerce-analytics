@@ -3,6 +3,7 @@ import argparse
 import json
 from pathlib import Path
 from pyspark.sql import SparkSession, functions as F
+from retailrocket.event_classification import classify_events
 
 
 
@@ -49,15 +50,7 @@ def analyze(raw, replay, output, reuse_raw=False, references=None, tracking=None
         raise ValueError('Missing source provenance')
     unique = events.dropDuplicates(identity).cache()
     unique_count = unique.count()
-    # Guard before multiplying millis into Spark's microsecond representation.
-    events = unique.withColumn('event_time', F.expr('''CASE
-        WHEN try_cast(timestamp AS bigint) BETWEEN -62135596800000 AND 253402300799999
-        THEN timestamp_millis(try_cast(timestamp AS bigint)) END'''))
-    reason = (F.when(F.col('event_time').isNull(), 'invalid_timestamp')
-              .when(F.col('visitorid').isNull() | (F.trim('visitorid') == ''), 'missing_visitor')
-              .when(F.col('itemid').isNull() | (F.trim('itemid') == ''), 'missing_item')
-              .when(F.col('event').isNull() | ~F.col('event').isin('view', 'addtocart', 'transaction'), 'invalid_event'))
-    events = events.withColumn('invalid_reason', reason).cache()
+    events = classify_events(unique).cache()
     valid = events.filter(F.col('invalid_reason').isNull()).drop('invalid_reason')
     if references:
         valid, reference_metadata = associate_categories(valid, references, replay)
