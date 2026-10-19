@@ -64,11 +64,16 @@ class Runs:
             self.current['phase'] = 'recovery_required'
             self.current['control_generation'] = self.current.get('control_generation', 0) + 1
             self._save()
+        elif self.current:
+            from retailrocket.replay_monitor import restore_terminal
+            self.current=restore_terminal(self.current)
+            self._save()
         self.thread=Thread(target=self._supervise,daemon=True); self.thread.start()
     def close(self):
         self.stop.set(); self.thread.join(); self.lease.close()
     def _save(self):
-        self.current['source_cursor']=self.current.get('cursor',self.current.get('confirmed',0))
+        from retailrocket.replay_monitor import source_cursor
+        self.current['source_cursor']=source_cursor(self.current)
         if self.current['phase']!='running':self.current['rate']=0
         atomic(self.path,self.current)
         atomic(self.root/self.current['run_id']/'run.json',self.current)
@@ -160,7 +165,7 @@ class Runs:
     def _supervise(self):
         while not self.stop.wait(self.poll_seconds):
             state=self.read()
-            if not state or state['phase'] in ('completed','stopped') or (state['phase']=='failed' and state.get('failure_stage')=='history'): continue
+            if not state or state['phase'] in ('completed','stopped','published') or (state['phase']=='failed' and state.get('failure_stage')=='history'): continue
             from retailrocket.finalization import HISTORY_PHASES
             if self.finalizer and state['phase'] in HISTORY_PHASES:
                 try:
