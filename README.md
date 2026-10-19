@@ -9,6 +9,11 @@
 宿主机先启动现有集群和三个 Kafka broker，确认 SSH `h1` 可用；不要替换已有 Hadoop/Java/Kafka 配置。需要 `uv`、curl、tar、SSH。安装只在 edge 节点 `~/opt` 添加独立运行时：
 
 ```bash
+# 本机已有相邻 hadoop-cluster 仓库的情况下，复用原启停脚本
+bash ../hadoop-cluster/start-cluster.sh
+for edge in h1 h2 h3; do
+  ssh "$edge" 'export JAVA_HOME=/usr/local/jdk1.8.0_212; "$JAVA_HOME/bin/jps" | grep -q Kafka || ~/opt/kafka_2.12-3.7.0/bin/kafka-server-start.sh -daemon ~/opt/kafka_2.12-3.7.0/config/server.properties'
+done
 uv sync --python 3.11.16 --extra spark --extra dev --frozen
 scripts/install-edge-runtime.sh h1
 ssh h1 'mkdir -p ~/opt/ecommerce-analytics ~/opt/retailrocket-source-v2'

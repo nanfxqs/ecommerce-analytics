@@ -82,13 +82,13 @@ def analyze(raw, replay, output, reuse_raw=False, references=None, tracking=None
     from retailrocket.visitor_analysis import write_visitor_profiles
     write_visitor_profiles(valid, output)
     invalid.write.mode('overwrite').parquet(output + '/quarantine')
-    raw.sparkSession.createDataFrame([quality]).write.mode('overwrite').parquet(output + '/quality')
+    raw.sparkSession.range(1).select(*[F.lit(quality[name]).cast('double' if isinstance(quality[name], float) else 'long').alias(name) for name in sorted(quality)]).write.mode('overwrite').parquet(output + '/quality')
     valid.groupBy('event').count().write.mode('overwrite').parquet(output + '/overview')
     bounds = valid.agg(F.min('event_time').cast('string'), F.max('event_time').cast('string')).first()
     metadata = dict(batch_id=replay['batch_id'], input=replay.get('input', {}), quality=quality,
                     references=reference_metadata, timezone='UTC', event_time_min=str(bounds[0]) if bounds[0] else None,
                     event_time_max=str(bounds[1]) if bounds[1] else None)
-    raw.sparkSession.createDataFrame([(json.dumps(metadata),)], 'value STRING').coalesce(1).write.mode('overwrite').text(output + '/metadata')
+    raw.sparkSession.range(1).select(F.lit(json.dumps(metadata)).alias('value')).coalesce(1).write.mode('overwrite').text(output + '/metadata')
     unique.unpersist()
     events.unpersist()
     return quality
