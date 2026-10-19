@@ -82,9 +82,15 @@ class History:
             return result
 
 
-def create_app(store):
+def create_app(store, *, run_store=None, cluster=None, poll_seconds=2):
     app = FastAPI(title='Retailrocket 历史数据回放')
     app.state.history = History(store)
+    if cluster is not None:
+        from retailrocket.runs import Runs, replay_router
+        runs = Runs(run_store or Path(store).parent/'replay-runs', cluster, poll_seconds)
+        app.state.runs = runs
+        app.include_router(replay_router(runs))
+        app.add_event_handler('shutdown', runs.close)
 
     @app.get('/api/history/overview')
     def overview(start: date | None = Query(None), end: date | None = Query(None)):
@@ -108,8 +114,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--store', required=True)
     parser.add_argument('--port', type=int, default=8000)
+    parser.add_argument('--cluster-config')
     args = parser.parse_args()
-    uvicorn.run(create_app(args.store), host='127.0.0.1', port=args.port)
+    cluster = None
+    if args.cluster_config:
+        import json
+        from retailrocket.runs import SSHCluster
+        cluster = SSHCluster(json.loads(Path(args.cluster_config).read_text()))
+    uvicorn.run(create_app(args.store, cluster=cluster), host='127.0.0.1', port=args.port)
 
 
 if __name__ == '__main__':

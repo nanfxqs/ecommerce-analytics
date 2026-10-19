@@ -5,6 +5,7 @@ import zhCN from 'antd/locale/zh_CN';
 import * as echarts from 'echarts';
 import { historyOverview, type HistoryResponse, type Overview } from './api';
 import './style.css';
+import { ReplayPage } from './ReplayPage';
 
 const { Title, Text } = Typography;
 function Trend({ rows }: { rows: Overview['trend'] }) {
@@ -23,6 +24,7 @@ function Trend({ rows }: { rows: Overview['trend'] }) {
 }
 
 function App() {
+  const [replay, setReplay] = useState(false);
   const [result, setResult] = useState<HistoryResponse<Overview> | null>(null);
   const [range, setRange] = useState<[string, string] | null>(null);
   const [draft, setDraft] = useState<[string, string]>(['', '']);
@@ -58,10 +60,11 @@ function App() {
     <Layout className="shell">
       <Layout.Sider theme="light" width={220} className="sidebar">
         <div className="brand">Retailrocket<Text type="secondary">电商行为分析</Text></div>
-        <Menu selectedKeys={['overview']} items={[{ key: 'history', type: 'group', label: '历史分析', children: [{ key: 'overview', label: '行为概览' }] }]} />
+        <Menu onClick={({ key }) => setReplay(key === 'replay')} selectedKeys={[replay ? 'replay' : 'overview']} items={[{ key: 'replay', label: '实时监控' },{ key: 'history', type: 'group', label: '历史分析', children: [{ key: 'overview', label: '行为概览' }] }]} />
         <div className="sidebar-note">公开历史数据<br />UTC 事件时间</div>
       </Layout.Sider>
       <Layout.Content className="content">
+        {replay ? <ReplayPage /> : <>
         <header><div><Text type="secondary">分析工作台 / 历史分析</Text><Title level={2}>行为概览</Title></div><Tag color="blue">历史数据回放</Tag></header>
         <Text type="secondary">浏览、加购与购买行为的历史统计，访客以 visitorid 区分。</Text>
         {error && <Alert type="error" showIcon message={error} className="section" />}
@@ -76,6 +79,7 @@ function App() {
           </> : <Card className="section"><Empty description="无有效事件数据" /></Card>}
         </>}
         <footer>Retailrocket 公开历史数据 · 页面每 2 秒查询已发布结果 · 历史活动不代表当前访问</footer>
+        </>}
       </Layout.Content>
     </Layout>
   </ConfigProvider>;
