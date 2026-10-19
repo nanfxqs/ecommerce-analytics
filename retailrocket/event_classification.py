@@ -13,4 +13,3 @@ def classify_events(rows):
         .when(F.col('visitorid').isNull() | (F.trim('visitorid') == ''), 'missing_visitor')
         .when(F.col('itemid').isNull() | (F.trim('itemid') == ''), 'missing_item')
         .when(F.col('event').isNull() | ~F.col('event').isin('view', 'addtocart', 'transaction'), 'invalid_event'))
-
