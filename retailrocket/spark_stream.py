@@ -1,8 +1,7 @@
-"""Bounded-round streaming capture and recoverable, queryable cumulative results.
+"""Streaming entrypoints and atomic HDFS snapshot/checkpoint observations.
 
-The append-only raw microbatch ledger is the exact full-round deduplication state.
-It deliberately has no watermark: late valid source records survive. Recomputing
-from this ledger trades CPU/I/O for bounded executor memory and simple recovery.
+Production queries use incremental exact RocksDB state in spark_live. The legacy
+captured-microbatch contract remains available for V1 comparison and old audits.
 """
 import argparse
 import json

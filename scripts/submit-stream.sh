@@ -11,7 +11,7 @@ exec "$SPARK_HOME/bin/spark-submit" --master yarn --deploy-mode client \
   --driver-memory 512m --executor-memory 512m --executor-cores 1 --num-executors 2 \
   --conf spark.hadoop.yarn.client.failover-sleep-base-ms=500 \
   --conf spark.hadoop.yarn.client.failover-sleep-max-ms=2000 \
-  --conf spark.yarn.am.memory=512m --conf spark.executor.memoryOverhead=384 \
+  --conf spark.yarn.am.memory=512m --conf "spark.executor.memoryOverhead=${RETAILROCKET_STREAM_OVERHEAD_MB:-512}" \
   --conf "spark.yarn.am.extraJavaOptions=-XX:CompressedClassSpaceSize=64m -XX:ReservedCodeCacheSize=64m" \
   --conf "spark.executor.extraJavaOptions=-XX:CompressedClassSpaceSize=64m -XX:ReservedCodeCacheSize=64m" \
   --conf spark.dynamicAllocation.enabled=false --conf "spark.sql.shuffle.partitions=${RETAILROCKET_SHUFFLE_PARTITIONS:-24}" \

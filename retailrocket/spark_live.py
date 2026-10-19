@@ -70,7 +70,9 @@ def _commit_delta(batch, batch_id, output, run_id):
         if existing:
             if existing['run_id'] != run_id: raise ValueError('Replay run identity mismatch')
             return existing
-        snapshot=read_snapshot(spark,output) or _initial(run_id)
+        snapshot=_snapshot_at(spark,output,batch_id-1) if batch_id else _initial(run_id)
+        if snapshot is None:
+            raise ValueError('Previous committed streaming result is missing')
         if snapshot['run_id'] != run_id: raise ValueError('Replay run identity mismatch')
         raw_path=output+'/raw/%020d'%batch_id
         if not _exists(spark,raw_path+'/_SUCCESS'):
@@ -124,7 +126,8 @@ def start_captured_stream(frame, *, output, checkpoint, run_id,trigger_seconds=2
         raise ValueError('Incompatible streaming output; retain legacy run and start a new replay run')
     spark.conf.set('spark.sql.streaming.stateStore.providerClass','org.apache.spark.sql.execution.streaming.state.RocksDBStateStoreProvider')
     spark.conf.set('spark.sql.streaming.stateStore.rocksdb.boundedMemoryUsage','true')
-    spark.conf.set('spark.sql.streaming.stateStore.rocksdb.maxMemoryUsageMB','64')
+    spark.conf.set('spark.sql.streaming.stateStore.rocksdb.maxMemoryUsageMB',
+                   spark.conf.get('spark.sql.streaming.stateStore.rocksdb.maxMemoryUsageMB','128'))
     writer=(_identities(frame).writeStream.option('checkpointLocation',checkpoint)
             .foreachBatch(lambda batch,index:_commit_delta(batch,index,output,run_id)))
     return writer.trigger(availableNow=True).start() if available_now else writer.trigger(processingTime=f'{trigger_seconds} seconds').start()

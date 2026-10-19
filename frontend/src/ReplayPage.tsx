@@ -32,7 +32,7 @@ export function ReplayPage() {
       <Card className="section"><Space size={60} wrap><Statistic title="生产确认消息量" value={run.confirmed} /><Statistic title="生产确认速率（条/秒）" value={run.rate || 0} precision={2} /><Statistic title="积压（Kafka 末端 − 已提交检查点）" value={run.lag ?? 0} /></Space></Card>
       <LiveMetrics snapshot={run.snapshot} />
       <Card className="section" title="分区进度（独占末端 offset）"><Typography.Paragraph type="secondary">结果覆盖 offset 与 Spark 已成功提交检查点分别展示。</Typography.Paragraph><Table pagination={false} rowKey="partition" dataSource={partitions} columns={[{ title: '分区', dataIndex: 'partition' }, { title: 'Kafka 末端', dataIndex: 'end' }, { title: '已提交检查点', dataIndex: 'committed' }, { title: '持久结果覆盖', dataIndex: 'result' }, { title: '积压', dataIndex: 'lag' }]} /></Card>
-      <Card className="section" title="最近原始消息样本 · 清洗前 · 最多 20 条">{run.samples?.length ? <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{JSON.stringify(run.samples.slice(0, 20), null, 2)}</pre> : <Empty description="等待原始消息样本" />}</Card>
+      <Card className="section" title="最近原始消息样本 · 清洗前 · 最多 20 条">{run.samples?.length ? <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', maxHeight: 360, overflow: 'auto' }}>{JSON.stringify(run.samples.slice(0, 20), null, 2)}</pre> : <Empty description="等待原始消息样本" />}</Card>
     </> : <Empty description="尚未启动回放轮次" />}
   </>;
 }
