@@ -38,7 +38,7 @@ RETAILROCKET_SHUFFLE_PARTITIONS=2 \
 
 生产查询使用每作业 RocksDB StateStore（有界原生内存128MiB）维护源身份、内容和有效访客集合，精确状态经 Spark 检查点持久化到 HDFS。仅事件有效的访客进入访客集合；先做源身份去重，避免变化内容的源重试产生额外访客。原始消息分支与身份分支共用输入，Spark progress 的 numInputRows 可能把同一输入计算两次，业务消费量必须取原始消息分支。不能凭该字段宣称完整数据满足10秒页面可见延迟。
 
-旧版累计重扫基线的初始实测 shuffle24、500个源记录的恢复回调为42.229秒，trigger为44.486秒，未达到 V2 延迟目标；随后合并聚合动作并用每作业 shuffle2 复测：预热后99条微批次trigger约5.0–7.1秒，冷启动仍22–33秒。小样本与短时吞吐不代表完整范围满足目标。上述旧版基线配置为2个512MiB heap +384MiB overhead executor。增量流作业保持512MiB heap，并在每作业申请512MiB overhead，2个单核 executor；AM512MiB，JVM class/code cache各64MiB，YARN 内存校验保持启用。完整数据、持续15分钟及浏览器 P95 仍需最终验收；未通过时必须优化或重新与用户确认，不能自行下调门槛。
+旧版累计重扫基线的初始实测 shuffle24、500个源记录的恢复回调为42.229秒，trigger为44.486秒，未达到 V2 延迟目标；随后合并聚合动作并用每作业 shuffle2 复测：预热后99条微批次trigger约5.0–7.1秒，冷启动仍22–33秒。小样本与短时吞吐不代表完整范围满足目标。上述旧版基线配置为2个512MiB heap +384MiB overhead executor。增量流作业保持512MiB heap，并在每作业申请512MiB overhead，2个单核 executor；AM512MiB，JVM class/code cache各64MiB，YARN 内存校验保持启用。真实完整生产者到历史发布链路及417个UTC行为桶一致性现已通过，持续15分钟正常负载及浏览器 P95 仍需最终验收；未通过时必须优化或重新与用户确认，不能自行下调门槛。
 
 实测记录见 [流处理证据](../evidence/v2-stream/README.md)。该节点组 UTC 比宿主晚28800秒，未经校准，不能直接跨机器相减估算延迟。最终可由宿主时钟记录 Kafka 发送确认回执到页面观察的时间，或先完成明确的时钟校准。
 
