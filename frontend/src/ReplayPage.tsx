@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Card, Empty, InputNumber, Select, Space, Statistic, Table, Tag, Typography } from 'antd';
+import { LiveMetrics, type LiveSnapshot } from './LiveMetrics';
 type Dataset = { id: string; label: string; rows: number };
-type Run = { run_id: string; phase: string; complete: boolean; confirmed: number; rate?: number; lag?: number; ends?: Record<string, number>; committed?: Record<string, number>; result_offsets?: Record<string, number>; samples?: unknown[]; updated_at?: string; error?: string; observation_error?: string };
+type Run = { snapshot?: LiveSnapshot | null; run_id: string; phase: string; complete: boolean; confirmed: number; rate?: number; lag?: number; ends?: Record<string, number>; committed?: Record<string, number>; result_offsets?: Record<string, number>; samples?: unknown[]; updated_at?: string; error?: string; observation_error?: string };
 async function request(path: string, init?: RequestInit) {
   const response = await fetch('/api/replay/' + path, init);
   if (!response.ok) { const body = await response.json(); throw new Error(body.detail || '回放服务暂不可用'); }
@@ -29,6 +30,7 @@ export function ReplayPage() {
       <Card className="section"><Space wrap><Tag color={run.complete ? 'green' : 'orange'}>{phases[run.phase] || run.phase}</Tag><Typography.Text>轮次 {run.run_id}</Typography.Text><Typography.Text>{run.complete ? '回放范围处理完整 · 尚非已发布历史批次' : '部分结果 · 回放范围尚未完整处理'}</Typography.Text><Typography.Text type="secondary">更新时间 {run.updated_at || '等待首次观测'} · 当前处理时间</Typography.Text></Space></Card>
       {(run.error || run.observation_error) && <Alert type="error" message={run.error || run.observation_error} className="section" />}
       <Card className="section"><Space size={60} wrap><Statistic title="生产确认消息量" value={run.confirmed} /><Statistic title="生产确认速率（条/秒）" value={run.rate || 0} precision={2} /><Statistic title="积压（Kafka 末端 − 已提交检查点）" value={run.lag ?? 0} /></Space></Card>
+      <LiveMetrics snapshot={run.snapshot} />
       <Card className="section" title="分区进度（独占末端 offset）"><Typography.Paragraph type="secondary">结果覆盖 offset 与 Spark 已成功提交检查点分别展示。</Typography.Paragraph><Table pagination={false} rowKey="partition" dataSource={partitions} columns={[{ title: '分区', dataIndex: 'partition' }, { title: 'Kafka 末端', dataIndex: 'end' }, { title: '已提交检查点', dataIndex: 'committed' }, { title: '持久结果覆盖', dataIndex: 'result' }, { title: '积压', dataIndex: 'lag' }]} /></Card>
       <Card className="section" title="最近原始消息样本 · 清洗前 · 最多 20 条">{run.samples?.length ? <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{JSON.stringify(run.samples.slice(0, 20), null, 2)}</pre> : <Empty description="等待原始消息样本" />}</Card>
     </> : <Empty description="尚未启动回放轮次" />}
