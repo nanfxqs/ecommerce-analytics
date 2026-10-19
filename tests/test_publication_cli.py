@@ -58,3 +58,61 @@ def test_public_publish_rejects_incomplete_results_and_retries_safely(tmp_path, 
     publish(monkeypatch, store, second, damaged)
     publish(monkeypatch, store, second, damaged)
     assert current_snapshot(store).batch_id == 'second'
+
+
+def test_public_publish_rejects_duplicate_replacement_of_a_source_row(tmp_path, monkeypatch):
+    replay, directory = complete_export(tmp_path, 'duplicate')
+    path = directory/'events'/'part.parquet'
+    with duckdb.connect() as db:
+        db.execute('CREATE TABLE altered AS SELECT * REPLACE (2 AS source_line) FROM read_parquet(?)', [str(path)])
+        db.execute('COPY altered TO ? (FORMAT PARQUET)', [str(path)])
+    with pytest.raises(ValueError, match='Source completeness'):
+        publish(monkeypatch, tmp_path/'store', replay, directory)
+    with pytest.raises(FileNotFoundError, match='No successful batch'):
+        current_snapshot(tmp_path/'store')
+
+
+def test_spark_submission_failure_is_recorded_before_collecting(tmp_path):
+    from retailrocket.spark_batch import run
+    manifest = tmp_path/'replay.json'
+    manifest.write_text(json.dumps(dict(batch_id='unconfirmed', replay_confirmed=False)))
+    with pytest.raises(ValueError, match='not confirmed'):
+        run(manifest, 'unreachable:9092', '/not-used', store=tmp_path/'store')
+    state = json.loads((tmp_path/'store'/'runs'/'unconfirmed.json').read_text())
+    assert state['status'] == 'failed'
+    assert [stage['stage'] for stage in state['history']] == ['collecting', 'failed']
+
+
+def test_fixed_inputs_to_spark_export_to_validated_publication(tmp_path, monkeypatch):
+    from pyspark.sql import SparkSession
+    from retailrocket.ingest import prepare, records
+    from retailrocket.references import prepare_references
+    from retailrocket.spark_batch import analyze
+    from retailrocket.query import overview
+    source = tmp_path/'events.csv'
+    source.write_text('timestamp,visitorid,event,itemid,transactionid\n1430622000000,1,view,2,\nbad,1,view,2,\n')
+    manifest = prepare(source, tmp_path/'prepared', 'fixture-v1')
+    provenance = json.loads(manifest.read_text())
+    props, tree = tmp_path/'properties.csv', tmp_path/'tree.csv'
+    props.write_text('timestamp,itemid,property,value\n1000,2,categoryid,10\n')
+    tree.write_text('categoryid,parentid\n10,\n')
+    prepare_references([props], tree, tmp_path/'refs', 'fixture-v1', manifest)
+    replay = dict(batch_id='complete', replay_confirmed=True, rows=2, input=provenance,
+                  topic='events', startingOffsets={'events':{'0':0}}, endingOffsets={'events':{'0':2}})
+    replay_path = tmp_path/'replay.json'
+    replay_path.write_text(json.dumps(replay))
+    messages = [dict(row, batch_id='complete') for row in records(manifest)]
+    spark = SparkSession.builder.master('local[2]').appName('publication-contract').getOrCreate()
+    spark.conf.set('spark.sql.shuffle.partitions','2')
+    try:
+        directory = tmp_path/'analyzed'
+        analyze(spark.createDataFrame([(json.dumps(row),) for row in messages], 'value STRING'), replay,
+                str(directory), references=str(tmp_path/'refs'))
+        metadata = next((directory/'metadata').glob('part-*')).read_text()
+        (directory/'metadata.json').write_text(metadata)
+        publish(monkeypatch, tmp_path/'store', replay_path, directory)
+        snapshot = current_snapshot(tmp_path/'store')
+        assert overview(snapshot.directory/'events', '2015-05-03', '2015-05-03') == dict(view=1, addtocart=0, transaction=0)
+        assert snapshot.metadata['quality']['invalid_count'] == 1
+    finally:
+        spark.stop()
