@@ -3,6 +3,7 @@ import sys
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+from retailrocket.quality_view import render_anomalies
 from retailrocket.publication import current_snapshot
 from retailrocket.query import overview, quality_summary, date_bounds, visitor_conversion, daily_trend, range_quality
 
@@ -20,6 +21,7 @@ if bounds[0] is None:
     st.info('无有效事件数据')
     st.subheader('整个批次的采集质量')
     st.json(quality_summary(root))
+    render_anomalies(root)
     st.stop()
 st.caption(f'数据范围 {bounds[0]} — {bounds[1]} UTC')
 selected = st.date_input('日期范围（UTC）', value=bounds, min_value=bounds[0], max_value=bounds[1])
@@ -68,3 +70,5 @@ else:
     for column, (key, label) in zip(st.columns(6), labels):
         column.metric(label, quality[key])
     st.caption(f"消费 {quality['consumed_count']} = 唯一源记录 {quality['unique_source_count']} + 重试消息 {quality['retry_count']}；唯一源记录 = 有效 {quality['valid_count']} + 异常 {quality['invalid_count']}。疑似重复为重叠统计，不从有效行为扣减。")
+
+    render_anomalies(root, start, end)
