@@ -10,6 +10,8 @@ class Monitor:
 
     def observe(self,current,update):
         result=dict(current,**update)
+        if update.get('phase') in ('completed','stopped') and not update.get('error'):
+            result['error']=None
         result['source_cursor']=result.get('cursor',result.get('confirmed',0))
         ends=result.get('ends',{});starting=result.get('starting',{})
         if any(end<starting.get(partition,0) for partition,end in ends.items()):

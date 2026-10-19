@@ -92,36 +92,46 @@ def children(path):
 
 
 def observation(config,run_id):
-    root=directory(config,run_id); state=json.loads((root/'state.json').read_text())
+    root=directory(config,run_id)
+    state=json.loads((root/'state.json').read_text())
+    if state.get('run_id')!=run_id:raise ValueError('Worker state identity mismatch')
+    from retailrocket.edge_recovery import worker_alive
     consumer=kafka(config)
     try:
-        state['ends']=ends(consumer,state['topic'])
+        sampled_ends=ends(consumer,state['topic'])
+        # Kafka I/O can outlive the worker's final state write and lease release.
+        # Re-read after observing a released lease, rather than failing an old phase.
+        alive=worker_alive(root)
+        if not alive:
+            latest=json.loads((root/'state.json').read_text())
+            if latest.get('run_id')!=run_id:raise ValueError('Worker state identity mismatch')
+            state=latest
+            alive=worker_alive(root)
+            if state['phase'] in ('completed','stopped') and state.get('final')!=sampled_ends:
+                sampled_ends=ends(consumer,state['topic'])
+        state['ends']=sampled_ends
         try:
             from retailrocket.kafka_tail import sample_tail
-            samples,samples_complete=sample_tail(consumer,state['topic'],state['ends'])
+            samples,samples_complete=sample_tail(consumer,state['topic'],sampled_ends)
             raw_error=None
         except Exception as error:
             samples=[];samples_complete=False;raw_error=str(error)
-    finally: consumer.close()
-    cached = root/'stream-observation.json'
-    observed = json.loads(cached.read_text()) if cached.exists() else None
+    finally:consumer.close()
+    cached=root/'stream-observation.json'
+    observed=json.loads(cached.read_text()) if cached.exists() else None
     if observed:
-        snapshot = observed['snapshot']
-        if snapshot['run_id'] != run_id:
-            raise ValueError('Snapshot identity mismatch')
-        if set(observed['committed']) != set(state['ends']):
-            raise ValueError('Checkpoint partition mismatch')
+        snapshot=observed['snapshot']
+        if snapshot['run_id']!=run_id:raise ValueError('Snapshot identity mismatch')
+        if set(observed['committed'])!=set(state['ends']):raise ValueError('Checkpoint partition mismatch')
         state.update(observed)
     else:
-        state.update(committed={p:0 for p in state['ends']}, result_offsets={}, samples=[], snapshot=None)
-
-    state.update(raw_samples=samples,raw_samples_complete=samples_complete,raw_sample_error=raw_error)
-    # Compatibility alias now also refers to independently sampled, unprocessed input.
+        state.update(committed={p:0 for p in state['ends']},result_offsets={},samples=[],snapshot=None)
+    state.update(raw_samples=samples,raw_samples_complete=samples_complete,raw_sample_error=raw_error,worker_alive=alive)
     state['samples']=samples
-    from retailrocket.edge_recovery import worker_alive
-    state['worker_alive'] = worker_alive(root)
-    if not state['worker_alive'] and state['phase'] in ('running','paused','starting','stopping','draining'):
+    if not alive and state['phase'] in ('running','paused','starting','stopping','draining'):
         state.update(phase='failed',error='回放 worker 已中断，请手动恢复原轮次')
+    elif state['phase'] in ('completed','stopped'):
+        state['error']=None
     return state
 
 
@@ -229,7 +239,7 @@ def work(config,run_id,resume=False):
             began=time.monotonic(); pending=deque(); confirmed=state.get('cursor',0); initial_confirmed=confirmed
             if config.get('audit_ack_log'):
                 ack_log=(root/'acknowledgements.jsonl').open('a',buffering=1)
-                def traced_ack(metadata,position,record_id):
+                def traced_ack(position,record_id,metadata):
                     record=dict(run_id=run_id,source_line=position+1,source_record_id=record_id,
                         topic=metadata.topic,partition=metadata.partition,offset=metadata.offset,
                         ack_monotonic_ns=time.monotonic_ns(),ack_wall_ns=time.time_ns())
