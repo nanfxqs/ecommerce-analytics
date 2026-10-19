@@ -1,0 +1,42 @@
+{
+  "raw": {
+    "rows": 2756101,
+    "row_hash_xor": 18124198641403185437,
+    "row_hash_sum": "25429915697841549296573945"
+  },
+  "events": {
+    "rows": 2756101,
+    "row_hash_xor": 4822192101095230608,
+    "row_hash_sum": "25432370033253153178756030"
+  },
+  "quarantine": {
+    "rows": 0,
+    "row_hash_xor": null,
+    "row_hash_sum": "None"
+  },
+  "visitor_events": {
+    "rows": 1699929,
+    "row_hash_xor": 16069981267678919983,
+    "row_hash_sum": "15681950631675957825280211"
+  },
+  "category_daily": {
+    "rows": 94292,
+    "row_hash_xor": 10370346913392987434,
+    "row_hash_sum": "864465828086545370173356"
+  },
+  "item_daily": {
+    "rows": 1672186,
+    "row_hash_xor": 16987693941297259314,
+    "row_hash_sum": "15417759952364165902217938"
+  },
+  "visitor_daily": {
+    "rows": 1649534,
+    "row_hash_xor": 1122724854251927586,
+    "row_hash_sum": "15209233894672727262026828"
+  },
+  "visitor_category_daily": {
+    "rows": 1836867,
+    "row_hash_xor": 1291390474821369375,
+    "row_hash_sum": "16950383453961165999087483"
+  }
+}

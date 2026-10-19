@@ -1,0 +1,20 @@
+{
+  "batch_id": "full-v2-20261019",
+  "before_revision": "a02d179ad84639104b7b46831d9351af2e6091cde3268a96a4b8f8bede289cee",
+  "candidate_revision": "ea9a9fb0f17d8e462a16464ac77368ade707fc15fc8dbcf7d6b69ba7fd6c4a3c",
+  "revision_during_failure": "a02d179ad84639104b7b46831d9351af2e6091cde3268a96a4b8f8bede289cee",
+  "after_retry_revision": "ea9a9fb0f17d8e462a16464ac77368ade707fc15fc8dbcf7d6b69ba7fd6c4a3c",
+  "failed_status": "failed",
+  "retry_status": "published",
+  "before_counts": {
+    "view": 2664312,
+    "addtocart": 69332,
+    "transaction": 22457
+  },
+  "after_counts": {
+    "view": 2664312,
+    "addtocart": 69332,
+    "transaction": 22457
+  },
+  "acceptance_attempt": "2012c4fd7e234a698bd82a7821139a48"
+}

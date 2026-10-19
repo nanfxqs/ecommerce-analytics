@@ -1,0 +1,18 @@
+           1            3            506.2 K hdfs://mycluster/retailrocket/batches/full-v2-20261019/category_daily
+           1            7            286.6 M hdfs://mycluster/retailrocket/batches/full-v2-20261019/events
+           1            4              6.8 M hdfs://mycluster/retailrocket/batches/full-v2-20261019/item_daily
+           1            2              1.7 K hdfs://mycluster/retailrocket/batches/full-v2-20261019/metadata
+           1            2                765 hdfs://mycluster/retailrocket/batches/full-v2-20261019/overview
+           1            3              4.2 K hdfs://mycluster/retailrocket/batches/full-v2-20261019/quality
+           1            2              1.4 K hdfs://mycluster/retailrocket/batches/full-v2-20261019/quarantine
+           1            4            499.4 M hdfs://mycluster/retailrocket/batches/full-v2-20261019/raw
+           1            4             12.5 M hdfs://mycluster/retailrocket/batches/full-v2-20261019/visitor_category_daily
+           1            4             22.6 M hdfs://mycluster/retailrocket/batches/full-v2-20261019/visitor_daily
+           1            4              9.5 M hdfs://mycluster/retailrocket/batches/full-v2-20261019/visitor_events
+26/10/19 06:09:31 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 5010 ms on hadoop02 (executor 1) (1/1)
+26/10/19 06:09:34 INFO TaskSetManager: Finished task 0.0 in stage 1.0 (TID 1) in 260 ms on hadoop02 (executor 1) (1/1)
+26/10/19 06:09:39 INFO TaskSetManager: Finished task 1.0 in stage 2.0 (TID 3) in 2210 ms on hadoop02 (executor 1) (1/4)
+26/10/19 06:09:39 INFO TaskSetManager: Finished task 3.0 in stage 2.0 (TID 4) in 287 ms on hadoop02 (executor 1) (2/4)
+26/10/19 06:09:43 INFO TaskSetManager: Finished task 2.0 in stage 2.0 (TID 5) in 86 ms on hadoop02 (executor 1) (3/4)
+26/10/19 06:09:43 INFO TaskSetManager: Finished task 0.0 in stage 2.0 (TID 2) in 6490 ms on hadoop01 (executor 2) (4/4)
+{"app":{"id":"application_1792359468585_0004","user":"hadoop","name":"retailrocket-full-v2-20261019","queue":"default","state":"FINISHED","finalStatus":"SUCCEEDED","progress":100.0,"trackingUI":"History","trackingUrl":"http://hadoop03:8088/proxy/application_1792359468585_0004/","diagnostics":"","clusterId":1792359468585,"applicationType":"SPARK","applicationTags":"","priority":0,"startedTime":1792361344811,"launchTime":1792361345166,"finishedTime":1792361661951,"elapsedTime":317140,"amContainerLogs":"http://hadoop03:8042/node/containerlogs/container_e03_1792359468585_0004_01_000001/hadoop","amHostHttpAddress":"hadoop03:8042","masterNodeId":"hadoop03:42981","allocatedMB":-1,"allocatedVCores":-1,"reservedMB":-1,"reservedVCores":-1,"runningContainers":-1,"memorySeconds":952619,"vcoreSeconds":929,"queueUsagePercentage":0.0,"clusterUsagePercentage":0.0,"resourceSecondsMap":{"entry":{"key":"memory-mb","value":"952619"},"entry":{"key":"vcores","value":"929"}},"preemptedResourceMB":0,"preemptedResourceVCores":0,"numNonAMContainerPreempted":0,"numAMContainerPreempted":0,"preemptedMemorySeconds":0,"preemptedVcoreSeconds":0,"preemptedResourceSecondsMap":{},"logAggregationStatus":"DISABLED","unmanagedApplication":false,"amNodeLabelExpression":"","timeouts":{"timeout":[{"type":"LIFETIME","expiryTime":"UNLIMITED","remainingTimeInSeconds":-1}]}}}

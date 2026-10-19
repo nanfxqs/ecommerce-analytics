@@ -1,0 +1,16 @@
+{
+  "0": {
+    "events": 3,
+    "purchases": 0,
+    "last_ms": 1442004917175,
+    "active_days": 1,
+    "recency_seconds": 540270.613
+  },
+  "1": {
+    "events": 1,
+    "purchases": 0,
+    "last_ms": 1439487966444,
+    "active_days": 1,
+    "recency_seconds": 3057221.344
+  }
+}
