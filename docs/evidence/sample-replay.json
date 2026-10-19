@@ -1,0 +1,31 @@
+{
+  "batch_id": "sample-20261019",
+  "topic": "retailrocket-sample-20261019",
+  "rows": 10000,
+  "replay_confirmed": true,
+  "startingOffsets": {
+    "retailrocket-sample-20261019": {
+      "0": 0,
+      "1": 0,
+      "2": 0
+    }
+  },
+  "endingOffsets": {
+    "retailrocket-sample-20261019": {
+      "0": 3265,
+      "1": 3425,
+      "2": 3310
+    }
+  },
+  "input": {
+    "dataset_version": "kaggle-retailrocket-v2",
+    "source_file": "events.csv",
+    "source_sha256": "3745aa83238b1e6d44d8fda209807899f420084398f94ddf745f3cbcfecbf9e7",
+    "rows": 10000,
+    "first_source_line": 2,
+    "last_source_line": 10001,
+    "events": "events.jsonl",
+    "mode": "historical_replay",
+    "timezone": "UTC"
+  }
+}
