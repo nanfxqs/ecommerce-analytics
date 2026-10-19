@@ -6,8 +6,29 @@ from pyspark.sql import SparkSession, functions as F
 
 
 
-def analyze(raw, replay, output, reuse_raw=False):
+def associate_categories(events, references, replay):
+    """Temporal interval join; unknown events survive and future records never fill."""
+    from pyspark.sql.window import Window
+    spark = events.sparkSession
+    metadata = json.loads(spark.read.text(references + '/references.json', wholetext=True).first()[0])
+    if metadata['dataset_version'] != replay.get('input', {}).get('dataset_version'):
+        raise ValueError('Reference and event dataset versions differ')
+    if metadata.get('events_input', {}).get('source_sha256') != replay.get('input', {}).get('source_sha256'):
+        raise ValueError('Reference and event source checksums differ')
+    properties = spark.read.option('header', True).schema('timestamp LONG,itemid STRING,categoryid STRING').csv(references + '/' + metadata['properties'])
+    # A deterministic tie resolves duplicate snapshots without multiplying events.
+    properties = properties.groupBy('itemid', 'timestamp').agg(F.min('categoryid').alias('categoryid'))
+    properties = properties.withColumn('until', F.lead('timestamp').over(Window.partitionBy('itemid').orderBy('timestamp')))
+    e, p = events.alias('e'), properties.alias('p')
+    joined = e.join(p, (F.col('e.itemid') == F.col('p.itemid')) &
+                    (F.col('e.timestamp').cast('long') >= F.col('p.timestamp')) &
+                    (F.col('p.until').isNull() | (F.col('e.timestamp').cast('long') < F.col('p.until'))), 'left')
+    return joined.select('e.*', F.coalesce(F.col('p.categoryid'), F.lit('unknown')).alias('categoryid')), metadata
+
+
+def analyze(raw, replay, output, reuse_raw=False, references=None):
     """Persist one captured batch; usable locally for contracts, not acceptance."""
+    raw.sparkSession.conf.set('spark.sql.session.timeZone', 'UTC')
     if not reuse_raw:
         raw.write.mode('errorifexists').parquet(output + '/raw')
     raw = raw.sparkSession.read.parquet(output + '/raw')
@@ -29,6 +50,11 @@ def analyze(raw, replay, output, reuse_raw=False):
               .when(F.col('event').isNull() | ~F.col('event').isin('view', 'addtocart', 'transaction'), 'invalid_event'))
     events = events.withColumn('invalid_reason', reason).cache()
     valid = events.filter(F.col('invalid_reason').isNull()).drop('invalid_reason')
+    if references:
+        valid, reference_metadata = associate_categories(valid, references, replay)
+    else:
+        valid = valid.withColumn('categoryid', F.lit('unknown'))
+        reference_metadata = None
     invalid = events.filter(F.col('invalid_reason').isNotNull())
     valid_count = valid.count()
     contents = ['timestamp', 'visitorid', 'event', 'itemid', 'transactionid']
@@ -36,13 +62,20 @@ def analyze(raw, replay, output, reuse_raw=False):
     quality = dict(input_count=replay.get('input', {}).get('rows', replay['rows']), consumed_count=consumed,
                    unique_source_count=unique_count, valid_count=valid_count, invalid_count=unique_count - valid_count,
                    retry_count=consumed - unique_count, suspected_duplicate_count=suspected)
+    if references:
+        associated = valid.filter(F.col('categoryid') != 'unknown').count()
+        quality.update(category_associated_count=associated, category_unknown_count=valid_count-associated, category_coverage=associated/valid_count if valid_count else None)
     valid.write.mode('overwrite').parquet(output + '/events')
+    valid.select(F.to_date('event_time').alias('event_date'), 'visitorid', 'event').distinct().write.mode('overwrite').parquet(output + '/visitor_events')
+    daily = valid.withColumn('event_date', F.to_date('event_time'))
+    for key, name in [('categoryid', 'category_daily'), ('itemid', 'item_daily')]:
+        daily.groupBy('event_date', key).agg(F.count('*').alias('events'), *[F.sum(F.when(F.col('event') == event, 1).otherwise(0)).alias(label) for event, label in [('view', 'views'), ('addtocart', 'addtocarts'), ('transaction', 'transactions')]]).write.mode('overwrite').parquet(output + '/' + name)
     invalid.write.mode('overwrite').parquet(output + '/quarantine')
     raw.sparkSession.createDataFrame([quality]).write.mode('overwrite').parquet(output + '/quality')
     valid.groupBy('event').count().write.mode('overwrite').parquet(output + '/overview')
     bounds = valid.agg(F.min('event_time'), F.max('event_time')).first()
     metadata = dict(batch_id=replay['batch_id'], input=replay.get('input', {}), quality=quality,
-                    timezone='UTC', event_time_min=str(bounds[0]) if bounds[0] else None,
+                    references=reference_metadata, timezone='UTC', event_time_min=str(bounds[0]) if bounds[0] else None,
                     event_time_max=str(bounds[1]) if bounds[1] else None)
     raw.sparkSession.createDataFrame([(json.dumps(metadata),)], 'value STRING').coalesce(1).write.mode('overwrite').text(output + '/metadata')
     unique.unpersist()
@@ -50,7 +83,7 @@ def analyze(raw, replay, output, reuse_raw=False):
     return quality
 
 
-def run(replay_path, brokers, output, retry_from_raw=False):
+def run(replay_path, brokers, output, retry_from_raw=False, references=None):
     replay = json.loads(Path(replay_path).read_text())
     if not replay.get('replay_confirmed'):
         raise ValueError('Replay is not confirmed')
@@ -64,7 +97,7 @@ def run(replay_path, brokers, output, retry_from_raw=False):
         raw = (spark.read.format('kafka').option('kafka.bootstrap.servers', brokers)
                .option('subscribe', replay['topic']).option('startingOffsets', json.dumps(replay['startingOffsets']))
                .option('endingOffsets', json.dumps(replay['endingOffsets'])).option('failOnDataLoss', 'true').load())
-    quality = analyze(raw, replay, output, reuse_raw=retry_from_raw)
+    quality = analyze(raw, replay, output, reuse_raw=retry_from_raw, references=references)
     count = quality['consumed_count']
     # Executor registration provides actual host allocation, not a local-mode claim.
     executor_hosts = str(spark.sparkContext._jsc.sc().getExecutorMemoryStatus().keys().toList())
@@ -80,6 +113,7 @@ if __name__ == '__main__':
     parser.add_argument('--replay', required=True)
     parser.add_argument('--brokers', required=True)
     parser.add_argument('--output', required=True)
+    parser.add_argument('--references', required=True, help='HDFS reference directory containing references.json, categories.csv and category_tree.csv')
     parser.add_argument('--retry-from-raw', action='store_true')
     args = parser.parse_args()
-    run(args.replay, args.brokers, args.output, args.retry_from_raw)
+    run(args.replay, args.brokers, args.output, args.retry_from_raw, args.references)
