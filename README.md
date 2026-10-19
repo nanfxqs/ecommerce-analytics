@@ -144,3 +144,13 @@ V2 产物默认永久保留。需要释放空间时，使用[离线手动清理�
 
 
 V2 实时回放、控制、手动恢复与最终验收分别见 [回放说明](docs/operations/replay.md)、[流处理说明](docs/operations/streaming.md) 和 [验收运行记录](docs/operations/v2-acceptance.md)。流任务使用两个 512MiB heap + 512MiB overhead executor、128MiB RocksDB 共享原生缓存及 512MiB AM；历史任务仍采用原批处理资源。分区数影响完整精确状态的资源压力：小样本默认 2，全量部署使用已验证的 24；检查点固定状态分区数，调整须使用新隔离轮次。未完成最终全量与 15 分钟浏览器性能验收前，不声称 V2 已完成或保证实测之外的速率。
+
+
+V2 正常负载验收使用明确的部署配置：API 后台串行缓存等待0.25秒，驱动观察0.1秒，浏览器2秒。带集群控制的启动入口为：
+
+```bash
+uv run python -m retailrocket.api --store /operator/published \
+  --cluster-config /operator/local-cluster.json --poll-seconds 0.25
+```
+
+edge 的正常输入 profile 设置 `observation_interval_seconds: 0.1`、`wait_for_stream_ready: true`、`cursor_flush_records: 100`、`cursor_flush_seconds: 1`，小样本默认2个状态分区。全量突发 profile 使用 `max_offsets: 100000`、默认24个状态分区；切换操作者配置前必须确认没有活动轮次，恢复时保持原状态分区数。完整配置、普通负载速率及验收结果见 [V2 运行记录](docs/operations/v2-acceptance.md)。上述较低后台等待不改变页面每2秒轮询的行为，也不并发启动无界 SSH 查询。

@@ -9,7 +9,8 @@ def test_live_round_exact_state_survives_restart_and_drives_http(tmp_path):
     from pyspark.sql import SparkSession
     from retailrocket.spark_stream import start_captured_stream, read_snapshot, publish_observation
     spark = (SparkSession.builder.master('local[2]').appName('live-round-contract')
-             .config('spark.sql.shuffle.partitions','2').getOrCreate())
+             .config('spark.sql.shuffle.partitions','2')
+             .config('spark.sql.streaming.stateStore.rocksdb.changelogCheckpointing.enabled','true').getOrCreate())
     inbox=tmp_path/'input'; inbox.mkdir()
     output=str(tmp_path/'output'); checkpoint=str(tmp_path/'checkpoint')
     def row(line,offset,timestamp='0',visitor='1'):
