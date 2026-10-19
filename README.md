@@ -2,6 +2,13 @@
 
 使用现有三节点 Kafka、HDFS HA 和 YARN，回放 Retailrocket 历史事件；Spark 在集群清洗、关联历史分类并计算结果，本机 DuckDB 查询不可变 Parquet，Streamlit + Plotly 展示概览、购买关联、商品与分类、用户画像及质量摘要。所有日期使用源事件 UTC，回放不表示实时业务操作。
 
+## 版本与路线图
+
+- **V1：已完成并验收。** 当前代码与下方运行命令对应历史数据批处理、Streamlit + Plotly 看板和可靠发布；[全量验收证据](docs/evidence/full/README.md)。
+- **V2：规划中，尚未实现。** 增加清洗前后的实时数据流展示，采用 React + TypeScript + Vite 重建页面交互与视觉布局；其他组件与流处理细节待确认。
+
+完整版本范围和计划见 [项目路线图](roadmap.md)（[详细路线图](docs/roadmap.md)）。这里的 V1 / V2 是项目里程碑；数据集 `version2` 和现有名称中的 `v2` 是数据版本标识，两者独立。
+
 ## 环境与数据
 
 已验证环境：Hadoop3.1.3、Java8u212、Kafka3.7.0，新增隔离的 CPython3.11.16、Spark3.5.6/Scala2.12 及匹配 Kafka 连接器；本机依赖锁定在 `uv.lock`。运行记录见 [全量验收证据](docs/evidence/full/README.md)。三个虚拟节点共享一个物理宿主，不提供宿主故障容灾。虚拟机初始状态与网络、资源、时钟约束见 [运行说明](docs/operations/small-sample.md)。
@@ -20,7 +27,7 @@ ssh h1 'mkdir -p ~/opt/ecommerce-analytics ~/opt/retailrocket-source-v2'
 scp -r retailrocket scripts h1:~/opt/ecommerce-analytics/
 ```
 
-唯一首版数据源为 [官方 Retailrocket 数据集 version2](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset/data)。实施时公开 GET 无需认证；HEAD 返回404不能证明下载不可用。如果平台以后要求认证，只在本机配置，不提交凭据。
+V1 唯一数据源为 [官方 Retailrocket 数据集 version2](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset/data)。实施时公开 GET 无需认证；HEAD 返回404不能证明下载不可用。如果平台以后要求认证，只在本机配置，不提交凭据。
 
 ```bash
 mkdir -p data/retailrocket-v2
