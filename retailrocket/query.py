@@ -83,3 +83,37 @@ def range_quality(directory, start, end):
         for table, name in [('events', 'valid_count'), ('quarantine', 'invalid_count')]:
             counts[name] = connection.execute('SELECT count(*) FROM read_parquet(?) WHERE cast(event_time AS DATE) BETWEEN ? AND ?', [_path(directory, table), start, end]).fetchone()[0]
     return counts
+
+
+def _anomaly_scope(start, end):
+    if start is None and end is None:
+        return '', []
+    if start is None or end is None:
+        raise ValueError('Both UTC dates are required')
+    start, end = _range(start, end)
+    return ' WHERE cast(event_time AS DATE) BETWEEN ? AND ?', [start, end]
+
+
+def anomaly_reasons(directory, start=None, end=None):
+    """Counts by primary quarantine reason; omit dates to include invalid times."""
+    scope, dates = _anomaly_scope(start, end)
+    with duckdb.connect() as connection:
+        rows = connection.execute('SELECT invalid_reason, count(*) FROM read_parquet(?)' + scope +
+                                  ' GROUP BY invalid_reason ORDER BY invalid_reason',
+                                  [_path(directory, 'quarantine'), *dates]).fetchall()
+    return [dict(invalid_reason=reason, count=count) for reason, count in rows]
+
+
+def anomaly_records(directory, start=None, end=None, limit=100):
+    """A stable bounded sample of original fields and their quarantine reason."""
+    if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 500:
+        raise ValueError('Anomaly record limit must be between 1 and 500')
+    scope, dates = _anomaly_scope(start, end)
+    with duckdb.connect() as connection:
+        result = connection.execute('''SELECT dataset_version, source_file, source_line,
+            timestamp, event_time, visitorid, event, itemid, transactionid, invalid_reason
+            FROM read_parquet(?)''' + scope +
+            ' ORDER BY dataset_version, source_file, source_line LIMIT ?',
+            [_path(directory, 'quarantine'), *dates, limit])
+        names = [column[0] for column in result.description]
+        return [dict(zip(names, row)) for row in result.fetchall()]

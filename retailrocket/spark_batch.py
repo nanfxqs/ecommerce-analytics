@@ -29,6 +29,9 @@ def associate_categories(events, references, replay):
 def analyze(raw, replay, output, reuse_raw=False, references=None, tracking=None):
     """Persist one captured batch; usable locally for contracts, not acceptance."""
     raw.sparkSession.conf.set('spark.sql.session.timeZone', 'UTC')
+    # Epoch milliseconds use the proleptic Gregorian calendar, also before 1582.
+    raw.sparkSession.conf.set('spark.sql.parquet.datetimeRebaseModeInWrite', 'CORRECTED')
+    raw.sparkSession.conf.set('spark.sql.parquet.int96RebaseModeInWrite', 'CORRECTED')
     if not reuse_raw:
         raw.write.mode('errorifexists').parquet(output + '/raw')
     raw = raw.sparkSession.read.parquet(output + '/raw')
@@ -46,7 +49,10 @@ def analyze(raw, replay, output, reuse_raw=False, references=None, tracking=None
         raise ValueError('Missing source provenance')
     unique = events.dropDuplicates(identity).cache()
     unique_count = unique.count()
-    events = unique.withColumn('event_time', F.expr('timestamp_millis(try_cast(timestamp as bigint))'))
+    # Guard before multiplying millis into Spark's microsecond representation.
+    events = unique.withColumn('event_time', F.expr('''CASE
+        WHEN try_cast(timestamp AS bigint) BETWEEN -62135596800000 AND 253402300799999
+        THEN timestamp_millis(try_cast(timestamp AS bigint)) END'''))
     reason = (F.when(F.col('event_time').isNull(), 'invalid_timestamp')
               .when(F.col('visitorid').isNull() | (F.trim('visitorid') == ''), 'missing_visitor')
               .when(F.col('itemid').isNull() | (F.trim('itemid') == ''), 'missing_item')
@@ -78,7 +84,7 @@ def analyze(raw, replay, output, reuse_raw=False, references=None, tracking=None
     invalid.write.mode('overwrite').parquet(output + '/quarantine')
     raw.sparkSession.createDataFrame([quality]).write.mode('overwrite').parquet(output + '/quality')
     valid.groupBy('event').count().write.mode('overwrite').parquet(output + '/overview')
-    bounds = valid.agg(F.min('event_time'), F.max('event_time')).first()
+    bounds = valid.agg(F.min('event_time').cast('string'), F.max('event_time').cast('string')).first()
     metadata = dict(batch_id=replay['batch_id'], input=replay.get('input', {}), quality=quality,
                     references=reference_metadata, timezone='UTC', event_time_min=str(bounds[0]) if bounds[0] else None,
                     event_time_max=str(bounds[1]) if bounds[1] else None)
