@@ -1,0 +1,2 @@
+import { defineConfig } from '@playwright/test';
+export default defineConfig({ testDir:'./tests',testMatch:'replay-recovery.spec.ts',timeout:240000,use:{baseURL:'http://127.0.0.1:5177',launchOptions:{executablePath:'/usr/bin/chromium',args:['--no-sandbox']}},webServer:[{command:'RETAILROCKET_API=http://127.0.0.1:8004 npm run dev -- --port 5177',url:'http://127.0.0.1:5177',reuseExistingServer:false}] });

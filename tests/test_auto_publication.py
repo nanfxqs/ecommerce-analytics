@@ -121,3 +121,24 @@ def test_failed_remote_analysis_requires_explicit_retry_and_preserves_retry_acro
         client.post('/api/replay/current/retry-history')
         wait(client,lambda s:s.get('historical_status')=='published')
         assert cluster.retried==[True,True]
+
+
+def test_restart_waits_for_manual_recovery_then_adopts_existing_historical_stage(tmp_path):
+    class Recoverable(Cluster):
+        finish=False
+        def quiesce(self,run): return self.observe(run)
+        def recover(self,run): return self.observe(run)
+        def finalize(self,run):
+            return dict(historical_status='exported' if self.finish else 'analyzing')
+    cluster=Recoverable(tmp_path); store=tmp_path/'pub'; runs=tmp_path/'runs'
+    with TestClient(create_app(store,run_store=runs,cluster=cluster,poll_seconds=.01)) as client:
+        run=client.post('/api/replay/runs',json=dict(dataset='small',rate=5)).json()
+        wait(client,lambda s:s['phase']=='analyzing')
+    cluster.finish=True
+    with TestClient(create_app(store,run_store=runs,cluster=cluster,poll_seconds=.01)) as client:
+        wait(client,lambda s:s['phase']=='recovery_required')
+        time.sleep(.03)
+        assert client.get('/api/history/overview').json()['snapshot'] is None
+        assert client.post('/api/replay/current/recover').status_code==202
+        state=wait(client,lambda s:s.get('historical_status')=='published')
+        assert state['run_id']==run['run_id']

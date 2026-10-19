@@ -106,6 +106,10 @@ def observation(config,run_id):
     else:
         state.update(committed={p:0 for p in state['ends']}, result_offsets={}, samples=[], snapshot=None)
 
+    from retailrocket.edge_recovery import worker_alive
+    state['worker_alive'] = worker_alive(root)
+    if not state['worker_alive'] and state['phase'] in ('running','paused','starting','stopping','draining'):
+        state.update(phase='failed',error='回放 worker 已中断，请手动恢复原轮次')
     return state
 
 
@@ -142,44 +146,66 @@ def control(config, run):
     return receipt
 
 
-def work(config,run_id):
+def work(config,run_id,resume=False):
     root=directory(config,run_id)
     lease=(root/'worker.lock').open('a'); fcntl.flock(lease,fcntl.LOCK_EX|fcntl.LOCK_NB)
     run=json.loads((root/'request.json').read_text())
-    state=dict(phase='starting',run_id=run_id,topic=run_id,confirmed=0,cursor=0,rate=0,
+    state=json.loads((root/'state.json').read_text()) if resume else dict(phase='starting',run_id=run_id,topic=run_id,confirmed=0,cursor=0,rate=0,
                output='hdfs://mycluster/retailrocket/streams/'+run_id,
                checkpoint='hdfs://mycluster/retailrocket/stream-checkpoints/'+run_id,complete=False)
+    state.update(phase='starting', complete=False)
+    state.pop('error',None)
     atomic(root/'state.json',state)
     stream=None; producer=None; consumer=None
     try:
         manifest,metadata,events=dataset(config,run['dataset'])
         from kafka import KafkaProducer
         from kafka.admin import KafkaAdminClient,NewTopic
-        admin=KafkaAdminClient(bootstrap_servers=config['brokers'].split(','))
-        try: admin.create_topics([NewTopic(run_id,num_partitions=3,replication_factor=3)])
-        finally: admin.close()
-        consumer=kafka(config); starting=ends(consumer,run_id)
+        if resume:
+            if type(state.get('cursor')) is not int or not 0 <= state['cursor'] <= metadata['rows']:
+                raise ValueError('Invalid persisted source acknowledgement cursor')
+            if state.get('input') != metadata:
+                raise ValueError('Prepared input changed since interrupted run')
+            consumer=kafka(config)
+            current_ends=ends(consumer,run_id)
+            starting=state['starting']
+            if any(type(offset) is not int or offset != 0 for offset in starting.values()):
+                raise ValueError('Original dedicated-topic starting offsets changed')
+            if set(current_ends)!=set(starting):raise ValueError('Recovery topic partitions changed')
+        else:
+            admin=KafkaAdminClient(bootstrap_servers=config['brokers'].split(','))
+            try: admin.create_topics([NewTopic(run_id,num_partitions=3,replication_factor=3)])
+            finally: admin.close()
+            consumer=kafka(config); starting=ends(consumer,run_id)
         atomic(root/'input.json',metadata)
         command=[str(Path(config['code'])/'scripts/submit-stream.sh'),'--brokers',config['brokers'],'--topic',run_id,'--run-id',run_id,'--output',state['output'],'--checkpoint',state['checkpoint'],'--max-offsets',str(config.get('max_offsets',1000)),'--stop-file',str(root/'stop-stream'),'--observation-file',str(root/'stream-observation.json')]
         log=(root/'stream.log').open('a')
         environment=dict(os.environ); environment['RETAILROCKET_SHUFFLE_PARTITIONS']='2'
         stream=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,env=environment,start_new_session=True)
-        state.update(phase='running',stream_pid=stream.pid,starting=starting,input=metadata)
+        from retailrocket.edge_recovery import process_identity
+        state.update(phase='running',stream_pid=stream.pid,stream_identity=process_identity(stream.pid),starting=starting,input=metadata,stream_released=False)
         atomic(root/'state.json',state)
         producer=KafkaProducer(bootstrap_servers=config['brokers'].split(','),acks='all',retries=10,value_serializer=lambda row:json.dumps(row).encode(),linger_ms=20,batch_size=65536)
-        began=time.monotonic(); pending=deque(); confirmed=0
+        began=time.monotonic(); pending=deque(); confirmed=state.get('cursor',0); initial_confirmed=confirmed
         def acknowledge():
             nonlocal confirmed
             position,future=pending.popleft(); future.get(timeout=120)
+            # Operator-only one-shot fault hook for real ACK-before-fsync recovery audits.
+            crash_marker=root/'ack-fault-fired.json'
+            if config.get('audit_crash_after_ack') == position and not crash_marker.exists():
+                atomic(crash_marker, dict(position=position,run_id=run_id))
+                os._exit(86)
             confirmed+=1
-            state.update(cursor=position,confirmed=confirmed,rate=confirmed/max(.001,time.monotonic()-began))
+            state.update(cursor=position,confirmed=confirmed,rate=(confirmed-initial_confirmed)/max(.001,time.monotonic()-began))
             atomic(root/'state.json',state)
         def desired():
             return json.loads((root/'control.json').read_text()) if (root/'control.json').exists() else None
-        stopped = False
+        stopped = state.get('early_stopped',False)
         next_send = time.monotonic()
         with events.open() as source:
             for position,line in enumerate(source,1):
+                if position <= state.get('cursor',0) or (resume and 'final' in state):
+                    continue
                 if stream.poll() is not None: raise RuntimeError('YARN streaming driver exited before producer completion')
                 row=json.loads(line); row.update(batch_id=run_id,replay_time=datetime.now(timezone.utc).isoformat())
                 while True:
@@ -215,6 +241,8 @@ def work(config,run_id):
                 if len(pending)>=min(1000,max(1,int(run['requested_rate']))): acknowledge()
             while pending: acknowledge()
         producer.flush(timeout=120); final=ends(consumer,run_id)
+        if resume and 'final' in state and final != state['final']:
+            raise ValueError('Final Kafka range changed after producer EOF')
         replay=dict(batch_id=run_id,topic=run_id,rows=sum(final[p]-starting[p] for p in final),replay_confirmed=True,startingOffsets={run_id:starting},endingOffsets={run_id:final},input=metadata)
         atomic(root/'replay.json',replay)
         with (root/'control.lock').open('a') as lock:
@@ -250,15 +278,18 @@ def work(config,run_id):
 
 
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('operation',choices=['datasets','start','observe','work','control']); parser.add_argument('--config',required=True); parser.add_argument('--run-id')
+    parser=argparse.ArgumentParser(); parser.add_argument('operation',choices=['datasets','start','observe','work','control','quiesce','recover']); parser.add_argument('--config',required=True); parser.add_argument('--run-id'); parser.add_argument('--resume',action='store_true')
     args=parser.parse_args(); config=json.loads(Path(args.config).read_text()); config['_file']=str(Path(args.config).resolve())
     if args.operation=='datasets':
         # Checksum validation occurs at start; registry entries are operator-prevalidated.
         result=[dict(id=key,label=value['label'],rows=json.loads(Path(value['manifest']).read_text())['rows']) for key,value in config['datasets'].items()]
     elif args.operation=='start': result=start(config,json.load(sys.stdin))
     elif args.operation=='control': result=control(config,json.load(sys.stdin))
+    elif args.operation in ('quiesce','recover'):
+        from retailrocket import edge_recovery
+        result=getattr(edge_recovery,args.operation)(config,json.load(sys.stdin))
     elif args.operation=='observe': result=observation(config,identity(args.run_id))
-    else: work(config,identity(args.run_id)); return
+    else: work(config,identity(args.run_id),args.resume); return
     print(json.dumps(result))
 
 
