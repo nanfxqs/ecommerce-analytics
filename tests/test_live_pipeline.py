@@ -9,7 +9,8 @@ def test_live_round_exact_state_survives_restart_and_drives_http(tmp_path):
     from pyspark.sql import SparkSession
     from retailrocket.spark_stream import start_captured_stream, read_snapshot, publish_observation
     spark = (SparkSession.builder.master('local[2]').appName('live-round-contract')
-             .config('spark.sql.shuffle.partitions','2').getOrCreate())
+             .config('spark.sql.shuffle.partitions','1')
+             .config('spark.sql.streaming.stateStore.rocksdb.changelogCheckpointing.enabled','true').getOrCreate())
     inbox=tmp_path/'input'; inbox.mkdir()
     output=str(tmp_path/'output'); checkpoint=str(tmp_path/'checkpoint')
     def row(line,offset,timestamp='0',visitor='1'):
@@ -34,8 +35,14 @@ def test_live_round_exact_state_survives_restart_and_drives_http(tmp_path):
         run('first.json',[row(2,0,'86400000'),row(3,1),row(2,2,'86400000')])
         run('second.json',[row(4,3),row(5,4,'bad','invalid-only'),row(2,5,'172800000','ghost')])
         result=read_snapshot(spark,output)
+        physical=spark.read.parquet(*[str(p) for p in (Path(output)/'raw').iterdir() if p.is_dir() and (p/'_SUCCESS').exists()]).orderBy('offset').collect()
+        assert [r.offset for r in physical]==[0,1,2,3,4,5]
+        assert [json.loads(r.value)['source_line'] for r in physical]==[2,3,2,4,5,2]
+        assert json.loads(physical[-1].value)['visitorid']=='ghost'
         assert result['quality']==dict(consumed_count=6,unique_source_count=4,valid_count=3,
             invalid_count=1,retry_count=2,suspected_duplicate_count=1)
+        assert result['samples']==[]  # raw monitoring is independently sampled from Kafka, not the committed business frame
+        assert result.get('sample_records',[])==[]
         assert result['visitors']==1
         assert result['overview']=={'view':3}
         assert result['daily']==[dict(event_date='1970-01-01',event='view',count=2),dict(event_date='1970-01-02',event='view',count=1)]

@@ -1,0 +1,31 @@
+{
+  "root": "/home/hadoop/opt/ecommerce-v2-acceptance/runs-normal-changelog",
+  "code": "/home/hadoop/opt/ecommerce-v2-acceptance",
+  "brokers": "hadoop01:9092,hadoop02:9092,hadoop03:9092",
+  "max_offsets": 1000,
+  "datasets": {
+    "small": {
+      "manifest": "/home/hadoop/opt/ecommerce-v2-acceptance/data/small/input.json",
+      "label": "\u56fa\u5b9a\u5c0f\u6837\u672c10000\u6761",
+      "events_sha256": "08160d140300129d924fcbca6b1a63344eb4e12085c16da75fdcdc7763340e58"
+    },
+    "full": {
+      "manifest": "/home/hadoop/opt/ecommerce-v2-acceptance/data/full/input.json",
+      "label": "\u5b8c\u6574\u6570\u636e",
+      "events_sha256": "36490f208a2ff625545d49adae5f09bef8c48cbc74a81dfbd8877fb8d241ff1c"
+    }
+  },
+  "reference_source": "/home/hadoop/opt/ecommerce-v2-acceptance/references",
+  "reference_sha256": {
+    "references.json": "7149a0f58ac3a74de943ff9ee03b8cf84fdf67bd99e1db17bc3cf55e64a87397",
+    "categories.csv": "454879e4b2a795ee92629dd9b7103b4456aa72c2afaba7f5343fd25306bb9012",
+    "category_tree.csv": "94e865eb0a3d48cbbfe3b79079018dd92509315c88f5fd8d00d0b4b5af434f5b"
+  },
+  "cursor_flush_records": 100,
+  "cursor_flush_seconds": 1,
+  "wait_for_stream_ready": true,
+  "audit_ack_log": true,
+  "observation_interval_seconds": 0.1,
+  "rocksdb_changelog": true,
+  "small_shuffle_partitions": 1
+}

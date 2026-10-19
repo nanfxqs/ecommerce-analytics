@@ -1,0 +1,786 @@
+[
+  {
+    "selected": {
+      "host_before_ns": "19846265173403",
+      "host_after_ns": "19846463203414",
+      "host_wall_before_ns": "1792421736542000000",
+      "guest_monotonic_ns": "10675028778093",
+      "guest_wall_ns": "1792392936666456253",
+      "offset_ns": "9171335410315",
+      "uncertainty_ns": "99015005",
+      "rtt_ms": 198.030011
+    },
+    "candidates": [
+      {
+        "host_before_ns": "19846265173403",
+        "host_after_ns": "19846463203414",
+        "host_wall_before_ns": "1792421736542000000",
+        "guest_monotonic_ns": "10675028778093",
+        "guest_wall_ns": "1792392936666456253",
+        "offset_ns": "9171335410315",
+        "uncertainty_ns": "99015005",
+        "rtt_ms": 198.030011
+      },
+      {
+        "host_before_ns": "19846463237295",
+        "host_after_ns": "19846662354528",
+        "host_wall_before_ns": "1792421736740000000",
+        "guest_monotonic_ns": "10675228151233",
+        "guest_wall_ns": "1792392936865829321",
+        "offset_ns": "9171334644678",
+        "uncertainty_ns": "99558616",
+        "rtt_ms": 199.117233
+      },
+      {
+        "host_before_ns": "19846065768947",
+        "host_after_ns": "19846265121854",
+        "host_wall_before_ns": "1792421736343000000",
+        "guest_monotonic_ns": "10674830646248",
+        "guest_wall_ns": "1792392936468324368",
+        "offset_ns": "9171334799152",
+        "uncertainty_ns": "99676453",
+        "rtt_ms": 199.352907
+      },
+      {
+        "host_before_ns": "19845866293916",
+        "host_after_ns": "19846065736984",
+        "host_wall_before_ns": "1792421736143000000",
+        "guest_monotonic_ns": "10674631696403",
+        "guest_wall_ns": "1792392936269375131",
+        "offset_ns": "9171334319047",
+        "uncertainty_ns": "99721534",
+        "rtt_ms": 199.443068
+      },
+      {
+        "host_before_ns": "19845258953341",
+        "host_after_ns": "19845460459081",
+        "host_wall_before_ns": "1792421735536000000",
+        "guest_monotonic_ns": "10674024495579",
+        "guest_wall_ns": "1792392935662173601",
+        "offset_ns": "9171335210632",
+        "uncertainty_ns": "100752870",
+        "rtt_ms": 201.50574
+      },
+      {
+        "host_before_ns": "19845460519805",
+        "host_after_ns": "19845662899744",
+        "host_wall_before_ns": "1792421735737000000",
+        "guest_monotonic_ns": "10674228494872",
+        "guest_wall_ns": "1792392935866173390",
+        "offset_ns": "9171333214902",
+        "uncertainty_ns": "101189969",
+        "rtt_ms": 202.379939
+      },
+      {
+        "host_before_ns": "19845662939581",
+        "host_after_ns": "19845866253540",
+        "host_wall_before_ns": "1792421735940000000",
+        "guest_monotonic_ns": "10674432234284",
+        "guest_wall_ns": "1792392936069912409",
+        "offset_ns": "9171332362276",
+        "uncertainty_ns": "101656979",
+        "rtt_ms": 203.313959
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "19960239022276",
+      "host_after_ns": "19960452637053",
+      "host_wall_before_ns": "1792421850516000000",
+      "guest_monotonic_ns": "10789018426289",
+      "guest_wall_ns": "1792393050656104448",
+      "offset_ns": "9171327403375",
+      "uncertainty_ns": "106807388",
+      "rtt_ms": 213.614777
+    },
+    "candidates": [
+      {
+        "host_before_ns": "19960239022276",
+        "host_after_ns": "19960452637053",
+        "host_wall_before_ns": "1792421850516000000",
+        "guest_monotonic_ns": "10789018426289",
+        "guest_wall_ns": "1792393050656104448",
+        "offset_ns": "9171327403375",
+        "uncertainty_ns": "106807388",
+        "rtt_ms": 213.614777
+      },
+      {
+        "host_before_ns": "19960452705655",
+        "host_after_ns": "19960676840337",
+        "host_wall_before_ns": "1792421850730000000",
+        "guest_monotonic_ns": "10789243587686",
+        "guest_wall_ns": "1792393050881266244",
+        "offset_ns": "9171321185310",
+        "uncertainty_ns": "112067341",
+        "rtt_ms": 224.134682
+      },
+      {
+        "host_before_ns": "19960676893066",
+        "host_after_ns": "19960918755064",
+        "host_wall_before_ns": "1792421850954000000",
+        "guest_monotonic_ns": "10789484405308",
+        "guest_wall_ns": "1792393051122084897",
+        "offset_ns": "9171313418757",
+        "uncertainty_ns": "120930999",
+        "rtt_ms": 241.861998
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20021749580506",
+      "host_after_ns": "20021981959136",
+      "host_wall_before_ns": "1792421912027000000",
+      "guest_monotonic_ns": "10850548448474",
+      "guest_wall_ns": "1792393112186126276",
+      "offset_ns": "9171317321347",
+      "uncertainty_ns": "116189315",
+      "rtt_ms": 232.37863
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20021749580506",
+        "host_after_ns": "20021981959136",
+        "host_wall_before_ns": "1792421912027000000",
+        "guest_monotonic_ns": "10850548448474",
+        "guest_wall_ns": "1792393112186126276",
+        "offset_ns": "9171317321347",
+        "uncertainty_ns": "116189315",
+        "rtt_ms": 232.37863
+      },
+      {
+        "host_before_ns": "20021440248988",
+        "host_after_ns": "20021749523614",
+        "host_wall_before_ns": "1792421911717000000",
+        "guest_monotonic_ns": "10850313768062",
+        "guest_wall_ns": "1792393111951446361",
+        "offset_ns": "9171281118239",
+        "uncertainty_ns": "154637313",
+        "rtt_ms": 309.274626
+      },
+      {
+        "host_before_ns": "20021982072338",
+        "host_after_ns": "20022299291870",
+        "host_wall_before_ns": "1792421912259000000",
+        "guest_monotonic_ns": "10850865863681",
+        "guest_wall_ns": "1792393112503541531",
+        "offset_ns": "9171274818423",
+        "uncertainty_ns": "158609766",
+        "rtt_ms": 317.219532
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20083046052484",
+      "host_after_ns": "20083248655292",
+      "host_wall_before_ns": "1792421973323000000",
+      "guest_monotonic_ns": "10911816303859",
+      "guest_wall_ns": "1792393173453982289",
+      "offset_ns": "9171331050029",
+      "uncertainty_ns": "101301404",
+      "rtt_ms": 202.602808
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20083046052484",
+        "host_after_ns": "20083248655292",
+        "host_wall_before_ns": "1792421973323000000",
+        "guest_monotonic_ns": "10911816303859",
+        "guest_wall_ns": "1792393173453982289",
+        "offset_ns": "9171331050029",
+        "uncertainty_ns": "101301404",
+        "rtt_ms": 202.602808
+      },
+      {
+        "host_before_ns": "20083248677621",
+        "host_after_ns": "20083452033430",
+        "host_wall_before_ns": "1792421973526000000",
+        "guest_monotonic_ns": "10912019460618",
+        "guest_wall_ns": "1792393173657137872",
+        "offset_ns": "9171330894907",
+        "uncertainty_ns": "101677904",
+        "rtt_ms": 203.355809
+      },
+      {
+        "host_before_ns": "20082815684678",
+        "host_after_ns": "20083045947481",
+        "host_wall_before_ns": "1792421973093000000",
+        "guest_monotonic_ns": "10911611305610",
+        "guest_wall_ns": "1792393173248984907",
+        "offset_ns": "9171319510469",
+        "uncertainty_ns": "115131401",
+        "rtt_ms": 230.262803
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20144217593322",
+      "host_after_ns": "20144445797790",
+      "host_wall_before_ns": "1792422034495000000",
+      "guest_monotonic_ns": "10973013103037",
+      "guest_wall_ns": "1792393234650780838",
+      "offset_ns": "9171318592519",
+      "uncertainty_ns": "114102234",
+      "rtt_ms": 228.204468
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20144217593322",
+        "host_after_ns": "20144445797790",
+        "host_wall_before_ns": "1792422034495000000",
+        "guest_monotonic_ns": "10973013103037",
+        "guest_wall_ns": "1792393234650780838",
+        "offset_ns": "9171318592519",
+        "uncertainty_ns": "114102234",
+        "rtt_ms": 228.204468
+      },
+      {
+        "host_before_ns": "20144445822681",
+        "host_after_ns": "20144680764535",
+        "host_wall_before_ns": "1792422034723000000",
+        "guest_monotonic_ns": "10973246425160",
+        "guest_wall_ns": "1792393234884103575",
+        "offset_ns": "9171316868448",
+        "uncertainty_ns": "117470927",
+        "rtt_ms": 234.941854
+      },
+      {
+        "host_before_ns": "20143964631651",
+        "host_after_ns": "20144217561324",
+        "host_wall_before_ns": "1792422034242000000",
+        "guest_monotonic_ns": "10972783535966",
+        "guest_wall_ns": "1792393234421213817",
+        "offset_ns": "9171307560521",
+        "uncertainty_ns": "126464836",
+        "rtt_ms": 252.929673
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20205194672967",
+      "host_after_ns": "20205398349338",
+      "host_wall_before_ns": "1792422095472000000",
+      "guest_monotonic_ns": "11033966174951",
+      "guest_wall_ns": "1792393295603854711",
+      "offset_ns": "9171330336201",
+      "uncertainty_ns": "101838185",
+      "rtt_ms": 203.676371
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20205194672967",
+        "host_after_ns": "20205398349338",
+        "host_wall_before_ns": "1792422095472000000",
+        "guest_monotonic_ns": "11033966174951",
+        "guest_wall_ns": "1792393295603854711",
+        "offset_ns": "9171330336201",
+        "uncertainty_ns": "101838185",
+        "rtt_ms": 203.676371
+      },
+      {
+        "host_before_ns": "20205643910255",
+        "host_after_ns": "20205860936815",
+        "host_wall_before_ns": "1792422095921000000",
+        "guest_monotonic_ns": "11034427743841",
+        "guest_wall_ns": "1792393296065422703",
+        "offset_ns": "9171324679694",
+        "uncertainty_ns": "108513280",
+        "rtt_ms": 217.02656
+      },
+      {
+        "host_before_ns": "20205398368680",
+        "host_after_ns": "20205643885786",
+        "host_wall_before_ns": "1792422095675000000",
+        "guest_monotonic_ns": "11034210550098",
+        "guest_wall_ns": "1792393295848228436",
+        "offset_ns": "9171310577135",
+        "uncertainty_ns": "122758553",
+        "rtt_ms": 245.517106
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20266379482993",
+      "host_after_ns": "20266581615353",
+      "host_wall_before_ns": "1792422156656000000",
+      "guest_monotonic_ns": "11095149557738",
+      "guest_wall_ns": "1792393356787235886",
+      "offset_ns": "9171330991435",
+      "uncertainty_ns": "101066180",
+      "rtt_ms": 202.13236
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20266379482993",
+        "host_after_ns": "20266581615353",
+        "host_wall_before_ns": "1792422156656000000",
+        "guest_monotonic_ns": "11095149557738",
+        "guest_wall_ns": "1792393356787235886",
+        "offset_ns": "9171330991435",
+        "uncertainty_ns": "101066180",
+        "rtt_ms": 202.13236
+      },
+      {
+        "host_before_ns": "20266581651244",
+        "host_after_ns": "20266798435425",
+        "host_wall_before_ns": "1792422156859000000",
+        "guest_monotonic_ns": "11095362899950",
+        "guest_wall_ns": "1792393357000579023",
+        "offset_ns": "9171327143384",
+        "uncertainty_ns": "108392090",
+        "rtt_ms": 216.784181
+      },
+      {
+        "host_before_ns": "20266798458091",
+        "host_after_ns": "20267204051683",
+        "host_wall_before_ns": "1792422157075000000",
+        "guest_monotonic_ns": "11095771477468",
+        "guest_wall_ns": "1792393357409155677",
+        "offset_ns": "9171229777419",
+        "uncertainty_ns": "202796796",
+        "rtt_ms": 405.593592
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20327932437737",
+      "host_after_ns": "20328154745781",
+      "host_wall_before_ns": "1792422218209000000",
+      "guest_monotonic_ns": "11156720550719",
+      "guest_wall_ns": "1792393418358229674",
+      "offset_ns": "9171323041040",
+      "uncertainty_ns": "111154022",
+      "rtt_ms": 222.308044
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20327932437737",
+        "host_after_ns": "20328154745781",
+        "host_wall_before_ns": "1792422218209000000",
+        "guest_monotonic_ns": "11156720550719",
+        "guest_wall_ns": "1792393418358229674",
+        "offset_ns": "9171323041040",
+        "uncertainty_ns": "111154022",
+        "rtt_ms": 222.308044
+      },
+      {
+        "host_before_ns": "20327704154929",
+        "host_after_ns": "20327932408541",
+        "host_wall_before_ns": "1792422217981000000",
+        "guest_monotonic_ns": "11156501072393",
+        "guest_wall_ns": "1792393418138750725",
+        "offset_ns": "9171317209342",
+        "uncertainty_ns": "114126806",
+        "rtt_ms": 228.253612
+      },
+      {
+        "host_before_ns": "20328154771279",
+        "host_after_ns": "20328623726686",
+        "host_wall_before_ns": "1792422218432000000",
+        "guest_monotonic_ns": "11157183487904",
+        "guest_wall_ns": "1792393418821165862",
+        "offset_ns": "9171205761078",
+        "uncertainty_ns": "234477703",
+        "rtt_ms": 468.955407
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20389663179441",
+      "host_after_ns": "20389884850604",
+      "host_wall_before_ns": "1792422279940000000",
+      "guest_monotonic_ns": "11218452252514",
+      "guest_wall_ns": "1792393480089930590",
+      "offset_ns": "9171321762508",
+      "uncertainty_ns": "110835581",
+      "rtt_ms": 221.671163
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20389663179441",
+        "host_after_ns": "20389884850604",
+        "host_wall_before_ns": "1792422279940000000",
+        "guest_monotonic_ns": "11218452252514",
+        "guest_wall_ns": "1792393480089930590",
+        "offset_ns": "9171321762508",
+        "uncertainty_ns": "110835581",
+        "rtt_ms": 221.671163
+      },
+      {
+        "host_before_ns": "20389140049528",
+        "host_after_ns": "20389383159155",
+        "host_wall_before_ns": "1792422279417000000",
+        "guest_monotonic_ns": "11217951093813",
+        "guest_wall_ns": "1792393479588771804",
+        "offset_ns": "9171310510528",
+        "uncertainty_ns": "121554813",
+        "rtt_ms": 243.109627
+      },
+      {
+        "host_before_ns": "20389383182946",
+        "host_after_ns": "20389663157086",
+        "host_wall_before_ns": "1792422279660000000",
+        "guest_monotonic_ns": "11218230959463",
+        "guest_wall_ns": "1792393479868638638",
+        "offset_ns": "9171292210553",
+        "uncertainty_ns": "139987070",
+        "rtt_ms": 279.97414
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20450404352190",
+      "host_after_ns": "20450614104823",
+      "host_wall_before_ns": "1792422340681000000",
+      "guest_monotonic_ns": "11279181291395",
+      "guest_wall_ns": "1792393540818969297",
+      "offset_ns": "9171327937111",
+      "uncertainty_ns": "104876316",
+      "rtt_ms": 209.752633
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20450404352190",
+        "host_after_ns": "20450614104823",
+        "host_wall_before_ns": "1792422340681000000",
+        "guest_monotonic_ns": "11279181291395",
+        "guest_wall_ns": "1792393540818969297",
+        "offset_ns": "9171327937111",
+        "uncertainty_ns": "104876316",
+        "rtt_ms": 209.752633
+      },
+      {
+        "host_before_ns": "20450912741160",
+        "host_after_ns": "20451178234257",
+        "host_wall_before_ns": "1792422341190000000",
+        "guest_monotonic_ns": "11279747558664",
+        "guest_wall_ns": "1792393541385236367",
+        "offset_ns": "9171297929044",
+        "uncertainty_ns": "132746548",
+        "rtt_ms": 265.493097
+      },
+      {
+        "host_before_ns": "20450614134672",
+        "host_after_ns": "20450912719225",
+        "host_wall_before_ns": "1792422340891000000",
+        "guest_monotonic_ns": "11279481230414",
+        "guest_wall_ns": "1792393541118908932",
+        "offset_ns": "9171282196534",
+        "uncertainty_ns": "149292276",
+        "rtt_ms": 298.584553
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20511904560262",
+      "host_after_ns": "20512101490311",
+      "host_wall_before_ns": "1792422402182000000",
+      "guest_monotonic_ns": "11340672169321",
+      "guest_wall_ns": "1792393602309847299",
+      "offset_ns": "9171330855965",
+      "uncertainty_ns": "98465024",
+      "rtt_ms": 196.930049
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20511904560262",
+        "host_after_ns": "20512101490311",
+        "host_wall_before_ns": "1792422402182000000",
+        "guest_monotonic_ns": "11340672169321",
+        "guest_wall_ns": "1792393602309847299",
+        "offset_ns": "9171330855965",
+        "uncertainty_ns": "98465024",
+        "rtt_ms": 196.930049
+      },
+      {
+        "host_before_ns": "20511684976244",
+        "host_after_ns": "20511904532684",
+        "host_wall_before_ns": "1792422401962000000",
+        "guest_monotonic_ns": "11340473544293",
+        "guest_wall_ns": "1792393602111222329",
+        "offset_ns": "9171321210171",
+        "uncertainty_ns": "109778220",
+        "rtt_ms": 219.55644
+      },
+      {
+        "host_before_ns": "20512101514966",
+        "host_after_ns": "20512361659922",
+        "host_wall_before_ns": "1792422402378000000",
+        "guest_monotonic_ns": "11340931297030",
+        "guest_wall_ns": "1792393602568975171",
+        "offset_ns": "9171300290414",
+        "uncertainty_ns": "130072478",
+        "rtt_ms": 260.144956
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20573077608733",
+      "host_after_ns": "20573284776272",
+      "host_wall_before_ns": "1792422463355000000",
+      "guest_monotonic_ns": "11401854124729",
+      "guest_wall_ns": "1792393663491803108",
+      "offset_ns": "9171327067773",
+      "uncertainty_ns": "103583769",
+      "rtt_ms": 207.167539
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20573077608733",
+        "host_after_ns": "20573284776272",
+        "host_wall_before_ns": "1792422463355000000",
+        "guest_monotonic_ns": "11401854124729",
+        "guest_wall_ns": "1792393663491803108",
+        "offset_ns": "9171327067773",
+        "uncertainty_ns": "103583769",
+        "rtt_ms": 207.167539
+      },
+      {
+        "host_before_ns": "20572867995267",
+        "host_after_ns": "20573077579627",
+        "host_wall_before_ns": "1792422463145000000",
+        "guest_monotonic_ns": "11401646886934",
+        "guest_wall_ns": "1792393663284565801",
+        "offset_ns": "9171325900513",
+        "uncertainty_ns": "104792180",
+        "rtt_ms": 209.58436
+      },
+      {
+        "host_before_ns": "20573284804093",
+        "host_after_ns": "20573557148337",
+        "host_wall_before_ns": "1792422463562000000",
+        "guest_monotonic_ns": "11402126448459",
+        "guest_wall_ns": "1792393663764126237",
+        "offset_ns": "9171294527756",
+        "uncertainty_ns": "136172122",
+        "rtt_ms": 272.344244
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20634489693261",
+      "host_after_ns": "20634691886725",
+      "host_wall_before_ns": "1792422524767000000",
+      "guest_monotonic_ns": "11463261753400",
+      "guest_wall_ns": "1792393724899431743",
+      "offset_ns": "9171329036593",
+      "uncertainty_ns": "101096732",
+      "rtt_ms": 202.193464
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20634489693261",
+        "host_after_ns": "20634691886725",
+        "host_wall_before_ns": "1792422524767000000",
+        "guest_monotonic_ns": "11463261753400",
+        "guest_wall_ns": "1792393724899431743",
+        "offset_ns": "9171329036593",
+        "uncertainty_ns": "101096732",
+        "rtt_ms": 202.193464
+      },
+      {
+        "host_before_ns": "20634275213859",
+        "host_after_ns": "20634489669034",
+        "host_wall_before_ns": "1792422524552000000",
+        "guest_monotonic_ns": "11463060598193",
+        "guest_wall_ns": "1792393724698275916",
+        "offset_ns": "9171321843253",
+        "uncertainty_ns": "107227587",
+        "rtt_ms": 214.455175
+      },
+      {
+        "host_before_ns": "20634054115383",
+        "host_after_ns": "20634275188683",
+        "host_wall_before_ns": "1792422524331000000",
+        "guest_monotonic_ns": "11462845385379",
+        "guest_wall_ns": "1792393724483063858",
+        "offset_ns": "9171319266654",
+        "uncertainty_ns": "110536650",
+        "rtt_ms": 221.0733
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20695405978234",
+      "host_after_ns": "20695615948046",
+      "host_wall_before_ns": "1792422585683000000",
+      "guest_monotonic_ns": "11524185641921",
+      "guest_wall_ns": "1792393785823320179",
+      "offset_ns": "9171325321219",
+      "uncertainty_ns": "104984906",
+      "rtt_ms": 209.969812
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20695405978234",
+        "host_after_ns": "20695615948046",
+        "host_wall_before_ns": "1792422585683000000",
+        "guest_monotonic_ns": "11524185641921",
+        "guest_wall_ns": "1792393785823320179",
+        "offset_ns": "9171325321219",
+        "uncertainty_ns": "104984906",
+        "rtt_ms": 209.969812
+      },
+      {
+        "host_before_ns": "20695186042457",
+        "host_after_ns": "20695405956471",
+        "host_wall_before_ns": "1792422585463000000",
+        "guest_monotonic_ns": "11523976679535",
+        "guest_wall_ns": "1792393785614358136",
+        "offset_ns": "9171319319929",
+        "uncertainty_ns": "109957007",
+        "rtt_ms": 219.914014
+      },
+      {
+        "host_before_ns": "20695615965330",
+        "host_after_ns": "20695863445526",
+        "host_wall_before_ns": "1792422585893000000",
+        "guest_monotonic_ns": "11524427495005",
+        "guest_wall_ns": "1792393786065172910",
+        "offset_ns": "9171312210423",
+        "uncertainty_ns": "123740098",
+        "rtt_ms": 247.480196
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20756353731200",
+      "host_after_ns": "20756561995859",
+      "host_wall_before_ns": "1792422646631000000",
+      "guest_monotonic_ns": "11585131644807",
+      "guest_wall_ns": "1792393846769323010",
+      "offset_ns": "9171326218722",
+      "uncertainty_ns": "104132329",
+      "rtt_ms": 208.264659
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20756353731200",
+        "host_after_ns": "20756561995859",
+        "host_wall_before_ns": "1792422646631000000",
+        "guest_monotonic_ns": "11585131644807",
+        "guest_wall_ns": "1792393846769323010",
+        "offset_ns": "9171326218722",
+        "uncertainty_ns": "104132329",
+        "rtt_ms": 208.264659
+      },
+      {
+        "host_before_ns": "20756562024508",
+        "host_after_ns": "20756783034920",
+        "host_wall_before_ns": "1792422646839000000",
+        "guest_monotonic_ns": "11585354753436",
+        "guest_wall_ns": "1792393846992431447",
+        "offset_ns": "9171317776278",
+        "uncertainty_ns": "110505206",
+        "rtt_ms": 221.010412
+      },
+      {
+        "host_before_ns": "20756783062096",
+        "host_after_ns": "20757033127764",
+        "host_wall_before_ns": "1792422647060000000",
+        "guest_monotonic_ns": "11585604312989",
+        "guest_wall_ns": "1792393847241990754",
+        "offset_ns": "9171303781941",
+        "uncertainty_ns": "125032834",
+        "rtt_ms": 250.065668
+      }
+    ]
+  },
+  {
+    "selected": {
+      "host_before_ns": "20815332259822",
+      "host_after_ns": "20815528790692",
+      "host_wall_before_ns": "1792422705609000000",
+      "guest_monotonic_ns": "11644099477788",
+      "guest_wall_ns": "1792393905737155676",
+      "offset_ns": "9171331047469",
+      "uncertainty_ns": "98265435",
+      "rtt_ms": 196.53087
+    },
+    "candidates": [
+      {
+        "host_before_ns": "20815332259822",
+        "host_after_ns": "20815528790692",
+        "host_wall_before_ns": "1792422705609000000",
+        "guest_monotonic_ns": "11644099477788",
+        "guest_wall_ns": "1792393905737155676",
+        "offset_ns": "9171331047469",
+        "uncertainty_ns": "98265435",
+        "rtt_ms": 196.53087
+      },
+      {
+        "host_before_ns": "20814515639017",
+        "host_after_ns": "20814716039820",
+        "host_wall_before_ns": "1792422704793000000",
+        "guest_monotonic_ns": "11643286338257",
+        "guest_wall_ns": "1792393904924016256",
+        "offset_ns": "9171329501161",
+        "uncertainty_ns": "100200401",
+        "rtt_ms": 200.400803
+      },
+      {
+        "host_before_ns": "20815130281180",
+        "host_after_ns": "20815332239116",
+        "host_wall_before_ns": "1792422705407000000",
+        "guest_monotonic_ns": "11643903275934",
+        "guest_wall_ns": "1792393905540954138",
+        "offset_ns": "9171327984214",
+        "uncertainty_ns": "100978968",
+        "rtt_ms": 201.957936
+      },
+      {
+        "host_before_ns": "20814106055959",
+        "host_after_ns": "20814310284043",
+        "host_wall_before_ns": "1792422704383000000",
+        "guest_monotonic_ns": "11642880739305",
+        "guest_wall_ns": "1792393904518417966",
+        "offset_ns": "9171327430696",
+        "uncertainty_ns": "102114042",
+        "rtt_ms": 204.228084
+      },
+      {
+        "host_before_ns": "20814924975504",
+        "host_after_ns": "20815130254898",
+        "host_wall_before_ns": "1792422705202000000",
+        "guest_monotonic_ns": "11643700863516",
+        "guest_wall_ns": "1792393905338541751",
+        "offset_ns": "9171326751685",
+        "uncertainty_ns": "102639697",
+        "rtt_ms": 205.279394
+      },
+      {
+        "host_before_ns": "20814310313152",
+        "host_after_ns": "20814515620328",
+        "host_wall_before_ns": "1792422704587000000",
+        "guest_monotonic_ns": "11643086633730",
+        "guest_wall_ns": "1792393904724312046",
+        "offset_ns": "9171326333010",
+        "uncertainty_ns": "102653588",
+        "rtt_ms": 205.307176
+      },
+      {
+        "host_before_ns": "20814716062274",
+        "host_after_ns": "20814924937677",
+        "host_wall_before_ns": "1792422704993000000",
+        "guest_monotonic_ns": "11643495216710",
+        "guest_wall_ns": "1792393905132895104",
+        "offset_ns": "9171325283265",
+        "uncertainty_ns": "104437701",
+        "rtt_ms": 208.875403
+      }
+    ]
+  }
+]

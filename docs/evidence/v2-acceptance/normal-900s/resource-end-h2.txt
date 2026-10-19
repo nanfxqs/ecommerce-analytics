@@ -1,0 +1,64 @@
+2026-10-19T07:11:09Z
+cpu  322368 104 41099 1877362 46599 12324 8324 1888 0 0
+cpu0 161626 47 21023 939517 22816 6203 2401 932 0 0
+cpu1 160742 56 20076 937844 23783 6120 5923 956 0 0
+intr 17291019 0 9 0 0 0 0 0 0 0 0 1708 0 150 0 0 0 0 0 0 0 0 0 0 0 0 6 31 0 0 0 29 0 292950 296195 0 1814825 1907484 0 0 44 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ctxt 19215247
+btime 1792382261
+processes 60812
+procs_running 2
+procs_blocked 0
+softirq 11593261 16 1501510 1 4337335 0 0 160957 2406523 0 3186919
+MemTotal:        3753660 kB
+MemFree:          167720 kB
+MemAvailable:    1216456 kB
+Buffers:               4 kB
+Cached:          1205376 kB
+SwapCached:       103708 kB
+Active:          1168468 kB
+Inactive:        2173672 kB
+Active(anon):     700428 kB
+Inactive(anon):  1439132 kB
+Active(file):     468040 kB
+Inactive(file):   734540 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       4149244 kB
+SwapFree:        3023532 kB
+Dirty:               824 kB
+Writeback:             0 kB
+AnonPages:       2097064 kB
+Mapped:            61480 kB
+Shmem:              2796 kB
+KReclaimable:     100080 kB
+Slab:             158624 kB
+SReclaimable:     100080 kB
+SUnreclaim:        58544 kB
+KernelStack:       11324 kB
+PageTables:        14644 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     6026072 kB
+Committed_AS:    4501464 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:       32160 kB
+VmallocChunk:          0 kB
+Percpu:              864 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:   1325056 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+DirectMap4k:      126832 kB
+DirectMap2M:     4067328 kB
+DirectMap1G:     2097152 kB
+  56010   56009  3220 224728  0.0 bash            /bin/bash -c /usr/local/jdk1.8.0_212/bin/java -server -Xmx512m '-Djava.net.preferIPv6Addresses=false' '-XX:+IgnoreUnrecognizedVMOptions' '--add-opens=java.base/java.lang=ALL-UNNAMED' '--add-opens=java.base/java.lang.invoke=ALL-UNNAMED' '--add-opens=java.base/java.lang.reflect=ALL-UNNAMED' '--add-opens=java.base/java.io=ALL-UNNAMED' '--add-opens=java.base/java.net=ALL-UNNAMED' '--add-opens=java.base/java.nio=ALL-UNNAMED' '--add-opens=java.base/java.util=ALL-UNNAMED' '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED' '--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED' '--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED' '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED' '--add-opens=java.base/sun.nio.cs=ALL-UNNAMED' '--add-opens=java.base/sun.security.action=ALL-UNNAMED' '--add-opens=java.base/sun.util.calendar=ALL-UNNAMED' '--add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED' '-Djdk.reflect.useDirectMethodHandle=false' '-XX:CompressedClassSpaceSize=64m' '-XX:ReservedCodeCacheSize=64m' -Djava.io.tmpdir=/usr/local/hadoop/tmp/nm-local-dir/usercache/hadoop/appcache/application_1792382297034_0028/container_e05_1792382297034_0028_01_000003/tmp '-Dspark.driver.port=34671' -Dspark.yarn.app.container.log.dir=/usr/local/hadoop/logs/userlogs/application_1792382297034_0028/container_e05_1792382297034_0028_01_000003 -XX:OnOutOfMemoryError='kill %p' org.apache.spark.executor.YarnCoarseGrainedExecutorBackend --driver-url spark://CoarseGrainedScheduler@hadoop01:34671 --executor-id 2 --hostname hadoop02 --cores 1 --app-id application_1792382297034_0028 --resourceProfileId 0 1>/usr/local/hadoop/logs/userlogs/application_1792382297034_0028/container_e05_1792382297034_0028_01_000003/stdout 2>/usr/local/hadoop/logs/userlogs/application_1792382297034_0028/container_e05_1792382297034_0028_01_000003/stderr
+  56027   56010 437976 1539220 22.9 java          /usr/local/jdk1.8.0_212/bin/java -server -Xmx512m -Djava.net.preferIPv6Addresses=false -XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/jdk.internal.ref=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/sun.nio.cs=ALL-UNNAMED --add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.util.calendar=ALL-UNNAMED --add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED -Djdk.reflect.useDirectMethodHandle=false -XX:CompressedClassSpaceSize=64m -XX:ReservedCodeCacheSize=64m -Djava.io.tmpdir=/usr/local/hadoop/tmp/nm-local-dir/usercache/hadoop/appcache/application_1792382297034_0028/container_e05_1792382297034_0028_01_000003/tmp -Dspark.driver.port=34671 -Dspark.yarn.app.container.log.dir=/usr/local/hadoop/logs/userlogs/application_1792382297034_0028/container_e05_1792382297034_0028_01_000003 -XX:OnOutOfMemoryError=kill %p org.apache.spark.executor.YarnCoarseGrainedExecutorBackend --driver-url spark://CoarseGrainedScheduler@hadoop01:34671 --executor-id 2 --hostname hadoop02 --cores 1 --app-id application_1792382297034_0028 --resourceProfileId 0

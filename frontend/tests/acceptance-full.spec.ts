@@ -1,0 +1,28 @@
+import { test, expect } from '@playwright/test';
+test.skip(process.env.V2_FULL_ACCEPTANCE !== '1', 'Requires actual full worker and automatic publication on API8006');
+test('full registered input becomes complete history and realtime view without losing V1 pages', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByTestId('count-view')).toHaveText('2,664,312', { timeout: 90000 });
+  await expect(page.getByTestId('count-addtocart')).toHaveText('69,332');
+  await expect(page.getByTestId('count-transaction')).toHaveText('22,457');
+  await expect(page.getByTestId('count-visitors')).toHaveText('1,407,580');
+  await page.getByRole('menuitem', { name: '购买关联' }).click();
+  await expect(page.getByTestId('view-purchase-visitors')).toHaveText('11,291');
+  await expect(page.getByTestId('cart-purchase-visitors')).toHaveText('10,576');
+  await page.getByRole('menuitem', { name: '分类偏好' }).click();
+  await expect(page.getByText('76.16%', { exact: true })).toBeVisible();
+  await page.getByRole('menuitem', { name: '用户画像' }).click();
+  await expect(page.getByTestId('profile-total')).toHaveText('1407580');
+  await page.getByRole('menuitem', { name: '数据质量' }).click();
+  await expect(page.getByTestId('quality-valid_count')).toHaveText('2,756,101');
+  await expect(page.getByTestId('quality-suspected_duplicate_count')).toHaveText('460');
+  await page.getByRole('menuitem', { name: '实时监控' }).click();
+  await expect(page.getByText('完整历史分析已通过校验并发布')).toBeVisible();
+  await expect(page.getByTestId('physical-messages')).toHaveText('2,756,101');
+  await expect(page.getByTestId('source-cursor')).toHaveText('2,756,101');
+  await expect(page.getByTestId('live-valid')).toHaveText('2,756,101');
+  await expect(page.getByTestId('live-visitors')).toHaveText('1,407,580');
+  await page.screenshot({ path: '/tmp/ecommerce-v2-agent/acceptance-full-browser.png', fullPage: true });
+  await page.reload();
+  await expect(page.getByTestId('count-view')).toHaveText('2,664,312');
+});

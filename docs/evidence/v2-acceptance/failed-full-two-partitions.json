@@ -1,0 +1,20 @@
+{
+  "run_id": "v2-b68af3f678234c1aae86dd6e851fc54e",
+  "phase": "failed",
+  "confirmed": 1516976,
+  "cursor": 1516976,
+  "error": "YARN streaming driver exited before producer completion",
+  "committed_batch": 89,
+  "lag": 48153,
+  "output": "hdfs://mycluster/retailrocket/streams/v2-b68af3f678234c1aae86dd6e851fc54e",
+  "checkpoint": "hdfs://mycluster/retailrocket/stream-checkpoints/v2-b68af3f678234c1aae86dd6e851fc54e",
+  "quality": {
+    "consumed_count": 1469822,
+    "unique_source_count": 1469822,
+    "valid_count": 1469822,
+    "invalid_count": 0,
+    "retry_count": 0,
+    "suspected_duplicate_count": 253
+  },
+  "application_id": "application_1792382297034_0017"
+}

@@ -1,0 +1,18 @@
+{
+  "accepted": true,
+  "meaning": "Populated exact state restored from SAME fresh changelog checkpoint after real ACK-before-cursor process death; intentional recovery excluded from performance",
+  "run_id": "v2-6af43e90fc5e4ff0a3d997e639c5ee1e",
+  "profile": {
+    "shuffle_partitions": 2,
+    "rocksdb_changelog": true
+  },
+  "fault_ack": 200,
+  "persisted_cursor": 199,
+  "physical_before": 203,
+  "resent_source_prefix": 4,
+  "final_source": 359,
+  "final_physical": 363,
+  "retry_count": 4,
+  "old_application": "application_1792382297034_0023",
+  "new_application": "application_1792382297034_0024"
+}

@@ -50,6 +50,8 @@ class SSHCluster:
 class Runs:
     def __init__(self, root, cluster, poll_seconds=2, publication_store=None, publication_checkpoint=None):
         self.root=Path(root); self.root.mkdir(parents=True,exist_ok=True)
+        from retailrocket.replay_monitor import Monitor
+        self.monitor=Monitor()
         from retailrocket.finalization import Finalizer
         self.finalizer=Finalizer(publication_store, cluster, publication_checkpoint) if publication_store is not None and hasattr(cluster, 'finalize') else None
         self.cluster=cluster; self.poll_seconds=poll_seconds; self.lock=RLock(); self.stop=Event()
@@ -62,10 +64,17 @@ class Runs:
             self.current['phase'] = 'recovery_required'
             self.current['control_generation'] = self.current.get('control_generation', 0) + 1
             self._save()
+        elif self.current:
+            from retailrocket.replay_monitor import restore_terminal
+            self.current=restore_terminal(self.current)
+            self._save()
         self.thread=Thread(target=self._supervise,daemon=True); self.thread.start()
     def close(self):
-        self.stop.set(); self.thread.join(timeout=45); self.lease.close()
+        self.stop.set(); self.thread.join(); self.lease.close()
     def _save(self):
+        from retailrocket.replay_monitor import source_cursor
+        self.current['source_cursor']=source_cursor(self.current)
+        if self.current['phase']!='running':self.current['rate']=0
         atomic(self.path,self.current)
         atomic(self.root/self.current['run_id']/'run.json',self.current)
     def start(self,dataset,rate):
@@ -88,7 +97,7 @@ class Runs:
             self._save()
             try:
                 result = self.cluster.recover(dict(state))
-                candidate = dict(state, **result)
+                candidate = self.monitor.observe(state,result)
                 if hasattr(self, '_historical_gate'):
                     candidate = self._historical_gate(candidate)
             except Exception as error:
@@ -156,7 +165,7 @@ class Runs:
     def _supervise(self):
         while not self.stop.wait(self.poll_seconds):
             state=self.read()
-            if not state or state['phase'] in ('completed','stopped') or (state['phase']=='failed' and state.get('failure_stage')=='history'): continue
+            if not state or state['phase'] in ('completed','stopped','published') or (state['phase']=='failed' and state.get('failure_stage')=='history'): continue
             from retailrocket.finalization import HISTORY_PHASES
             if self.finalizer and state['phase'] in HISTORY_PHASES:
                 try:
@@ -166,7 +175,7 @@ class Runs:
                 update['updated_at']=datetime.now(timezone.utc).isoformat()
                 with self.lock:
                     if self.current and self.current['run_id']==state['run_id'] and self.current['phase']==state['phase'] and not self.stop.is_set():
-                        self.current.update(update); self._save()
+                        self.current.update(update); self.current['rate']=0; self._save()
                 continue
             try:
                 update=self.cluster.quiesce(state) if state['phase'] == 'recovery_required' else self.cluster.observe(state)
@@ -181,7 +190,7 @@ class Runs:
                     if state['phase'] == 'recovery_required':
                         update['remote_phase'] = update.get('phase')
                         update['phase'] = 'recovery_required'
-                    self.current=self._historical_gate(dict(self.current,**update))
+                    self.current=self._historical_gate(self.monitor.observe(self.current,update))
                     pending = self.current.get('pending_control')
                     if (pending and self.current['phase'] == {'pause':'paused','continue':'running','stop':'stopped'}[pending['action']]
                             and (update.get('last_control') or {}).get('operation_id') == pending['operation_id']

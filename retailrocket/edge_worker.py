@@ -15,6 +15,8 @@ import signal
 import subprocess
 import sys
 import time
+from uuid import uuid4
+from threading import Lock
 
 def atomic(path, value):
     path = Path(path)
@@ -69,12 +71,16 @@ def dataset(config,key):
 
 def kafka(config):
     from kafka import KafkaConsumer
-    return KafkaConsumer(bootstrap_servers=config['brokers'].split(','),enable_auto_commit=False,request_timeout_ms=15000,api_version_auto_timeout_ms=10000)
+    return KafkaConsumer(bootstrap_servers=config['brokers'].split(','),enable_auto_commit=False,request_timeout_ms=15000,api_version_auto_timeout_ms=10000,fetch_max_wait_ms=100,max_poll_records=60)
 
 
-def ends(consumer,topic):
+def ends(consumer,topic,wait_seconds=0):
     from kafka import TopicPartition
+    deadline=time.monotonic()+wait_seconds
     parts=consumer.partitions_for_topic(topic)
+    while not parts and time.monotonic()<deadline:
+        time.sleep(min(.1,max(0,deadline-time.monotonic())))
+        parts=consumer.partitions_for_topic(topic)
     if not parts: raise ValueError('Run topic missing')
     return {str(p.partition):offset for p,offset in consumer.end_offsets([TopicPartition(topic,p) for p in sorted(parts)]).items()}
 
@@ -90,26 +96,46 @@ def children(path):
 
 
 def observation(config,run_id):
-    root=directory(config,run_id); state=json.loads((root/'state.json').read_text())
+    root=directory(config,run_id)
+    state=json.loads((root/'state.json').read_text())
+    if state.get('run_id')!=run_id:raise ValueError('Worker state identity mismatch')
+    from retailrocket.edge_recovery import worker_alive
     consumer=kafka(config)
-    try: state['ends']=ends(consumer,state['topic'])
-    finally: consumer.close()
-    cached = root/'stream-observation.json'
-    observed = json.loads(cached.read_text()) if cached.exists() else None
+    try:
+        sampled_ends=ends(consumer,state['topic'])
+        # Kafka I/O can outlive the worker's final state write and lease release.
+        # Re-read after observing a released lease, rather than failing an old phase.
+        alive=worker_alive(root)
+        if not alive:
+            latest=json.loads((root/'state.json').read_text())
+            if latest.get('run_id')!=run_id:raise ValueError('Worker state identity mismatch')
+            state=latest
+            alive=worker_alive(root)
+            if state['phase'] in ('completed','stopped') and state.get('final')!=sampled_ends:
+                sampled_ends=ends(consumer,state['topic'])
+        state['ends']=sampled_ends
+        try:
+            from retailrocket.kafka_tail import sample_tail
+            samples,samples_complete=sample_tail(consumer,state['topic'],sampled_ends)
+            raw_error=None
+        except Exception as error:
+            samples=[];samples_complete=False;raw_error=str(error)
+    finally:consumer.close()
+    cached=root/'stream-observation.json'
+    observed=json.loads(cached.read_text()) if cached.exists() else None
     if observed:
-        snapshot = observed['snapshot']
-        if snapshot['run_id'] != run_id:
-            raise ValueError('Snapshot identity mismatch')
-        if set(observed['committed']) != set(state['ends']):
-            raise ValueError('Checkpoint partition mismatch')
+        snapshot=observed['snapshot']
+        if snapshot['run_id']!=run_id:raise ValueError('Snapshot identity mismatch')
+        if set(observed['committed'])!=set(state['ends']):raise ValueError('Checkpoint partition mismatch')
         state.update(observed)
     else:
-        state.update(committed={p:0 for p in state['ends']}, result_offsets={}, samples=[], snapshot=None)
-
-    from retailrocket.edge_recovery import worker_alive
-    state['worker_alive'] = worker_alive(root)
-    if not state['worker_alive'] and state['phase'] in ('running','paused','starting','stopping','draining'):
+        state.update(committed={p:0 for p in state['ends']},result_offsets={},samples=[],snapshot=None)
+    state.update(raw_samples=samples,raw_samples_complete=samples_complete,raw_sample_error=raw_error,worker_alive=alive)
+    state['samples']=samples
+    if not alive and state['phase'] in ('running','paused','starting','stopping','draining'):
         state.update(phase='failed',error='回放 worker 已中断，请手动恢复原轮次')
+    elif state['phase'] in ('completed','stopped'):
+        state['error']=None
     return state
 
 
@@ -148,133 +174,198 @@ def control(config, run):
 
 def work(config,run_id,resume=False):
     root=directory(config,run_id)
-    lease=(root/'worker.lock').open('a'); fcntl.flock(lease,fcntl.LOCK_EX|fcntl.LOCK_NB)
-    run=json.loads((root/'request.json').read_text())
-    state=json.loads((root/'state.json').read_text()) if resume else dict(phase='starting',run_id=run_id,topic=run_id,confirmed=0,cursor=0,rate=0,
-               output='hdfs://mycluster/retailrocket/streams/'+run_id,
-               checkpoint='hdfs://mycluster/retailrocket/stream-checkpoints/'+run_id,complete=False)
-    state.update(phase='starting', complete=False)
-    state.pop('error',None)
-    atomic(root/'state.json',state)
-    stream=None; producer=None; consumer=None
-    try:
-        manifest,metadata,events=dataset(config,run['dataset'])
-        from kafka import KafkaProducer
-        from kafka.admin import KafkaAdminClient,NewTopic
-        if resume:
-            if type(state.get('cursor')) is not int or not 0 <= state['cursor'] <= metadata['rows']:
-                raise ValueError('Invalid persisted source acknowledgement cursor')
-            if state.get('input') != metadata:
-                raise ValueError('Prepared input changed since interrupted run')
-            consumer=kafka(config)
-            current_ends=ends(consumer,run_id)
-            starting=state['starting']
-            if any(type(offset) is not int or offset != 0 for offset in starting.values()):
-                raise ValueError('Original dedicated-topic starting offsets changed')
-            if set(current_ends)!=set(starting):raise ValueError('Recovery topic partitions changed')
-        else:
-            admin=KafkaAdminClient(bootstrap_servers=config['brokers'].split(','))
-            try: admin.create_topics([NewTopic(run_id,num_partitions=3,replication_factor=3)])
-            finally: admin.close()
-            consumer=kafka(config); starting=ends(consumer,run_id)
-        atomic(root/'input.json',metadata)
-        command=[str(Path(config['code'])/'scripts/submit-stream.sh'),'--brokers',config['brokers'],'--topic',run_id,'--run-id',run_id,'--output',state['output'],'--checkpoint',state['checkpoint'],'--max-offsets',str(config.get('max_offsets',1000)),'--stop-file',str(root/'stop-stream'),'--observation-file',str(root/'stream-observation.json')]
-        log=(root/'stream.log').open('a')
-        environment=dict(os.environ); environment['RETAILROCKET_SHUFFLE_PARTITIONS']='2'
-        stream=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,env=environment,start_new_session=True)
-        from retailrocket.edge_recovery import process_identity
-        state.update(phase='running',stream_pid=stream.pid,stream_identity=process_identity(stream.pid),starting=starting,input=metadata,stream_released=False)
+    with (root/'worker.lock').open('a') as lease:
+        fcntl.flock(lease,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        run=json.loads((root/'request.json').read_text())
+        state=json.loads((root/'state.json').read_text()) if resume else dict(phase='starting',run_id=run_id,topic=run_id,confirmed=0,cursor=0,rate=0,
+                   output='hdfs://mycluster/retailrocket/streams/'+run_id,
+                   checkpoint='hdfs://mycluster/retailrocket/stream-checkpoints/'+run_id,complete=False)
+        state.update(phase='starting', complete=False)
+        state.pop('error',None)
         atomic(root/'state.json',state)
-        producer=KafkaProducer(bootstrap_servers=config['brokers'].split(','),acks='all',retries=10,value_serializer=lambda row:json.dumps(row).encode(),linger_ms=20,batch_size=65536)
-        began=time.monotonic(); pending=deque(); confirmed=state.get('cursor',0); initial_confirmed=confirmed
-        def acknowledge():
-            nonlocal confirmed
-            position,future=pending.popleft(); future.get(timeout=120)
-            # Operator-only one-shot fault hook for real ACK-before-fsync recovery audits.
-            crash_marker=root/'ack-fault-fired.json'
-            if config.get('audit_crash_after_ack') == position and not crash_marker.exists():
-                atomic(crash_marker, dict(position=position,run_id=run_id))
-                os._exit(86)
-            confirmed+=1
-            state.update(cursor=position,confirmed=confirmed,rate=(confirmed-initial_confirmed)/max(.001,time.monotonic()-began))
+        stream=None; producer=None; consumer=None; checkpoint=None; ack_log=None
+        try:
+            manifest,metadata,events=dataset(config,run['dataset'])
+            partitions=config.get(run['dataset']+'_shuffle_partitions',config.get('shuffle_partitions',24 if run['dataset']=='full' else 2))
+            if type(partitions) is not int or not 1 <= partitions <= 200:
+                raise ValueError('shuffle_partitions must be an integer in 1..200')
+            changelog=config.get('rocksdb_changelog',False)
+            if type(changelog) is not bool:raise ValueError('rocksdb_changelog must be boolean')
+            profile=dict(shuffle_partitions=partitions,rocksdb_changelog=changelog)
+            previous_profile=dict(state.get('stream_profile',dict(shuffle_partitions=2)))
+            previous_profile.setdefault('rocksdb_changelog',False)
+            if resume and previous_profile != profile:
+                raise ValueError('Stream profile changed; checkpoint state partitions cannot migrate')
+            state['stream_profile']=profile
             atomic(root/'state.json',state)
-        def desired():
-            return json.loads((root/'control.json').read_text()) if (root/'control.json').exists() else None
-        stopped = state.get('early_stopped',False)
-        next_send = time.monotonic()
-        with events.open() as source:
-            for position,line in enumerate(source,1):
-                if position <= state.get('cursor',0) or (resume and 'final' in state):
-                    continue
-                if stream.poll() is not None: raise RuntimeError('YARN streaming driver exited before producer completion')
-                row=json.loads(line); row.update(batch_id=run_id,replay_time=datetime.now(timezone.utc).isoformat())
-                while True:
-                    if stream.poll() is not None:
-                        raise RuntimeError('Streaming driver exited during replay control')
-                    intent = desired()
-                    action = intent['action'] if intent else None
-                    if action in ('pause', 'stop'):
-                        while pending:
-                            acknowledge()
-                        target_phase = 'paused' if action == 'pause' else 'stopping'
-                        if state['phase'] != target_phase or state.get('last_control', {}).get('operation_id') != intent['operation_id']:
-                            state['last_control'] = dict(intent, acknowledged=True)
-                            state['phase'] = target_phase
-                            atomic(root/'state.json', state)
-                        if action == 'stop':
-                            stopped = True
-                            break
-                        time.sleep(.1)
-                        next_send = time.monotonic()
+            from kafka import KafkaProducer
+            from kafka.admin import KafkaAdminClient,NewTopic
+            if resume:
+                if type(state.get('cursor')) is not int or not 0 <= state['cursor'] <= metadata['rows']:
+                    raise ValueError('Invalid persisted source acknowledgement cursor')
+                if state.get('input') != metadata:
+                    raise ValueError('Prepared input changed since interrupted run')
+                consumer=kafka(config)
+                current_ends=ends(consumer,run_id)
+                starting=state['starting']
+                if any(type(offset) is not int or offset != 0 for offset in starting.values()):
+                    raise ValueError('Original dedicated-topic starting offsets changed')
+                if set(current_ends)!=set(starting):raise ValueError('Recovery topic partitions changed')
+            else:
+                admin=KafkaAdminClient(bootstrap_servers=config['brokers'].split(','))
+                try: admin.create_topics([NewTopic(run_id,num_partitions=3,replication_factor=3)])
+                finally: admin.close()
+                consumer=kafka(config); starting=ends(consumer,run_id,wait_seconds=30)
+            atomic(root/'input.json',metadata)
+            command=[str(Path(config['code'])/'scripts/submit-stream.sh'),'--brokers',config['brokers'],'--topic',run_id,'--run-id',run_id,'--output',state['output'],'--checkpoint',state['checkpoint'],'--max-offsets',str(config.get('max_offsets',1000)),'--stop-file',str(root/'stop-stream'),'--observation-file',str(root/'stream-observation.json'),'--observation-interval-seconds',str(config.get('observation_interval_seconds',1))]
+            if config.get('wait_for_stream_ready'):
+                (root/'stream-ready.json').unlink(missing_ok=True)
+                command+=['--ready-file',str(root/'stream-ready.json')]
+            log=(root/'stream.log').open('a')
+            environment=dict(os.environ); environment['RETAILROCKET_SHUFFLE_PARTITIONS']=str(partitions)
+            environment['RETAILROCKET_STREAM_ROCKSDB_CHANGELOG']=str(changelog).lower()
+            stream=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,env=environment,start_new_session=True)
+            from retailrocket.edge_recovery import process_identity
+            state.update(phase='running',stream_pid=stream.pid,stream_identity=process_identity(stream.pid),starting=starting,input=metadata,stream_released=False)
+            atomic(root/'state.json',state)
+            if config.get('wait_for_stream_ready'):
+                state['phase']='starting';atomic(root/'state.json',state)
+                deadline=time.monotonic()+240
+                while not (root/'stream-ready.json').exists():
+                    if stream.poll() is not None:raise RuntimeError('Streaming driver exited before readiness')
+                    if time.monotonic()>deadline:raise TimeoutError('Streaming readiness timed out')
+                    time.sleep(.1)
+                if json.loads((root/'stream-ready.json').read_text())['run_id']!=run_id:raise ValueError('Readiness identity mismatch')
+                state.update(phase='running',ready_at=datetime.now(timezone.utc).isoformat());atomic(root/'state.json',state)
+            producer=KafkaProducer(bootstrap_servers=config['brokers'].split(','),acks='all',retries=10,value_serializer=lambda row:json.dumps(row).encode(),linger_ms=20,batch_size=65536)
+            state.update(ack_session=uuid4().hex,producer_acknowledged=0)
+            ack_lock=Lock()
+            def confirmed_ack(metadata):
+                with ack_lock:state['producer_acknowledged']+=1
+            from retailrocket.cursor_checkpoint import CursorCheckpoint
+            checkpoint=CursorCheckpoint(state,lambda value:atomic(root/'state.json',value),
+                records=config.get('cursor_flush_records',1),seconds=config.get('cursor_flush_seconds',1))
+            began=time.monotonic(); pending=deque(); confirmed=state.get('cursor',0); initial_confirmed=confirmed
+            if config.get('audit_ack_log'):
+                ack_log=(root/'acknowledgements.jsonl').open('a',buffering=1)
+                def traced_ack(position,record_id,metadata):
+                    record=dict(run_id=run_id,source_line=position+1,source_record_id=record_id,
+                        topic=metadata.topic,partition=metadata.partition,offset=metadata.offset,
+                        ack_monotonic_ns=time.monotonic_ns(),ack_wall_ns=time.time_ns())
+                    with ack_lock:ack_log.write(json.dumps(record)+'\n')
+            def acknowledge():
+                nonlocal confirmed
+                position,future=pending.popleft(); future.get(timeout=120)
+                # Operator-only one-shot fault hook for real ACK-before-fsync recovery audits.
+                crash_marker=root/'ack-fault-fired.json'
+                if config.get('audit_crash_after_ack') == position and not crash_marker.exists():
+                    atomic(crash_marker, dict(position=position,run_id=run_id))
+                    os._exit(86)
+                confirmed+=1
+                checkpoint.acknowledged(cursor=position,confirmed=confirmed,rate=0)
+            def desired():
+                return json.loads((root/'control.json').read_text()) if (root/'control.json').exists() else None
+            stopped = state.get('early_stopped',False)
+            next_send = time.monotonic()
+            with events.open() as source:
+                for position,line in enumerate(source,1):
+                    if position <= state.get('cursor',0) or (resume and 'final' in state):
                         continue
-                    if state['phase'] == 'paused':
-                        state.update(phase='running', last_control=dict(intent, acknowledged=True))
-                        atomic(root/'state.json', state)
-                    if time.monotonic() >= next_send:
+                    if stream.poll() is not None: raise RuntimeError('YARN streaming driver exited before producer completion')
+                    row=json.loads(line); row.update(batch_id=run_id,replay_time=datetime.now(timezone.utc).isoformat())
+                    while True:
+                        if stream.poll() is not None:
+                            raise RuntimeError('Streaming driver exited during replay control')
+                        intent = desired()
+                        action = intent['action'] if intent else None
+                        if action in ('pause', 'stop'):
+                            while pending:
+                                acknowledge()
+                            target_phase = 'paused' if action == 'pause' else 'stopping'
+                            if state['phase'] != target_phase or state.get('last_control', {}).get('operation_id') != intent['operation_id']:
+                                state.update(last_control=dict(intent,acknowledged=True),phase=target_phase,rate=0)
+                                checkpoint.save()
+                            if action == 'stop':
+                                stopped = True
+                                break
+                            time.sleep(.1)
+                            next_send = time.monotonic()
+                            continue
+                        if state['phase'] == 'paused':
+                            state.update(phase='running', last_control=dict(intent, acknowledged=True))
+                            checkpoint.save()
+                        if time.monotonic() >= next_send:
+                            break
+                        time.sleep(max(0, min(.1, next_send-time.monotonic())))
+                    if stopped:
                         break
-                    time.sleep(max(0, min(.1, next_send-time.monotonic())))
-                if stopped:
-                    break
-                next_send = time.monotonic() + 1/run['requested_rate']
-                row['replay_time'] = datetime.now(timezone.utc).isoformat()
-                pending.append((position,producer.send(run_id,key=row['source_record_id'].encode(),value=row)))
-                if len(pending)>=min(1000,max(1,int(run['requested_rate']))): acknowledge()
-            while pending: acknowledge()
-        producer.flush(timeout=120); final=ends(consumer,run_id)
-        if resume and 'final' in state and final != state['final']:
-            raise ValueError('Final Kafka range changed after producer EOF')
-        replay=dict(batch_id=run_id,topic=run_id,rows=sum(final[p]-starting[p] for p in final),replay_confirmed=True,startingOffsets={run_id:starting},endingOffsets={run_id:final},input=metadata)
-        atomic(root/'replay.json',replay)
-        with (root/'control.lock').open('a') as lock:
-            fcntl.flock(lock, fcntl.LOCK_EX)
-            intent = desired()
-            stopped = stopped or bool(intent and intent['action'] == 'stop')
-            state.update(phase='draining', final=final, early_stopped=stopped)
-            if intent:
-                state['last_control'] = dict(intent, acknowledged=True)
-            atomic(root/'state.json',state)
-        deadline=time.monotonic()+config.get('drain_timeout',1800)
-        while True:
-            if stream.poll() is not None: raise RuntimeError('Stream exited before committed drain')
-            observed=observation(config,run_id)
-            if all(observed['committed'].get(p,0)>=end and observed['result_offsets'].get(p,0)>=end for p,end in final.items()): break
-            if time.monotonic()>deadline: raise TimeoutError('Timed out waiting for committed stream drain')
-            time.sleep(2)
-        (root/'stop-stream').touch()
-        stream.wait(timeout=120)
-        if stream.returncode: raise RuntimeError('Streaming shutdown failed')
-        state.update(phase='stopped' if stopped else 'completed',complete=not stopped,stream_released=True)
-        atomic(root/'state.json',state)
-    except Exception as error:
-        state.update(phase='failed',error=str(error)); atomic(root/'state.json',state)
-        if stream and stream.poll() is None:
+                    next_send = time.monotonic() + 1/run['requested_rate']
+                    row['replay_time'] = datetime.now(timezone.utc).isoformat()
+                    future=producer.send(run_id,key=row['source_record_id'].encode(),value=row)
+                    future.add_callback(confirmed_ack)
+                    if ack_log:future.add_callback(traced_ack,position,row['source_record_id'])
+                    pending.append((position,future))
+                    if len(pending)>=min(1000,max(1,int(run['requested_rate']))): acknowledge()
+                while pending: acknowledge()
+            producer.flush(timeout=120); checkpoint.save(); final=ends(consumer,run_id)
+            if resume and 'final' in state and final != state['final']:
+                raise ValueError('Final Kafka range changed after producer EOF')
+            replay=dict(batch_id=run_id,topic=run_id,rows=sum(final[p]-starting[p] for p in final),replay_confirmed=True,startingOffsets={run_id:starting},endingOffsets={run_id:final},input=metadata)
+            atomic(root/'replay.json',replay)
+            with (root/'control.lock').open('a') as lock:
+                fcntl.flock(lock, fcntl.LOCK_EX)
+                intent = desired()
+                stopped = stopped or bool(intent and intent['action'] == 'stop')
+                state.update(phase='draining', final=final, early_stopped=stopped,rate=0)
+                if intent:
+                    state['last_control'] = dict(intent, acknowledged=True)
+                checkpoint.save()
+            deadline=time.monotonic()+config.get('drain_timeout',1800)
+            while True:
+                if stream.poll() is not None: raise RuntimeError('Stream exited before committed drain')
+                observed=observation(config,run_id)
+                if all(observed['committed'].get(p,0)>=end and observed['result_offsets'].get(p,0)>=end for p,end in final.items()): break
+                if time.monotonic()>deadline: raise TimeoutError('Timed out waiting for committed stream drain')
+                time.sleep(2)
             (root/'stop-stream').touch()
-            try: stream.wait(timeout=60)
-            except subprocess.TimeoutExpired: os.killpg(stream.pid,signal.SIGTERM)
-    finally:
-        if producer: producer.close(timeout=30)
-        if consumer: consumer.close()
-        lease.close()
+            stream.wait(timeout=120)
+            if stream.returncode: raise RuntimeError('Streaming shutdown failed')
+            state.update(phase='stopped' if stopped else 'completed',complete=not stopped,stream_released=True,rate=0)
+            checkpoint.save()
+        except Exception as error:
+            state.update(phase='failed',error=str(error),rate=0)
+            try:
+                if checkpoint:checkpoint.save()
+                else:atomic(root/'state.json',state)
+            except Exception as persistence_error:
+                print('Could not persist failed worker state: '+str(persistence_error),file=sys.stderr)
+        finally:
+            # Persistence and client close failures must never bypass any owned resource.
+            cleanup_errors=[]
+            def attempt(label,operation):
+                try:operation()
+                except Exception as error:
+                    cleanup_errors.append(label+': '+str(error))
+            def stop_owned_stream():
+                if stream and stream.poll() is None:
+                    try:
+                        (root/'stop-stream').touch()
+                        stream.wait(timeout=60)
+                    except Exception:
+                        if stream.poll() is None:
+                            os.killpg(stream.pid,signal.SIGTERM)
+                            try:stream.wait(timeout=10)
+                            except subprocess.TimeoutExpired:
+                                os.killpg(stream.pid,signal.SIGKILL)
+                                stream.wait(timeout=10)
+                        raise
+            attempt('stream shutdown',stop_owned_stream)
+            if checkpoint:attempt('cursor checkpoint close',checkpoint.close)
+            if producer:attempt('producer close',lambda:producer.close(timeout=30))
+            if ack_log:attempt('ACK log close',ack_log.close)
+            if consumer:attempt('consumer close',consumer.close)
+            if cleanup_errors:
+                raise RuntimeError('Worker cleanup failures: '+'; '.join(cleanup_errors))
 
 
 def main():

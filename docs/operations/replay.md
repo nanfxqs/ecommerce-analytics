@@ -5,7 +5,7 @@
 本机启动：
 
 ```bash
-python -m retailrocket.api --store /operator/published --cluster-config /operator/local-cluster.json
+python -m retailrocket.api --store /operator/published --cluster-config /operator/local-cluster.json --poll-seconds 0.25
 ```
 
 本机配置由操作者提供，不接受页面上传：
@@ -22,11 +22,11 @@ python -m retailrocket.api --store /operator/published --cluster-config /operato
 
 数据注册只由操作者完成，启动前核对准备数据及原始源文件 SHA256、行数、连续源行、源身份。只允许固定小样本和完整数据，不能通过页面提交路径。生成轮次 ID 限定为 `v2-` 加 32 位十六进制；目录、topic、检查点及输出由后台生成，SSH 参数通过 argv/结构化 JSON 传递。
 
-每轮 edge 保存 request、state、input、replay 及日志。本机保存 current 和每轮状态镜像。ACK 游标仅越过连续确认的源记录；正常结束生成的 replay.rows 按实际 Kafka offset 范围计算，不能与唯一源记录量混用。源重试需要继续沿用同一源记录身份。该阶段已保留恢复所需状态，故障后人工恢复控制由后续恢复任务实现，不能直接删除检查点重启。
+每轮 edge 保存 request、state、input、replay 及日志。本机保存 current 和每轮状态镜像。ACK 游标仅越过连续确认的源记录；正常结束生成的 replay.rows 按实际 Kafka offset 范围计算，不能与唯一源记录量混用。源重试需要继续沿用同一源记录身份。故障后通过页面手动恢复控制继续同一轮，恢复先校验输入、topic、检查点并停用旧拥有者；不能直接删除检查点重启。
 
-页面分别显示 Kafka 当前独占末端、Spark 已提交检查点 offset 和持久结果覆盖 offset。检查点以 `commits/<batch>` 存在为依据，不能用先写出的 `offsets/<batch>` 或结果快照代替。driver 每秒通过已建立的 JVM Hadoop 客户端核对 HDFS 提交记录及对应结果，原子写出本轮本地 `stream-observation.json`。edge 观测只读取这个小文件和 Kafka 末端，不在每次查询中启动 HDFS CLI 或 Spark 作业。只有检查点与结果 offset 完全匹配的快照才进入业务页面；空分区明确按 0 处理。页面每 2 秒查询本机缓存，并分别显示观测时间与业务结果更新时间；端到端性能仍须独立验收。
+页面分别显示 Kafka 当前独占末端、Spark 已提交检查点 offset 和持久结果覆盖 offset。检查点以 `commits/<batch>` 存在为依据，不能用先写出的 `offsets/<batch>` 或结果快照代替。driver 每秒通过已建立的 JVM Hadoop 客户端核对 HDFS 提交记录及对应结果，原子写出本轮本地 `stream-observation.json`。edge 观测只读取这个小文件和 Kafka 末端，不在每次查询中启动 HDFS CLI 或 Spark 作业。只有检查点与结果 offset 完全匹配的快照才进入业务页面；空分区明确按 0 处理。页面每 2 秒查询本机缓存，并分别显示观测时间与业务结果更新时间；独立15分钟实测及可复现配置见 [验收记录](v2-acceptance.md)。
 
-正常 EOF 后等待所有发送确认，捕获最终 offset，等待检查点与结果都覆盖范围，然后向 driver 写入停止请求，等待 Spark 释放资源。完成状态表示回放范围处理完成，仍不是已发布历史分析；自动历史发布由后续任务接入。失败保留状态及日志，阻止另一个轮次抢占不确定资源；不要手工改 current 指针绕过保护。
+正常 EOF 后等待所有发送确认，捕获最终 offset，等待检查点与结果都覆盖范围，然后向 driver 写入停止请求，等待 Spark 释放资源。完成状态表示回放范围处理完成，仍不是已发布历史分析；随后自动执行历史分析与安全发布，见 [发布说明](automatic-publication.md)。失败保留状态及日志，阻止另一个轮次抢占不确定资源；不要手工改 current 指针绕过保护。
 
 控制 API：`GET /api/replay/datasets`、`GET /api/replay/current`、`POST /api/replay/runs`（dataset、正数 rate）。无活动轮次返回 null；并发启动 409，未知输入/非法速率 422。生产环境必须传入真实 cluster 配置；不配置时不会注册回放 API。
 
@@ -53,3 +53,13 @@ API 重启发现尚未结束的轮次时，先显示“等待手动恢复”。�
 发送端只在 Kafka 确认后推进连续源游标。确认与本地状态持久化之间故障可能重发少量源记录；源身份保持不变，最终指标精确去重。回放清单的物理消息量仍按原始开始与最终 Kafka offsets 计算，不能用唯一源行数替代。已有检查点缺失、JSON 损坏、主题/结果身份或引擎不匹配均明确拒绝恢复，保留原状态，绝不删除或重建检查点。
 
 集群操作者的故障审计可在**专用验证配置**设置 `audit_crash_after_ack` 源序号，使独立 worker 在真实 ACK 后、游标写入前只中断一次；标记保存在轮次目录。该开关默认关闭、不接受页面参数，常规演示配置应移除。它用于证明重发语义，不能在正式数据轮次启用。此实现处理进程/服务中断；未宣称抵御整个宿主机故障。
+
+## 监控计数、时间与原始采样
+
+本机 API 分别暴露 `source_cursor`（兼容字段 `confirmed`，已持久确认的连续源记录前缀）与 `physical_messages`（各分区 Kafka 末端减本轮起始 offset 的总和，包含恢复重发）。两者不能互相替代。`producer_acknowledged` 由 Kafka Future 成功回调独立计数，同一源记录重发也增加；`ack_session` 标识发送进程的一次生命周期。`rate` 是相邻后台观测之间新增成功确认数除以本机实际单调时间间隔，字段 `rate_definition` 明确其定义。该值受后台观测和最长一秒进度落盘节奏影响，表示观测间隔速率；暂停、排空和结束阶段显示零，不将源游标差分误标为物理确认速率。回调计数不增加每条记录的持久化写入。
+
+`result_received_at` 是本机第一次接收到该轮次、microbatch 与结果 offset 组合的时间。重复轮询同一个结果不会更新它，API 重启后仍从轮次状态保留；原有 `snapshot.updated_at` 继续保存引擎节点报告时间。页面将“结果接收时间（本机 UTC）”与“引擎记录时间（节点 UTC）”分别标注，不能用新轮询时间伪装新结果，也不能把不同节点时钟直接相减作为延迟证据。
+
+清洗前监控的 `raw_samples` 独立读取 Kafka 每个非空分区的尾部，最终最多二十条，带 topic、partition、offset、Kafka 时间戳、原始字符串及可解析的源内容。采样复用此次末端查询的 KafkaConsumer，手动 seek、禁用自动提交，poll 预算最多150毫秒；没有 HDFS CLI 或 Spark 启动。因此 Spark 结果停滞时，原始样本仍可随 Kafka 前进。此采样不修改业务结果、已提交检查点或结果覆盖 offset。`raw_samples_complete` 表示本次预算内是否读到了各分区当前末端；采样失败通过 `raw_sample_error` 明示，并保留业务观测。兼容的顶层 `samples` 同样指向独立原始采样，快照内部的原始内容仍属于该快照的处理范围。
+
+API 关闭时会等待正在执行的监督线程及有超时上限的外部调用真正退出，再释放 supervisor lease；不会在等待45秒后允许第二个后台并行操作同一轮次。磁盘写入、游标关闭或 Kafka 客户端关闭失败也不能跳过其他资源清理：worker 逐项停止自己启动的流、关闭检查点、producer、ACK 日志和 consumer，最后通过作用域释放进程锁，并报告清理异常。

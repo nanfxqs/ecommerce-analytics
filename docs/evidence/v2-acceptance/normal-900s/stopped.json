@@ -1,0 +1,958 @@
+{
+  "run_id": "v2-716a15738eae4aca89399b0c37f3a483",
+  "dataset": "small",
+  "requested_rate": 5,
+  "phase": "stopped",
+  "complete": false,
+  "confirmed": 4492,
+  "created_at": "2026-10-19T14:55:38.685851+00:00",
+  "source_cursor": 4492,
+  "rate": 0,
+  "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+  "cursor": 4492,
+  "output": "hdfs://mycluster/retailrocket/streams/v2-716a15738eae4aca89399b0c37f3a483",
+  "checkpoint": "hdfs://mycluster/retailrocket/stream-checkpoints/v2-716a15738eae4aca89399b0c37f3a483",
+  "stream_profile": {
+    "shuffle_partitions": 1,
+    "rocksdb_changelog": true
+  },
+  "ends": {
+    "0": 1462,
+    "1": 1520,
+    "2": 1510
+  },
+  "committed": {
+    "0": 1462,
+    "1": 1520,
+    "2": 1510
+  },
+  "result_offsets": {
+    "0": 1462,
+    "1": 1520,
+    "2": 1510
+  },
+  "samples": [
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 0,
+      "offset": 1461,
+      "kafka_timestamp_ms": 1792393892787,
+      "value": "{\"timestamp\": \"1433221912301\", \"visitorid\": \"671380\", \"event\": \"view\", \"itemid\": \"381704\", \"transactionid\": \"\", \"source_line\": 4493, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"c7dacdb2f940bda576904f23987615af9c728d0af8a94b4bedf59c459e3b7ff6\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:32.787120+00:00\"}",
+      "record": {
+        "timestamp": "1433221912301",
+        "visitorid": "671380",
+        "event": "view",
+        "itemid": "381704",
+        "transactionid": "",
+        "source_line": 4493,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "c7dacdb2f940bda576904f23987615af9c728d0af8a94b4bedf59c459e3b7ff6",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:32.787120+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 1,
+      "offset": 1519,
+      "kafka_timestamp_ms": 1792393892586,
+      "value": "{\"timestamp\": \"1433220947997\", \"visitorid\": \"833280\", \"event\": \"view\", \"itemid\": \"384282\", \"transactionid\": \"\", \"source_line\": 4492, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"eb8011f95bae65aa523b45ee7ed79a137c5b4dfd7a6056072d76716cbb47c2e3\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:32.586010+00:00\"}",
+      "record": {
+        "timestamp": "1433220947997",
+        "visitorid": "833280",
+        "event": "view",
+        "itemid": "384282",
+        "transactionid": "",
+        "source_line": 4492,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "eb8011f95bae65aa523b45ee7ed79a137c5b4dfd7a6056072d76716cbb47c2e3",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:32.586010+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 1,
+      "offset": 1518,
+      "kafka_timestamp_ms": 1792393892385,
+      "value": "{\"timestamp\": \"1433223112827\", \"visitorid\": \"178867\", \"event\": \"view\", \"itemid\": \"13520\", \"transactionid\": \"\", \"source_line\": 4491, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"3f3359efee942ee88eec67ff9907afb1ed5245914e6b7e1ff8bbe4a2adb319f6\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:32.385132+00:00\"}",
+      "record": {
+        "timestamp": "1433223112827",
+        "visitorid": "178867",
+        "event": "view",
+        "itemid": "13520",
+        "transactionid": "",
+        "source_line": 4491,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "3f3359efee942ee88eec67ff9907afb1ed5245914e6b7e1ff8bbe4a2adb319f6",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:32.385132+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 0,
+      "offset": 1460,
+      "kafka_timestamp_ms": 1792393892185,
+      "value": "{\"timestamp\": \"1433221080299\", \"visitorid\": \"513679\", \"event\": \"view\", \"itemid\": \"61254\", \"transactionid\": \"\", \"source_line\": 4490, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"1617ea8fba35d62da7b195e18db634119bce117de298e9d8ec44421d3d899f74\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:32.184797+00:00\"}",
+      "record": {
+        "timestamp": "1433221080299",
+        "visitorid": "513679",
+        "event": "view",
+        "itemid": "61254",
+        "transactionid": "",
+        "source_line": 4490,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "1617ea8fba35d62da7b195e18db634119bce117de298e9d8ec44421d3d899f74",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:32.184797+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1509,
+      "kafka_timestamp_ms": 1792393891984,
+      "value": "{\"timestamp\": \"1433223252857\", \"visitorid\": \"325025\", \"event\": \"view\", \"itemid\": \"362457\", \"transactionid\": \"\", \"source_line\": 4489, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"848d05449fbdb3fba272ccf69f3bf9d2261962f8ae2a8ce9f607e8f1db78f779\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:31.984487+00:00\"}",
+      "record": {
+        "timestamp": "1433223252857",
+        "visitorid": "325025",
+        "event": "view",
+        "itemid": "362457",
+        "transactionid": "",
+        "source_line": 4489,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "848d05449fbdb3fba272ccf69f3bf9d2261962f8ae2a8ce9f607e8f1db78f779",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:31.984487+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1508,
+      "kafka_timestamp_ms": 1792393891784,
+      "value": "{\"timestamp\": \"1433222678443\", \"visitorid\": \"360490\", \"event\": \"view\", \"itemid\": \"325772\", \"transactionid\": \"\", \"source_line\": 4488, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"0589783db850fce80af81c5b56236770540eae9d85b1e7c31022fa1c919e4c0c\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:31.784183+00:00\"}",
+      "record": {
+        "timestamp": "1433222678443",
+        "visitorid": "360490",
+        "event": "view",
+        "itemid": "325772",
+        "transactionid": "",
+        "source_line": 4488,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "0589783db850fce80af81c5b56236770540eae9d85b1e7c31022fa1c919e4c0c",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:31.784183+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 1,
+      "offset": 1517,
+      "kafka_timestamp_ms": 1792393891584,
+      "value": "{\"timestamp\": \"1433224782991\", \"visitorid\": \"512667\", \"event\": \"view\", \"itemid\": \"133415\", \"transactionid\": \"\", \"source_line\": 4487, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"760d6c796caf2eb4cc79d3d79888ac7eb2426d74483fcc1231ddc863df4747ba\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:31.583845+00:00\"}",
+      "record": {
+        "timestamp": "1433224782991",
+        "visitorid": "512667",
+        "event": "view",
+        "itemid": "133415",
+        "transactionid": "",
+        "source_line": 4487,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "760d6c796caf2eb4cc79d3d79888ac7eb2426d74483fcc1231ddc863df4747ba",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:31.583845+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 0,
+      "offset": 1459,
+      "kafka_timestamp_ms": 1792393891383,
+      "value": "{\"timestamp\": \"1433222696005\", \"visitorid\": \"1083914\", \"event\": \"view\", \"itemid\": \"143464\", \"transactionid\": \"\", \"source_line\": 4486, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"d6fbbf0aefe2fd9aa4db9234373f9bd61114001838345dfa510171f358489a50\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:31.383384+00:00\"}",
+      "record": {
+        "timestamp": "1433222696005",
+        "visitorid": "1083914",
+        "event": "view",
+        "itemid": "143464",
+        "transactionid": "",
+        "source_line": 4486,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "d6fbbf0aefe2fd9aa4db9234373f9bd61114001838345dfa510171f358489a50",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:31.383384+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 0,
+      "offset": 1458,
+      "kafka_timestamp_ms": 1792393891183,
+      "value": "{\"timestamp\": \"1433221112663\", \"visitorid\": \"889629\", \"event\": \"view\", \"itemid\": \"122350\", \"transactionid\": \"\", \"source_line\": 4485, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"4008a8d925d06b61466a58425f0f8799ec8ba9981ea6700a1b7c4e56bcb154ad\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:31.183102+00:00\"}",
+      "record": {
+        "timestamp": "1433221112663",
+        "visitorid": "889629",
+        "event": "view",
+        "itemid": "122350",
+        "transactionid": "",
+        "source_line": 4485,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "4008a8d925d06b61466a58425f0f8799ec8ba9981ea6700a1b7c4e56bcb154ad",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:31.183102+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 1,
+      "offset": 1516,
+      "kafka_timestamp_ms": 1792393890983,
+      "value": "{\"timestamp\": \"1433223790251\", \"visitorid\": \"688809\", \"event\": \"view\", \"itemid\": \"311303\", \"transactionid\": \"\", \"source_line\": 4484, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"60e1e26b69de298964860614be6d6fea46097fadf51a3ab508aaa4e7f3f67a57\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:30.982856+00:00\"}",
+      "record": {
+        "timestamp": "1433223790251",
+        "visitorid": "688809",
+        "event": "view",
+        "itemid": "311303",
+        "transactionid": "",
+        "source_line": 4484,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "60e1e26b69de298964860614be6d6fea46097fadf51a3ab508aaa4e7f3f67a57",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:30.982856+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1507,
+      "kafka_timestamp_ms": 1792393890782,
+      "value": "{\"timestamp\": \"1433221264319\", \"visitorid\": \"1150571\", \"event\": \"view\", \"itemid\": \"189559\", \"transactionid\": \"\", \"source_line\": 4483, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"457fc62f11bca1b04c102ff3ae97010a40b48c626ba58ea569ee53460041dfb8\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:30.782121+00:00\"}",
+      "record": {
+        "timestamp": "1433221264319",
+        "visitorid": "1150571",
+        "event": "view",
+        "itemid": "189559",
+        "transactionid": "",
+        "source_line": 4483,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "457fc62f11bca1b04c102ff3ae97010a40b48c626ba58ea569ee53460041dfb8",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:30.782121+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1506,
+      "kafka_timestamp_ms": 1792393890582,
+      "value": "{\"timestamp\": \"1433224130046\", \"visitorid\": \"816192\", \"event\": \"view\", \"itemid\": \"64396\", \"transactionid\": \"\", \"source_line\": 4482, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"4f392f41591284dd0f08c93460f09f49a0cbfdcd25f8496b2d1ef9148929cb82\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:30.581823+00:00\"}",
+      "record": {
+        "timestamp": "1433224130046",
+        "visitorid": "816192",
+        "event": "view",
+        "itemid": "64396",
+        "transactionid": "",
+        "source_line": 4482,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "4f392f41591284dd0f08c93460f09f49a0cbfdcd25f8496b2d1ef9148929cb82",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:30.581823+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1505,
+      "kafka_timestamp_ms": 1792393890381,
+      "value": "{\"timestamp\": \"1433220895231\", \"visitorid\": \"467972\", \"event\": \"view\", \"itemid\": \"181202\", \"transactionid\": \"\", \"source_line\": 4481, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"0a5f0fa6e1197811d29001f900ab7054ef60ad227e7159990161ca8dfe428e66\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:30.381611+00:00\"}",
+      "record": {
+        "timestamp": "1433220895231",
+        "visitorid": "467972",
+        "event": "view",
+        "itemid": "181202",
+        "transactionid": "",
+        "source_line": 4481,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "0a5f0fa6e1197811d29001f900ab7054ef60ad227e7159990161ca8dfe428e66",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:30.381611+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1504,
+      "kafka_timestamp_ms": 1792393890181,
+      "value": "{\"timestamp\": \"1433220834564\", \"visitorid\": \"1285640\", \"event\": \"view\", \"itemid\": \"86844\", \"transactionid\": \"\", \"source_line\": 4480, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"1f7072c7591aec5c2250c50aada32d12dab5b4d04befa6a7381540471792eec2\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:30.180791+00:00\"}",
+      "record": {
+        "timestamp": "1433220834564",
+        "visitorid": "1285640",
+        "event": "view",
+        "itemid": "86844",
+        "transactionid": "",
+        "source_line": 4480,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "1f7072c7591aec5c2250c50aada32d12dab5b4d04befa6a7381540471792eec2",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:30.180791+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1503,
+      "kafka_timestamp_ms": 1792393889980,
+      "value": "{\"timestamp\": \"1433224518988\", \"visitorid\": \"1097169\", \"event\": \"view\", \"itemid\": \"257993\", \"transactionid\": \"\", \"source_line\": 4479, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"9694c5d3eb2468283b1a29b18e6699685cb3e062001de9673b4b1ba24043e98e\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:29.980546+00:00\"}",
+      "record": {
+        "timestamp": "1433224518988",
+        "visitorid": "1097169",
+        "event": "view",
+        "itemid": "257993",
+        "transactionid": "",
+        "source_line": 4479,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "9694c5d3eb2468283b1a29b18e6699685cb3e062001de9673b4b1ba24043e98e",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:29.980546+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1502,
+      "kafka_timestamp_ms": 1792393889780,
+      "value": "{\"timestamp\": \"1433223866951\", \"visitorid\": \"1182746\", \"event\": \"view\", \"itemid\": \"366072\", \"transactionid\": \"\", \"source_line\": 4478, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"e764a1b9aa3a9e5487f61a5594238877665232bb6a461a485759abdb1e8e0de7\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:29.780362+00:00\"}",
+      "record": {
+        "timestamp": "1433223866951",
+        "visitorid": "1182746",
+        "event": "view",
+        "itemid": "366072",
+        "transactionid": "",
+        "source_line": 4478,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "e764a1b9aa3a9e5487f61a5594238877665232bb6a461a485759abdb1e8e0de7",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:29.780362+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1501,
+      "kafka_timestamp_ms": 1792393889580,
+      "value": "{\"timestamp\": \"1433221699595\", \"visitorid\": \"1334190\", \"event\": \"view\", \"itemid\": \"261918\", \"transactionid\": \"\", \"source_line\": 4477, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"eba339238d4fc77e66805960f2661a995784f682b9f18ad5d3d80a2888bd9b9a\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:29.579940+00:00\"}",
+      "record": {
+        "timestamp": "1433221699595",
+        "visitorid": "1334190",
+        "event": "view",
+        "itemid": "261918",
+        "transactionid": "",
+        "source_line": 4477,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "eba339238d4fc77e66805960f2661a995784f682b9f18ad5d3d80a2888bd9b9a",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:29.579940+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 1,
+      "offset": 1515,
+      "kafka_timestamp_ms": 1792393889379,
+      "value": "{\"timestamp\": \"1433222058468\", \"visitorid\": \"348768\", \"event\": \"view\", \"itemid\": \"145463\", \"transactionid\": \"\", \"source_line\": 4476, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"fab3fd462e81c2c18bba978ee88ad7a15a72ca09fa1833d5930a6a6e1d447c8c\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:29.379639+00:00\"}",
+      "record": {
+        "timestamp": "1433222058468",
+        "visitorid": "348768",
+        "event": "view",
+        "itemid": "145463",
+        "transactionid": "",
+        "source_line": 4476,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "fab3fd462e81c2c18bba978ee88ad7a15a72ca09fa1833d5930a6a6e1d447c8c",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:29.379639+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 0,
+      "offset": 1457,
+      "kafka_timestamp_ms": 1792393889179,
+      "value": "{\"timestamp\": \"1433224602685\", \"visitorid\": \"528212\", \"event\": \"view\", \"itemid\": \"339580\", \"transactionid\": \"\", \"source_line\": 4475, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"9a7307e1ef226d6e5b9d7c0873c52e7fa829a3ee76af7636a1c57a9372735a8c\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:29.179081+00:00\"}",
+      "record": {
+        "timestamp": "1433224602685",
+        "visitorid": "528212",
+        "event": "view",
+        "itemid": "339580",
+        "transactionid": "",
+        "source_line": 4475,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "9a7307e1ef226d6e5b9d7c0873c52e7fa829a3ee76af7636a1c57a9372735a8c",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:29.179081+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1500,
+      "kafka_timestamp_ms": 1792393888978,
+      "value": "{\"timestamp\": \"1433221916264\", \"visitorid\": \"729484\", \"event\": \"view\", \"itemid\": \"295506\", \"transactionid\": \"\", \"source_line\": 4474, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"e602a8fda2f8f9f27e45f3edc7952c12519f9545d5a2382bcfeea639f77fe947\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:28.978547+00:00\"}",
+      "record": {
+        "timestamp": "1433221916264",
+        "visitorid": "729484",
+        "event": "view",
+        "itemid": "295506",
+        "transactionid": "",
+        "source_line": 4474,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "e602a8fda2f8f9f27e45f3edc7952c12519f9545d5a2382bcfeea639f77fe947",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:28.978547+00:00"
+      }
+    }
+  ],
+  "snapshot": {
+    "engine": "exact-state-v1",
+    "run_id": "v2-716a15738eae4aca89399b0c37f3a483",
+    "timezone": "UTC",
+    "complete": false,
+    "quality": {
+      "consumed_count": 4492,
+      "unique_source_count": 4492,
+      "valid_count": 4492,
+      "invalid_count": 0,
+      "retry_count": 0,
+      "suspected_duplicate_count": 0
+    },
+    "visitors": 3524,
+    "overview": {
+      "view": 4342,
+      "addtocart": 112,
+      "transaction": 38
+    },
+    "daily": [
+      {
+        "event_date": "2015-06-01",
+        "event": "addtocart",
+        "count": 79
+      },
+      {
+        "event_date": "2015-06-01",
+        "event": "transaction",
+        "count": 24
+      },
+      {
+        "event_date": "2015-06-01",
+        "event": "view",
+        "count": 2950
+      },
+      {
+        "event_date": "2015-06-02",
+        "event": "addtocart",
+        "count": 33
+      },
+      {
+        "event_date": "2015-06-02",
+        "event": "transaction",
+        "count": 14
+      },
+      {
+        "event_date": "2015-06-02",
+        "event": "view",
+        "count": 1392
+      }
+    ],
+    "invalid_reasons": {},
+    "processed_offsets": {
+      "v2-716a15738eae4aca89399b0c37f3a483": {
+        "0": 1462,
+        "1": 1520,
+        "2": 1510
+      }
+    },
+    "samples": [],
+    "event_time_min": "2015-06-01 06:00:58.458",
+    "event_time_max": "2015-06-02 05:59:42.991",
+    "microbatch_id": 317,
+    "updated_at": "2026-10-19T07:11:37.026744+00:00",
+    "sample_records": [],
+    "application_id": "application_1792382297034_0028",
+    "master": "yarn",
+    "executor_hosts": "List(hadoop03:35793, hadoop01:42435, hadoop02:43083)",
+    "result_received_at": "2026-10-19T15:11:38.067333+00:00"
+  },
+  "raw_samples": [
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 0,
+      "offset": 1461,
+      "kafka_timestamp_ms": 1792393892787,
+      "value": "{\"timestamp\": \"1433221912301\", \"visitorid\": \"671380\", \"event\": \"view\", \"itemid\": \"381704\", \"transactionid\": \"\", \"source_line\": 4493, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"c7dacdb2f940bda576904f23987615af9c728d0af8a94b4bedf59c459e3b7ff6\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:32.787120+00:00\"}",
+      "record": {
+        "timestamp": "1433221912301",
+        "visitorid": "671380",
+        "event": "view",
+        "itemid": "381704",
+        "transactionid": "",
+        "source_line": 4493,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "c7dacdb2f940bda576904f23987615af9c728d0af8a94b4bedf59c459e3b7ff6",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:32.787120+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 1,
+      "offset": 1519,
+      "kafka_timestamp_ms": 1792393892586,
+      "value": "{\"timestamp\": \"1433220947997\", \"visitorid\": \"833280\", \"event\": \"view\", \"itemid\": \"384282\", \"transactionid\": \"\", \"source_line\": 4492, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"eb8011f95bae65aa523b45ee7ed79a137c5b4dfd7a6056072d76716cbb47c2e3\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:32.586010+00:00\"}",
+      "record": {
+        "timestamp": "1433220947997",
+        "visitorid": "833280",
+        "event": "view",
+        "itemid": "384282",
+        "transactionid": "",
+        "source_line": 4492,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "eb8011f95bae65aa523b45ee7ed79a137c5b4dfd7a6056072d76716cbb47c2e3",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:32.586010+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 1,
+      "offset": 1518,
+      "kafka_timestamp_ms": 1792393892385,
+      "value": "{\"timestamp\": \"1433223112827\", \"visitorid\": \"178867\", \"event\": \"view\", \"itemid\": \"13520\", \"transactionid\": \"\", \"source_line\": 4491, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"3f3359efee942ee88eec67ff9907afb1ed5245914e6b7e1ff8bbe4a2adb319f6\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:32.385132+00:00\"}",
+      "record": {
+        "timestamp": "1433223112827",
+        "visitorid": "178867",
+        "event": "view",
+        "itemid": "13520",
+        "transactionid": "",
+        "source_line": 4491,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "3f3359efee942ee88eec67ff9907afb1ed5245914e6b7e1ff8bbe4a2adb319f6",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:32.385132+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 0,
+      "offset": 1460,
+      "kafka_timestamp_ms": 1792393892185,
+      "value": "{\"timestamp\": \"1433221080299\", \"visitorid\": \"513679\", \"event\": \"view\", \"itemid\": \"61254\", \"transactionid\": \"\", \"source_line\": 4490, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"1617ea8fba35d62da7b195e18db634119bce117de298e9d8ec44421d3d899f74\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:32.184797+00:00\"}",
+      "record": {
+        "timestamp": "1433221080299",
+        "visitorid": "513679",
+        "event": "view",
+        "itemid": "61254",
+        "transactionid": "",
+        "source_line": 4490,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "1617ea8fba35d62da7b195e18db634119bce117de298e9d8ec44421d3d899f74",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:32.184797+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1509,
+      "kafka_timestamp_ms": 1792393891984,
+      "value": "{\"timestamp\": \"1433223252857\", \"visitorid\": \"325025\", \"event\": \"view\", \"itemid\": \"362457\", \"transactionid\": \"\", \"source_line\": 4489, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"848d05449fbdb3fba272ccf69f3bf9d2261962f8ae2a8ce9f607e8f1db78f779\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:31.984487+00:00\"}",
+      "record": {
+        "timestamp": "1433223252857",
+        "visitorid": "325025",
+        "event": "view",
+        "itemid": "362457",
+        "transactionid": "",
+        "source_line": 4489,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "848d05449fbdb3fba272ccf69f3bf9d2261962f8ae2a8ce9f607e8f1db78f779",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:31.984487+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1508,
+      "kafka_timestamp_ms": 1792393891784,
+      "value": "{\"timestamp\": \"1433222678443\", \"visitorid\": \"360490\", \"event\": \"view\", \"itemid\": \"325772\", \"transactionid\": \"\", \"source_line\": 4488, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"0589783db850fce80af81c5b56236770540eae9d85b1e7c31022fa1c919e4c0c\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:31.784183+00:00\"}",
+      "record": {
+        "timestamp": "1433222678443",
+        "visitorid": "360490",
+        "event": "view",
+        "itemid": "325772",
+        "transactionid": "",
+        "source_line": 4488,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "0589783db850fce80af81c5b56236770540eae9d85b1e7c31022fa1c919e4c0c",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:31.784183+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 1,
+      "offset": 1517,
+      "kafka_timestamp_ms": 1792393891584,
+      "value": "{\"timestamp\": \"1433224782991\", \"visitorid\": \"512667\", \"event\": \"view\", \"itemid\": \"133415\", \"transactionid\": \"\", \"source_line\": 4487, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"760d6c796caf2eb4cc79d3d79888ac7eb2426d74483fcc1231ddc863df4747ba\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:31.583845+00:00\"}",
+      "record": {
+        "timestamp": "1433224782991",
+        "visitorid": "512667",
+        "event": "view",
+        "itemid": "133415",
+        "transactionid": "",
+        "source_line": 4487,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "760d6c796caf2eb4cc79d3d79888ac7eb2426d74483fcc1231ddc863df4747ba",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:31.583845+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 0,
+      "offset": 1459,
+      "kafka_timestamp_ms": 1792393891383,
+      "value": "{\"timestamp\": \"1433222696005\", \"visitorid\": \"1083914\", \"event\": \"view\", \"itemid\": \"143464\", \"transactionid\": \"\", \"source_line\": 4486, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"d6fbbf0aefe2fd9aa4db9234373f9bd61114001838345dfa510171f358489a50\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:31.383384+00:00\"}",
+      "record": {
+        "timestamp": "1433222696005",
+        "visitorid": "1083914",
+        "event": "view",
+        "itemid": "143464",
+        "transactionid": "",
+        "source_line": 4486,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "d6fbbf0aefe2fd9aa4db9234373f9bd61114001838345dfa510171f358489a50",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:31.383384+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 0,
+      "offset": 1458,
+      "kafka_timestamp_ms": 1792393891183,
+      "value": "{\"timestamp\": \"1433221112663\", \"visitorid\": \"889629\", \"event\": \"view\", \"itemid\": \"122350\", \"transactionid\": \"\", \"source_line\": 4485, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"4008a8d925d06b61466a58425f0f8799ec8ba9981ea6700a1b7c4e56bcb154ad\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:31.183102+00:00\"}",
+      "record": {
+        "timestamp": "1433221112663",
+        "visitorid": "889629",
+        "event": "view",
+        "itemid": "122350",
+        "transactionid": "",
+        "source_line": 4485,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "4008a8d925d06b61466a58425f0f8799ec8ba9981ea6700a1b7c4e56bcb154ad",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:31.183102+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 1,
+      "offset": 1516,
+      "kafka_timestamp_ms": 1792393890983,
+      "value": "{\"timestamp\": \"1433223790251\", \"visitorid\": \"688809\", \"event\": \"view\", \"itemid\": \"311303\", \"transactionid\": \"\", \"source_line\": 4484, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"60e1e26b69de298964860614be6d6fea46097fadf51a3ab508aaa4e7f3f67a57\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:30.982856+00:00\"}",
+      "record": {
+        "timestamp": "1433223790251",
+        "visitorid": "688809",
+        "event": "view",
+        "itemid": "311303",
+        "transactionid": "",
+        "source_line": 4484,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "60e1e26b69de298964860614be6d6fea46097fadf51a3ab508aaa4e7f3f67a57",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:30.982856+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1507,
+      "kafka_timestamp_ms": 1792393890782,
+      "value": "{\"timestamp\": \"1433221264319\", \"visitorid\": \"1150571\", \"event\": \"view\", \"itemid\": \"189559\", \"transactionid\": \"\", \"source_line\": 4483, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"457fc62f11bca1b04c102ff3ae97010a40b48c626ba58ea569ee53460041dfb8\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:30.782121+00:00\"}",
+      "record": {
+        "timestamp": "1433221264319",
+        "visitorid": "1150571",
+        "event": "view",
+        "itemid": "189559",
+        "transactionid": "",
+        "source_line": 4483,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "457fc62f11bca1b04c102ff3ae97010a40b48c626ba58ea569ee53460041dfb8",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:30.782121+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1506,
+      "kafka_timestamp_ms": 1792393890582,
+      "value": "{\"timestamp\": \"1433224130046\", \"visitorid\": \"816192\", \"event\": \"view\", \"itemid\": \"64396\", \"transactionid\": \"\", \"source_line\": 4482, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"4f392f41591284dd0f08c93460f09f49a0cbfdcd25f8496b2d1ef9148929cb82\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:30.581823+00:00\"}",
+      "record": {
+        "timestamp": "1433224130046",
+        "visitorid": "816192",
+        "event": "view",
+        "itemid": "64396",
+        "transactionid": "",
+        "source_line": 4482,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "4f392f41591284dd0f08c93460f09f49a0cbfdcd25f8496b2d1ef9148929cb82",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:30.581823+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1505,
+      "kafka_timestamp_ms": 1792393890381,
+      "value": "{\"timestamp\": \"1433220895231\", \"visitorid\": \"467972\", \"event\": \"view\", \"itemid\": \"181202\", \"transactionid\": \"\", \"source_line\": 4481, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"0a5f0fa6e1197811d29001f900ab7054ef60ad227e7159990161ca8dfe428e66\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:30.381611+00:00\"}",
+      "record": {
+        "timestamp": "1433220895231",
+        "visitorid": "467972",
+        "event": "view",
+        "itemid": "181202",
+        "transactionid": "",
+        "source_line": 4481,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "0a5f0fa6e1197811d29001f900ab7054ef60ad227e7159990161ca8dfe428e66",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:30.381611+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1504,
+      "kafka_timestamp_ms": 1792393890181,
+      "value": "{\"timestamp\": \"1433220834564\", \"visitorid\": \"1285640\", \"event\": \"view\", \"itemid\": \"86844\", \"transactionid\": \"\", \"source_line\": 4480, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"1f7072c7591aec5c2250c50aada32d12dab5b4d04befa6a7381540471792eec2\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:30.180791+00:00\"}",
+      "record": {
+        "timestamp": "1433220834564",
+        "visitorid": "1285640",
+        "event": "view",
+        "itemid": "86844",
+        "transactionid": "",
+        "source_line": 4480,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "1f7072c7591aec5c2250c50aada32d12dab5b4d04befa6a7381540471792eec2",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:30.180791+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1503,
+      "kafka_timestamp_ms": 1792393889980,
+      "value": "{\"timestamp\": \"1433224518988\", \"visitorid\": \"1097169\", \"event\": \"view\", \"itemid\": \"257993\", \"transactionid\": \"\", \"source_line\": 4479, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"9694c5d3eb2468283b1a29b18e6699685cb3e062001de9673b4b1ba24043e98e\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:29.980546+00:00\"}",
+      "record": {
+        "timestamp": "1433224518988",
+        "visitorid": "1097169",
+        "event": "view",
+        "itemid": "257993",
+        "transactionid": "",
+        "source_line": 4479,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "9694c5d3eb2468283b1a29b18e6699685cb3e062001de9673b4b1ba24043e98e",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:29.980546+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1502,
+      "kafka_timestamp_ms": 1792393889780,
+      "value": "{\"timestamp\": \"1433223866951\", \"visitorid\": \"1182746\", \"event\": \"view\", \"itemid\": \"366072\", \"transactionid\": \"\", \"source_line\": 4478, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"e764a1b9aa3a9e5487f61a5594238877665232bb6a461a485759abdb1e8e0de7\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:29.780362+00:00\"}",
+      "record": {
+        "timestamp": "1433223866951",
+        "visitorid": "1182746",
+        "event": "view",
+        "itemid": "366072",
+        "transactionid": "",
+        "source_line": 4478,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "e764a1b9aa3a9e5487f61a5594238877665232bb6a461a485759abdb1e8e0de7",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:29.780362+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1501,
+      "kafka_timestamp_ms": 1792393889580,
+      "value": "{\"timestamp\": \"1433221699595\", \"visitorid\": \"1334190\", \"event\": \"view\", \"itemid\": \"261918\", \"transactionid\": \"\", \"source_line\": 4477, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"eba339238d4fc77e66805960f2661a995784f682b9f18ad5d3d80a2888bd9b9a\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:29.579940+00:00\"}",
+      "record": {
+        "timestamp": "1433221699595",
+        "visitorid": "1334190",
+        "event": "view",
+        "itemid": "261918",
+        "transactionid": "",
+        "source_line": 4477,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "eba339238d4fc77e66805960f2661a995784f682b9f18ad5d3d80a2888bd9b9a",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:29.579940+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 1,
+      "offset": 1515,
+      "kafka_timestamp_ms": 1792393889379,
+      "value": "{\"timestamp\": \"1433222058468\", \"visitorid\": \"348768\", \"event\": \"view\", \"itemid\": \"145463\", \"transactionid\": \"\", \"source_line\": 4476, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"fab3fd462e81c2c18bba978ee88ad7a15a72ca09fa1833d5930a6a6e1d447c8c\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:29.379639+00:00\"}",
+      "record": {
+        "timestamp": "1433222058468",
+        "visitorid": "348768",
+        "event": "view",
+        "itemid": "145463",
+        "transactionid": "",
+        "source_line": 4476,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "fab3fd462e81c2c18bba978ee88ad7a15a72ca09fa1833d5930a6a6e1d447c8c",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:29.379639+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 0,
+      "offset": 1457,
+      "kafka_timestamp_ms": 1792393889179,
+      "value": "{\"timestamp\": \"1433224602685\", \"visitorid\": \"528212\", \"event\": \"view\", \"itemid\": \"339580\", \"transactionid\": \"\", \"source_line\": 4475, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"9a7307e1ef226d6e5b9d7c0873c52e7fa829a3ee76af7636a1c57a9372735a8c\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:29.179081+00:00\"}",
+      "record": {
+        "timestamp": "1433224602685",
+        "visitorid": "528212",
+        "event": "view",
+        "itemid": "339580",
+        "transactionid": "",
+        "source_line": 4475,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "9a7307e1ef226d6e5b9d7c0873c52e7fa829a3ee76af7636a1c57a9372735a8c",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:29.179081+00:00"
+      }
+    },
+    {
+      "topic": "v2-716a15738eae4aca89399b0c37f3a483",
+      "partition": 2,
+      "offset": 1500,
+      "kafka_timestamp_ms": 1792393888978,
+      "value": "{\"timestamp\": \"1433221916264\", \"visitorid\": \"729484\", \"event\": \"view\", \"itemid\": \"295506\", \"transactionid\": \"\", \"source_line\": 4474, \"source_file\": \"events.csv\", \"dataset_version\": \"kaggle-retailrocket-v2\", \"source_record_id\": \"e602a8fda2f8f9f27e45f3edc7952c12519f9545d5a2382bcfeea639f77fe947\", \"batch_id\": \"v2-716a15738eae4aca89399b0c37f3a483\", \"replay_time\": \"2026-10-19T07:11:28.978547+00:00\"}",
+      "record": {
+        "timestamp": "1433221916264",
+        "visitorid": "729484",
+        "event": "view",
+        "itemid": "295506",
+        "transactionid": "",
+        "source_line": 4474,
+        "source_file": "events.csv",
+        "dataset_version": "kaggle-retailrocket-v2",
+        "source_record_id": "e602a8fda2f8f9f27e45f3edc7952c12519f9545d5a2382bcfeea639f77fe947",
+        "batch_id": "v2-716a15738eae4aca89399b0c37f3a483",
+        "replay_time": "2026-10-19T07:11:28.978547+00:00"
+      }
+    }
+  ],
+  "raw_samples_complete": true,
+  "raw_sample_error": null,
+  "worker_alive": false,
+  "lag": 0,
+  "updated_at": "2026-10-19T15:11:39.832693+00:00",
+  "physical_messages": 4492,
+  "rate_definition": "producer_acknowledgements_per_observation_second",
+  "stream_pid": 141012,
+  "stream_identity": {
+    "pid": 141012,
+    "start": "1067808",
+    "boot": "3741e13b-5d17-4782-8b0f-2b1097432503"
+  },
+  "starting": {
+    "0": 0,
+    "1": 0,
+    "2": 0
+  },
+  "input": {
+    "dataset_version": "kaggle-retailrocket-v2",
+    "source_file": "events.csv",
+    "source_sha256": "3745aa83238b1e6d44d8fda209807899f420084398f94ddf745f3cbcfecbf9e7",
+    "rows": 10000,
+    "first_source_line": 2,
+    "last_source_line": 10001,
+    "events": "events.jsonl",
+    "raw_source": "source.csv",
+    "mode": "historical_replay",
+    "timezone": "UTC"
+  },
+  "stream_released": true,
+  "committed_batch": 317,
+  "result_identity": "[\"v2-716a15738eae4aca89399b0c37f3a483\", 317, {\"v2-716a15738eae4aca89399b0c37f3a483\": {\"0\": 1462, \"1\": 1520, \"2\": 1510}}]",
+  "result_received_at": "2026-10-19T15:11:38.067333+00:00",
+  "ready_at": "2026-10-19T06:56:29.663731+00:00",
+  "ack_session": "ae79d3391d514e5d97745ae7c4f42206",
+  "producer_acknowledged": 4492,
+  "control_generation": 1,
+  "last_control": {
+    "action": "stop",
+    "operation_id": "5a80a7e7c30549b2a3fbec86780fd468",
+    "acknowledged": true
+  },
+  "final": {
+    "0": 1462,
+    "1": 1520,
+    "2": 1510
+  },
+  "early_stopped": true,
+  "error": null
+}

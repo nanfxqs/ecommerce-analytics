@@ -1,0 +1,5 @@
+323.7 M  647.3 M  /retailrocket/streams/v2-58e8ae0622ec45269dd5e147cb226a3f
+1.4 G    2.8 G    /retailrocket/stream-checkpoints/v2-58e8ae0622ec45269dd5e147cb226a3f
+         123          420          339396547 /retailrocket/streams/v2-58e8ae0622ec45269dd5e147cb226a3f
+Filesystem                  Size  Used Avail Use% Mounted on
+/dev/mapper/almalinux-root   36G   24G   12G  68% /

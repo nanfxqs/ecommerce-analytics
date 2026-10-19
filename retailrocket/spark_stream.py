@@ -85,7 +85,7 @@ def read_snapshot(spark, output):
     return _snapshot_at(spark, output, int(complete[-1].rsplit('/', 1)[-1])) if complete else None
 
 
-def publish_observation(spark, output, checkpoint, observation_file, run_id):
+def publish_observation(spark, output, checkpoint, observation_file, run_id, previous_batch=None):
     """Atomic local cache of a result AND its durable Spark checkpoint commit.
 
     Read existing HDFS clients directly; no CLI subprocess or Spark SQL job.
@@ -97,6 +97,8 @@ def publish_observation(spark, output, checkpoint, observation_file, run_id):
     if not commits:
         return None
     batch_id = max(commits)
+    if previous_batch == batch_id:
+        return None  # Immutable committed batch already validated by this driver.
     snapshot = _snapshot_at(spark, output, batch_id)
     if snapshot is None:
         raise ValueError('Checkpoint has no matching durable result snapshot')
@@ -236,12 +238,16 @@ def main():
     parser.add_argument('--max-offsets', type=int, default=10000)
     parser.add_argument('--trigger-seconds', type=int, default=2)
     parser.add_argument('--available-now', action='store_true')
+    parser.add_argument('--observation-interval-seconds',type=float,default=1)
+    parser.add_argument('--ready-file', help='Driver-local readiness barrier before producer starts')
     parser.add_argument('--observation-file', help='Atomic driver-local committed result cache')
     parser.add_argument('--stop-file', help='Driver-local graceful shutdown request')
     parser.add_argument('--evidence', help='Driver-local JSON evidence after query exits successfully')
     args = parser.parse_args()
     spark = SparkSession.builder.appName('retailrocket-stream-' + args.run_id).getOrCreate()
     try:
+        if not .05 <= args.observation_interval_seconds <= 1:
+            raise ValueError('Observation interval must be between0.05and1seconds')
         if spark.sparkContext.master != 'yarn':
             raise ValueError('Distributed streaming requires YARN')
         if not args.checkpoint.startswith('hdfs://') or not args.output.startswith('hdfs://'):
@@ -250,14 +256,28 @@ def main():
                              checkpoint=args.checkpoint, run_id=args.run_id,
                              starting_offsets=args.starting_offsets, max_offsets=args.max_offsets,
                              trigger_seconds=args.trigger_seconds, available_now=args.available_now)
+        if args.ready_file:
+            # No producer ACK is hidden: wait on an empty dedicated topic before
+            # allowing normal-load production, including executor registration.
+            import time
+            deadline=time.monotonic()+180
+            while spark.sparkContext._jsc.sc().getExecutorMemoryStatus().size()<3:
+                if time.monotonic()>deadline:raise TimeoutError('Executors did not become ready')
+                time.sleep(.1)
+            query.processAllAvailable()
+            marker=Path(args.ready_file);temporary=marker.with_suffix('.tmp')
+            temporary.write_text(json.dumps(dict(run_id=args.run_id,application_id=spark.sparkContext.applicationId)))
+            temporary.replace(marker)
         if args.stop_file or args.observation_file:
+            previous_observed_batch=None
             while query.isActive:
                 if args.observation_file:
-                    publish_observation(spark, args.output, args.checkpoint, args.observation_file, args.run_id)
+                    published=publish_observation(spark, args.output, args.checkpoint, args.observation_file, args.run_id,previous_observed_batch)
+                    if published:previous_observed_batch=published['committed_batch']
                 if args.stop_file and Path(args.stop_file).exists():
                     query.stop()
                     break
-                query.awaitTermination(1)
+                query.awaitTermination(args.observation_interval_seconds)
             if query.exception():
                 raise RuntimeError(str(query.exception()))
         else:
