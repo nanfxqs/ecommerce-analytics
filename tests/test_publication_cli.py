@@ -18,7 +18,8 @@ def complete_export(tmp_path, batch):
     manifest.write_text(json.dumps(replay))
     quality = dict(input_count=2, consumed_count=2, unique_source_count=2, valid_count=2,
                    invalid_count=0, retry_count=0, suspected_duplicate_count=0)
-    metadata = dict(batch_id=batch, input=source, quality=quality,
+    metadata = dict(batch_id=batch, input=source, quality=quality, timezone='UTC',
+                    event_time_min='2015-05-04T00:00:00Z', event_time_max='2015-05-04 00:00:00',
                     references=dict(dataset_version='v1', events_input=source, sources=[dict(file='properties.csv',sha256='b'*64,rows=2),dict(file='tree.csv',sha256='c'*64,rows=1)]))
     (directory/'metadata.json').write_text(json.dumps(metadata))
     with duckdb.connect() as db:
@@ -153,6 +154,7 @@ def test_publication_accepts_all_invalid_inputs_with_empty_dashboard_results(tmp
     replay, directory = complete_export(tmp_path, 'all-invalid')
     metadata = json.loads((directory/'metadata.json').read_text())
     metadata['quality'].update(valid_count=0, invalid_count=2)
+    metadata.update(event_time_min=None, event_time_max=None)
     (directory/'metadata.json').write_text(json.dumps(metadata))
     with duckdb.connect() as db:
         db.execute('CREATE TABLE invalid AS SELECT * FROM read_parquet(?)', [str(directory/'events'/'part.parquet')])
@@ -165,3 +167,23 @@ def test_publication_accepts_all_invalid_inputs_with_empty_dashboard_results(tmp
         db.execute('COPY quality TO ? (FORMAT PARQUET)', [str(directory/'quality'/'part.parquet')])
     publish(monkeypatch, tmp_path/'store', replay, directory)
     assert current_snapshot(tmp_path/'store').metadata['quality']['invalid_count'] == 2
+
+
+@pytest.mark.parametrize(('field', 'wrong'), [('event_time_min', '2015-05-03 16:00:00'), ('event_time_max', '2015-05-04 08:00:00'), ('timezone', 'Asia/Shanghai')])
+def test_publication_rejects_shifted_time_metadata_preserving_success(tmp_path, monkeypatch, field, wrong):
+    store = tmp_path/'store'
+    replay, good = complete_export(tmp_path, 'good')
+    publish(monkeypatch, store, replay, good)
+    replay, damaged = complete_export(tmp_path, 'shifted')
+    path = damaged/'metadata.json'
+    metadata = json.loads(path.read_text())
+    original = metadata[field]
+    metadata[field] = wrong
+    path.write_text(json.dumps(metadata))
+    with pytest.raises(ValueError, match='time'):
+        publish(monkeypatch, store, replay, damaged)
+    assert current_snapshot(store).batch_id == 'good'
+    metadata[field] = original
+    path.write_text(json.dumps(metadata))
+    publish(monkeypatch, store, replay, damaged)
+    assert current_snapshot(store).batch_id == 'shifted'
