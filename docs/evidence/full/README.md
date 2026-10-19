@@ -4,7 +4,7 @@ The entire official Retailrocket version2 events input passed through Kafka and 
 
 ## Input, collection and results
 
-Dataset version `kaggle-retailrocket-v2`, events SHA256 `3745aa83238b1e6d44d8fda209807899f420084398f94ddf745f3cbcfecbf9e7`, source lines2–2756102. [replay.json](replay.json) confirms all2,756,101 acknowledgements and exact half-open offsets for dedicated three-partition/three-replica topic `retailrocket-full-v2-20261019`: partition0 `[0,920007)`, partition1 `[0,917873)`, partition2 `[0,918221)`.
+Dataset version `kaggle-retailrocket-v2`, events SHA256 `3745aa83238b1e6d44d8fda209807899f420084398f94ddf745f3cbcfecbf9e7`, source lines2–2756102. [replay.json](replay.json) confirms all2,756,101 acknowledgements and exact half-open offsets for dedicated three-partition/three-replica topic `retailrocket-full-v2-20261019`: partition0 `[0,920007)`, partition1 `[0,917873)`, partition2 `[0,918221)`. [kafka-topic.txt](kafka-topic.txt) independently records the three leaders/replicas/ISR and unchanged final broker offsets.
 
 | Check | Actual result |
 |---|---:|
@@ -40,7 +40,7 @@ A controlled pre-switch failure used a distinct valid candidate revision, create
 
 Streamlit AppTest executed the final published full snapshot: overview, purchase associations, products/categories, profiles and data quality all completed without exceptions using one shared UTC date range. Batch/UTC captions, full metrics, positive visitor lookup, missing visitor and out-of-range pagination passed ([dashboard-report.json](dashboard-report.json)). Known fixtures cover UTC boundaries, non-sequential purchases, cross-day distinct visitors, zero denominators, source retry deduplication, valid empty transaction IDs, invalid isolation, recency and preference ordering.
 
-Root's frozen full suite on integration `9d33db1` passed28 tests in160.14s, including the workerless regression and metadata/aggregate validation guards. No local test is represented as distributed evidence.
+Root's frozen full suite on integration `9d33db1` passed28 tests in160.14s, including the workerless regression and metadata/aggregate validation guards. A focused followup extended the known fixture with an empty day inside its valid date bounds; all five pages kept the same selected UTC day, overview displayed zeros/no data, and zero-denominator purchase rates displayed no data. This integration test passed in37.77s. No local test is represented as distributed evidence.
 
 ## Reproduce and inspect
 
