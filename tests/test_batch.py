@@ -21,3 +21,13 @@ def test_dashboard_reads_exported_overview(tmp_path):
     conn.execute("INSERT INTO events VALUES ('view','2015-05-03'),('view','2015-05-04'),('addtocart','2015-05-04'),('transaction','2015-05-04')")
     conn.execute(f"COPY events TO '{tmp_path / 'events.parquet'}' (FORMAT PARQUET)")
     assert overview(tmp_path, '2015-05-04', '2015-05-04') == {'view': 1, 'addtocart': 1, 'transaction': 1}
+
+
+def test_prepared_batch_retains_original_input(tmp_path):
+    from retailrocket.ingest import records
+    source = tmp_path / 'events.csv'
+    original = 'timestamp,visitorid,event,itemid,transactionid\n1430622000000,1,view,2,\n'
+    source.write_text(original)
+    manifest = prepare(source, tmp_path / 'prepared', 'fixture-v1')
+    metadata = json.loads(Path(manifest).read_text())
+    assert (Path(manifest).parent / metadata['raw_source']).read_text() == original

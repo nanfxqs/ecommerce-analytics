@@ -1,0 +1,22 @@
+{
+  "batch_id": "sample-20261019",
+  "rows": 10000,
+  "application_id": "application_1792359468585_0002",
+  "master": "yarn",
+  "executor_hosts": "List(hadoop01:32921, hadoop01:42949, hadoop02:45247)",
+  "output": "hdfs://mycluster/retailrocket/batches/sample-20261019",
+  "startingOffsets": {
+    "retailrocket-sample-20261019": {
+      "0": 0,
+      "1": 0,
+      "2": 0
+    }
+  },
+  "endingOffsets": {
+    "retailrocket-sample-20261019": {
+      "0": 3265,
+      "1": 3425,
+      "2": 3310
+    }
+  }
+}

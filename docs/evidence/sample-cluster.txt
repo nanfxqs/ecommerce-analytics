@@ -1,0 +1,22 @@
+drwxr-xr-x   - hadoop supergroup          0 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/events
+-rw-r--r--   2 hadoop supergroup          0 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/events/_SUCCESS
+-rw-r--r--   2 hadoop supergroup     731109 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/events/part-00000-677dafbb-99c0-4d88-87d0-d2a43310b53f-c000.snappy.parquet
+-rw-r--r--   2 hadoop supergroup     354572 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/events/part-00001-677dafbb-99c0-4d88-87d0-d2a43310b53f-c000.snappy.parquet
+drwxr-xr-x   - hadoop supergroup          0 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/overview
+-rw-r--r--   2 hadoop supergroup          0 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/overview/_SUCCESS
+-rw-r--r--   2 hadoop supergroup        764 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/overview/part-00000-8bfdb389-899a-4a48-bb52-dfe9e30e8524-c000.snappy.parquet
+drwxr-xr-x   - hadoop supergroup          0 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/raw
+-rw-r--r--   2 hadoop supergroup          0 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/raw/_SUCCESS
+-rw-r--r--   2 hadoop supergroup     621687 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/raw/part-00000-7ef459a3-1768-48c6-a8ff-58c8c05890cb-c000.snappy.parquet
+-rw-r--r--   2 hadoop supergroup     653982 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/raw/part-00001-7ef459a3-1768-48c6-a8ff-58c8c05890cb-c000.snappy.parquet
+-rw-r--r--   2 hadoop supergroup     632742 2026-10-19 05:44 hdfs://mycluster/retailrocket/batches/sample-20261019/raw/part-00002-7ef459a3-1768-48c6-a8ff-58c8c05890cb-c000.snappy.parquet
+26/10/19 05:44:20 INFO TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0) (hadoop02, executor 1, partition 0, PROCESS_LOCAL, 9212 bytes) 
+26/10/19 05:44:21 INFO TaskSetManager: Starting task 1.0 in stage 0.0 (TID 1) (hadoop01, executor 2, partition 1, PROCESS_LOCAL, 9212 bytes) 
+26/10/19 05:44:31 INFO TaskSetManager: Starting task 2.0 in stage 0.0 (TID 2) (hadoop02, executor 1, partition 2, PROCESS_LOCAL, 9212 bytes) 
+26/10/19 05:44:31 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 10799 ms on hadoop02 (executor 1) (1/3)
+26/10/19 05:44:32 INFO TaskSetManager: Finished task 1.0 in stage 0.0 (TID 1) in 10784 ms on hadoop01 (executor 2) (2/3)
+26/10/19 05:44:32 INFO TaskSetManager: Finished task 2.0 in stage 0.0 (TID 2) in 1228 ms on hadoop02 (executor 1) (3/3)
+26/10/19 05:44:33 INFO TaskSetManager: Starting task 0.0 in stage 1.0 (TID 3) (hadoop02, executor 1, partition 0, PROCESS_LOCAL, 9230 bytes) 
+26/10/19 05:44:33 INFO TaskSetManager: Finished task 0.0 in stage 1.0 (TID 3) in 406 ms on hadoop02 (executor 1) (1/1)
+26/10/19 05:44:34 INFO TaskSetManager: Starting task 0.0 in stage 2.0 (TID 4) (hadoop02, executor 1, partition 0, NODE_LOCAL, 9869 bytes) 
+{"app":{"id":"application_1792359468585_0002","user":"hadoop","name":"retailrocket-sample-20261019","queue":"default","state":"FINISHED","finalStatus":"SUCCEEDED","progress":100.0,"trackingUI":"History","trackingUrl":"http://hadoop03:8088/proxy/application_1792359468585_0002/","diagnostics":"","clusterId":1792359468585,"applicationType":"SPARK","applicationTags":"","priority":0,"startedTime":1792359813692,"launchTime":1792359813937,"finishedTime":1792359885500,"elapsedTime":71808,"amContainerLogs":"http://hadoop03:8042/node/containerlogs/container_e03_1792359468585_0002_01_000001/hadoop","amHostHttpAddress":"hadoop03:8042","masterNodeId":"hadoop03:42981","allocatedMB":-1,"allocatedVCores":-1,"reservedMB":-1,"reservedVCores":-1,"runningContainers":-1,"memorySeconds":141497,"vcoreSeconds":137,"queueUsagePercentage":0.0,"clusterUsagePercentage":0.0,"resourceSecondsMap":{"entry":{"key":"memory-mb","value":"141497"},"entry":{"key":"vcores","value":"137"}},"preemptedResourceMB":0,"preemptedResourceVCores":0,"numNonAMContainerPreempted":0,"numAMContainerPreempted":0,"preemptedMemorySeconds":0,"preemptedVcoreSeconds":0,"preemptedResourceSecondsMap":{},"logAggregationStatus":"DISABLED","unmanagedApplication":false,"amNodeLabelExpression":"","timeouts":{"timeout":[{"type":"LIFETIME","expiryTime":"UNLIMITED","remainingTimeInSeconds":-1}]}}}
