@@ -25,6 +25,10 @@ class KafkaConsumer:
  def end_offsets(self,ps):return {p:0 for p in ps}
  def close(self):pass
 class Future:
+ def add_callback(self,f,*args):
+  try:f(*args,type('Metadata',(),dict(topic='fixture',partition=0,offset=1))())
+  except Exception:pass
+  return self
  def get(self,timeout=None):time.sleep(float(os.environ.get('ACK_DELAY','0')));return None
 class KafkaProducer:
  def __init__(self,**kw):pass
@@ -43,7 +47,7 @@ class KafkaAdminClient:
     run_id='v2-'+'1'*32;root=tmp_path/'runs';owned=root/run_id;owned.mkdir(parents=True)
     (owned/'request.json').write_text(json.dumps(dict(run_id=run_id,dataset='small',requested_rate=1000000)))
     config=dict(root=str(root),code=str(code),brokers='external:9092',audit_crash_after_ack=35,
-                cursor_flush_records=flush_records,cursor_flush_seconds=seconds,shuffle_partitions=24,
+                cursor_flush_records=flush_records,cursor_flush_seconds=seconds,shuffle_partitions=24,audit_ack_log=True,
                 datasets={'small':dict(manifest=str(manifest),events_sha256=hashlib.sha256(events.read_bytes()).hexdigest())})
     path=tmp_path/'config.json';path.write_text(json.dumps(config))
     env=dict(os.environ,ACK_DELAY=str(delay),PYTHONPATH=str(fake)+os.pathsep+str(Path(__file__).parents[1]))
@@ -51,6 +55,11 @@ class KafkaAdminClient:
     state=json.loads((owned/'state.json').read_text())
     try:
         assert result.returncode==86,result.stderr
+        traced=[json.loads(line) for line in (owned/'acknowledgements.jsonl').read_text().splitlines()]
+        assert len(traced)==61
+        assert traced[0]['source_line']==2 and traced[0]['topic']=='fixture'
+        assert traced[0]['ack_monotonic_ns']>0 and traced[0]['ack_wall_ns']>0
+        assert len(traced[0]['source_record_id'])==64
         assert Path(str(driver)+'.partitions').read_text()=='24'
         assert state['stream_profile']['shuffle_partitions']==24
         assert state['cursor']==expected

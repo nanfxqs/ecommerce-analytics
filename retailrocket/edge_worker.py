@@ -213,7 +213,7 @@ def work(config,run_id,resume=False):
         if config.get('audit_ack_log'):
             from threading import Lock
             ack_lock=Lock();ack_log=(root/'acknowledgements.jsonl').open('a',buffering=1)
-            def traced_ack(metadata,position,record_id):
+            def traced_ack(position,record_id,metadata):
                 record=dict(run_id=run_id,source_line=position+1,source_record_id=record_id,
                     topic=metadata.topic,partition=metadata.partition,offset=metadata.offset,
                     ack_monotonic_ns=time.monotonic_ns(),ack_wall_ns=time.time_ns())
