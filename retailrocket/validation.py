@@ -19,14 +19,25 @@ def validate_analysis(snapshot):
         raise ValueError('Reference provenance differs from event input')
     if not refs.get('sources') or any(not entry.get('file') or not re.fullmatch('[0-9a-f]{64}', entry.get('sha256', '')) or 'rows' not in entry for entry in refs['sources']):
         raise ValueError('Reference source provenance is incomplete')
+    if metadata.get('timezone') != 'UTC':
+        raise ValueError('Export timezone must be UTC')
     tables = ('raw', 'events', 'quarantine', 'quality', 'overview', 'visitor_events',
               'category_daily', 'item_daily', 'visitor_daily', 'visitor_category_daily')
     with duckdb.connect() as db:
+        db.execute("SET TimeZone='UTC'")
         for name in tables:
             paths = sorted((root / name).glob('*.parquet'))
             if not paths:
                 raise ValueError('Incomplete analysis export: missing ' + name)
             db.read_parquet([str(path) for path in paths]).create_view(name)
+        bounds = db.execute('SELECT cast(min(event_time) AS TIMESTAMPTZ),cast(max(event_time) AS TIMESTAMPTZ) FROM events').fetchone()
+        for field, expected_bound in zip(('event_time_min', 'event_time_max'), bounds):
+            if field not in metadata:
+                raise ValueError('Export time range metadata is missing: '+field)
+            declared = metadata[field]
+            parsed = db.execute('SELECT try_cast(? AS TIMESTAMPTZ)', [declared]).fetchone()[0]
+            if (declared is not None and parsed is None) or parsed != expected_bound:
+                raise ValueError('Export time range differs from persisted events: '+field)
         rows = db.execute('SELECT * FROM quality').fetchall()
         columns = [column[0] for column in db.description]
         if len(rows) != 1:
