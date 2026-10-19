@@ -1,0 +1,11 @@
+563731  1127462  /retailrocket/streams/v2-feasibility
+6471    12942    /retailrocket/stream-checkpoints/v2-feasibility
+Found 8 items
+-rw-r--r--   2 hadoop supergroup         29 2026-10-19 12:02 /retailrocket/stream-checkpoints/v2-feasibility/commits/0
+-rw-r--r--   2 hadoop supergroup         29 2026-10-19 12:04 /retailrocket/stream-checkpoints/v2-feasibility/commits/1
+-rw-r--r--   2 hadoop supergroup         29 2026-10-19 12:06 /retailrocket/stream-checkpoints/v2-feasibility/commits/2
+-rw-r--r--   2 hadoop supergroup         29 2026-10-19 12:06 /retailrocket/stream-checkpoints/v2-feasibility/commits/3
+-rw-r--r--   2 hadoop supergroup         29 2026-10-19 12:06 /retailrocket/stream-checkpoints/v2-feasibility/commits/4
+-rw-r--r--   2 hadoop supergroup         29 2026-10-19 12:06 /retailrocket/stream-checkpoints/v2-feasibility/commits/5
+-rw-r--r--   2 hadoop supergroup         29 2026-10-19 12:06 /retailrocket/stream-checkpoints/v2-feasibility/commits/6
+-rw-r--r--   2 hadoop supergroup         29 2026-10-19 12:06 /retailrocket/stream-checkpoints/v2-feasibility/commits/7
