@@ -8,6 +8,13 @@ from retailrocket.publication import BatchRun, current_snapshot, publish_batch
 def main():
     parser = argparse.ArgumentParser()
     commands = parser.add_subparsers(dest='command', required=True)
+    refs = commands.add_parser('prepare-references')
+    refs.add_argument('--properties', nargs='+', required=True)
+    refs.add_argument('--tree', required=True)
+    refs.add_argument('--output', required=True)
+    refs.add_argument('--version', required=True)
+    refs.add_argument('--events-manifest', required=True)
+    refs.add_argument('--hdfs-directory')
     source = commands.add_parser('prepare')
     source.add_argument('--source', required=True)
     source.add_argument('--output', required=True)
@@ -30,7 +37,13 @@ def main():
     status.add_argument('--store', required=True)
     status.add_argument('--batch-id')
     args = parser.parse_args()
-    if args.command == 'publish':
+    if args.command == 'prepare-references':
+        from retailrocket.references import prepare_references, import_references
+        manifest = prepare_references(args.properties,args.tree,args.output,args.version,args.events_manifest)
+        if args.hdfs_directory:
+            import_references(manifest.parent,args.hdfs_directory)
+        print(manifest)
+    elif args.command == 'publish':
         result = publish_batch(args.store, args.replay, args.export_directory)
         print(json.dumps(dict(batch_id=result.batch_id, directory=str(result.directory))))
     elif args.command == 'status':
