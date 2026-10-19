@@ -1,0 +1,141 @@
+{
+  "h1": {
+    "start": {
+      "guest_timestamp": "1792392934.879799506",
+      "cpu_jiffies": [
+        644626,
+        94,
+        74142,
+        1342470,
+        32220,
+        14334,
+        9219,
+        2260,
+        0,
+        0
+      ],
+      "processes": []
+    },
+    "end": {
+      "guest_timestamp": "2026-10-19T07:11:10Z",
+      "cpu_jiffies": [
+        711451,
+        94,
+        88766,
+        1438192,
+        36080,
+        15902,
+        11952,
+        2399,
+        0,
+        0
+      ],
+      "processes": [
+        {
+          "pid": 141012,
+          "rss_kib": 773484,
+          "lifetime_cpu_percent": 39.4,
+          "role": "driver"
+        }
+      ]
+    },
+    "guest_cpu_busy_percent": 46.308587326320556
+  },
+  "h2": {
+    "start": {
+      "guest_timestamp": "1792392934.622989157",
+      "cpu_jiffies": [
+        297531,
+        104,
+        37841,
+        1728262,
+        39866,
+        11195,
+        7510,
+        1798,
+        0,
+        0
+      ],
+      "processes": []
+    },
+    "end": {
+      "guest_timestamp": "2026-10-19T07:11:09Z",
+      "cpu_jiffies": [
+        322368,
+        104,
+        41099,
+        1877362,
+        46599,
+        12324,
+        8324,
+        1888,
+        0,
+        0
+      ],
+      "processes": [
+        {
+          "pid": 56010,
+          "rss_kib": 3220,
+          "lifetime_cpu_percent": 0.0,
+          "role": "executor"
+        },
+        {
+          "pid": 56027,
+          "rss_kib": 437976,
+          "lifetime_cpu_percent": 22.9,
+          "role": "executor"
+        }
+      ]
+    },
+    "guest_cpu_busy_percent": 16.201246497921606
+  },
+  "h3": {
+    "start": {
+      "guest_timestamp": "1792392935.406011327",
+      "cpu_jiffies": [
+        275908,
+        101,
+        33758,
+        1790529,
+        4298,
+        11051,
+        6580,
+        1754,
+        0,
+        0
+      ],
+      "processes": []
+    },
+    "end": {
+      "guest_timestamp": "2026-10-19T07:11:10Z",
+      "cpu_jiffies": [
+        298330,
+        101,
+        36183,
+        1949846,
+        4564,
+        12027,
+        7186,
+        1830,
+        0,
+        0
+      ],
+      "processes": [
+        {
+          "pid": 51592,
+          "rss_kib": 3108,
+          "lifetime_cpu_percent": 0.0,
+          "role": "executor"
+        },
+        {
+          "pid": 51608,
+          "rss_kib": 444752,
+          "lifetime_cpu_percent": 21.3,
+          "role": "executor"
+        }
+      ]
+    },
+    "guest_cpu_busy_percent": 14.24326125274064
+  },
+  "definition": "Guest aggregate /proc/stat busy percentage across all guest CPUs (includes preexisting Hadoop/Kafka services), end before stop; process pcpu is lifetime average, RSS is a point observation, not sampled peak. YARN allocation3072MiB/3vcores plus client driver. No global settings changed."
+}

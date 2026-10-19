@@ -4,14 +4,14 @@
 
 ## 资源与部署配置
 
-复用既有 Hadoop 3.1.3、Kafka 3.7.0、Java 8u212，隔离 CPython 3.11.16、Spark 3.5.6 / Scala 2.12。流任务两个单核 executor，各 512MiB heap +512MiB overhead，AM512MiB，RocksDB 共享有界原生缓存128MiB；JVM class-space/code-cache 各64MiB。保持 YARN 内存校验，不修改全局配置。历史任务采用既有批处理脚本资源。机器为同一宿主上的三个节点，跨节点成功不能证明宿主故障容灾。
+复用既有 Hadoop 3.1.3、Kafka 3.7.0、Java 8u212，隔离 CPython 3.11.16、Spark 3.5.6 / Scala 2.12。流任务两个单核 executor，各 512MiB heap +512MiB overhead，AM heap512MiB（YARN取整后容器1024MiB，两个executor各1024MiB，共3072MiB/3vcore；client driver另计），RocksDB 共享有界原生缓存128MiB；JVM class-space/code-cache 各64MiB。保持 YARN 内存校验，不修改全局配置。历史任务采用既有批处理脚本资源。机器为同一宿主上的三个节点，跨节点成功不能证明宿主故障容灾。
 
 worker operator JSON 支持：
 
 | 配置 | 默认 | 最终验收部署 |
 | --- | --- | --- |
 | `max_offsets` | 1000 | 全量100000；正常小样本1000 |
-| `shuffle_partitions` | full24、small2 | 全量24；正常小样本2 |
+| `shuffle_partitions` | full24、small2 | 全量24；正常小样本显式small_shuffle_partitions=1 |
 | `cursor_flush_records` | 1 | 100 |
 | `cursor_flush_seconds` | 1 | 1 |
 | `wait_for_stream_ready` | false | 正常延迟验收true |
@@ -50,16 +50,36 @@ python scripts/benchmark-cursor.py --help
 - 已有流可行性、控制、恢复及自动发布证据分别位于 `docs/evidence/v2-stream`、`docs/evidence/v2-controls`、`docs/evidence/v2-recovery`、`docs/evidence/v2-publication`。已知输入验证源重试、内容相同的不同源行、异常、乱序和跨日访客；恢复包含 ACK35 / durable cursor34、重发不翻倍及损坏检查点拒绝。它们不能替代本次完整链路和15分钟验收。
 - 旧版每批累计重扫全量 trigger126秒，已被增量状态架构替代。独立旧topic全量探测的24分区 / 100k微批次结果与 V1 完全一致；这是状态规模证据，不是完整 V2 生产者链路验收。
 - 本次实际完整 worker 轮次 `v2-b68af3f678234c1aae86dd6e851fc54e` 使用2分区，在 confirmed1516976时因 RocksDB `Insert failed due to LRU cache being full` 失败。保留全部 topic、检查点及日志，不发布部分结果。该失败说明小样本2分区资源配置不能直接用于全量。
-- 随后以新隔离轮次 `v2-58e8ae0622ec45269dd5e147cb226a3f` 使用24分区重做完整链路。该轮次真实全链路已成功，流应用0018和历史应用0019均 FINISHED/SUCCEEDED；新发布历史与实时417个 UTC 行为桶逐一一致。实际 Chromium 完整页面1项测试通过7.7秒，详见 [永久证据](../evidence/v2-acceptance/README.md)。完整注册数据与 V1 来源校验一致，原始 V1 结果和topic均未修改。
+- 随后以新隔离轮次 `v2-58e8ae0622ec45269dd5e147cb226a3f` 使用24分区重做完整链路。该轮次真实全链路已成功，流应用0018和历史应用0019均 FINISHED/SUCCEEDED；新发布历史与实时417个 UTC 行为桶逐一一致。实际 Chromium 完整页面1项测试通过11.9秒（含两种消息计数卡），详见 [永久证据](../evidence/v2-acceptance/README.md)。完整注册数据与 V1 来源校验一致，原始 V1 结果和topic均未修改。
 - 实际边缘 fsync1000次在并行全量负载下：每条落盘11.289秒，100条批量落盘0.102秒。实际完整生产者约2500–2700条/秒；请求速率100000仅为上限，不是已实现吞吐或10秒延迟承诺。全量突发积压与另行5条/秒正常延迟验收分别报告。
 - 容量观察：edge根盘36GiB中15GiB空闲，HDFS105.1GiB中55.0GiB可用、7.7GiB使用；不执行自动清理。
 
-全量与完整浏览器核对已通过；15分钟正常输入与最终审核仍待完成。当前不标记 V2 完成。
+全量、完整浏览器及15分钟正常输入均已通过；最终审核仍待完成，当前不标记 V2 完成。
 
 
-120秒最终观察路径预检的607条普通窗口 ACK 全部匹配首次页面绘制，但P95保守上界13621.7ms，未达到10秒；原始证据保留，未直接开始900秒。故意关闭浏览器15秒测试独立通过，后台源游标629→712、提交量610→682，重新打开同轮次后结果可见，提前停止后751条消息排空且旧完整历史保持不变。后续优化使用上述0.1秒驱动观察与0.25秒后台等待，并删除旧 Spark 样本收集动作；新的真实预检及900秒正式结果待完成，不下调目标。
+120秒最终观察路径预检的607条普通窗口 ACK 全部匹配首次页面绘制，但P95保守上界13621.7ms，未达到10秒；原始证据保留，未直接开始900秒。故意关闭浏览器15秒测试独立通过，后台源游标629→712、提交量610→682，重新打开同轮次后结果可见，提前停止后751条消息排空且旧完整历史保持不变。后续优化使用上述0.1秒驱动观察与0.25秒后台等待，并删除旧 Spark 样本收集动作；后续预检及900秒正式结果见下表，保留失败结果且未下调目标。
 
 
 增量检查点单项验证使用 Spark 3.5.6 官方支持的 `spark.sql.streaming.stateStore.rocksdb.changelogCheckpointing.enabled=true`（[官方说明](https://spark.apache.org/docs/3.5.6/structured-streaming-programming-guide.html#rocksdb-state-store-changelog-checkpointing)）。它把本批状态变化持久化并周期生成后台快照，不改变精确去重或提交 offset 的一致性。保持2状态分区、原始输出布局、资源和调度配置不变后，状态提交由约800–1400ms降到约90–250ms，warm trigger约2.8–4秒。该值是作业诊断，不替代实际浏览器P95。
 
 真实同轮恢复已通过：`v2-6af43e90fc5e4ff0a3d997e639c5ee1e` 应用0023→0024，ACK200后游标199、物理消息203；同一已有状态的检查点手动恢复后，359唯一有效源记录对应363物理消息、精确重试4，积压0，提前停止不发布部分历史。新 profile 固定检查点模式；旧未记录模式的 profile 归一为false。该故障阶段独立报告，不计入正常性能。首次尝试另遇新topic元数据传播暂不可见，cursor0且无Spark；新增仅启动创建阶段的有界等待并保留失败目录，观察/恢复仍对缺失topic报错。
+
+
+## 正式900秒结果（通过，最终审核待完成）
+
+最终部署 `e8090f6`，实际轮次 `v2-716a15738eae4aca89399b0c37f3a483`，YARN应用 `application_1792382297034_0028`。固定10000条输入以5条/秒持续生产，实际ACK跨度902.971718492秒、速率4.97358条/秒。4492条实际ACK全部匹配首次绘制；包括第一条数据及冷状态提交，不剔除延迟样本。P50保守上界6232.42ms、P95 **8580.68ms**、P99 10169.07ms、最大14720.43ms；规格要求P95而非每条≤10秒。时钟校准偏移区间跨度233.293288ms已计入上界。
+
+每分钟积压中位数首29、末25，差-4，回归斜率-0.004464条/秒；没有持续增长积压。实际前端轮询中位2.01359秒、P95 2.01634秒。停止后4492条全部提交、lag0、stream_released=true、无错误、complete=false，完整已发布历史仍为全量轮次。全部原始ACK、绘制帧、逐条延迟、校准候选、轮询、观察、资源与配置哈希见 [永久原始证据](../evidence/v2-acceptance/normal-900s/summary.json)。
+
+| 实测阶段 | 全部ACK | P95保守上界ms | 结论 |
+| --- | ---: | ---: | --- |
+| 修复回调、原观察路径 | 607 | 13621.71 | 失败，另行浏览器关闭测试通过 |
+| API0.25s/driver0.1s、去多余collect | 611 | 12274.03 | 失败 |
+| 单项changelog | 609 | 11358.67 | 失败 |
+| 原始输出coalesce2 | 611 | 10815.50 | 失败 |
+| 新轮次small状态1、300秒预检 | 1509 | 9476.15 | 仅短测，duration不足900故accepted=false |
+| 独立正式900秒同profile | 4492 | 8580.68 | 通过全部正式门槛 |
+
+启动正常profile必须同时设置 `small_shuffle_partitions: 1`、`rocksdb_changelog: true`、`observation_interval_seconds: 0.1`、`wait_for_stream_ready: true`、`audit_ack_log: true`、`cursor_flush_records: 100`、`cursor_flush_seconds: 1`，API `--poll-seconds 0.25`；前端保持2秒。专属空topic准备完成后才开始生产，全部第一批数据ACK均计入。这是在上述资源、状态规模和5条/秒正常输入下的验收结果，不是完整2.7M状态下同延迟或约2785条/秒突发吞吐的延迟承诺。全量已单独用24分区/原checkpoint模式核验正确性，不能把状态1用于全量或改变现有检查点分区。
+
+正式资源观察的三节点整体CPU忙碌率分别约46.31%、16.20%、14.24%，包含原有Hadoop/Kafka服务；计算使用/proc/stat起止差，不把进程生命周期ps百分比称作窗口平均。驱动与executor RSS为时点观察，不声称峰值。原始资源数据与定义见 `normal-900s/resources-summary.json`。YARN应用0028最终FINISHED/SUCCEEDED，实际耗时946.967秒。

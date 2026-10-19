@@ -1,0 +1,11 @@
+{
+  "run_id": "v2-6af43e90fc5e4ff0a3d997e639c5ee1e",
+  "dataset": "small",
+  "requested_rate": 5.0,
+  "phase": "starting",
+  "complete": false,
+  "confirmed": 0,
+  "created_at": "2026-10-19T14:28:48.782092+00:00",
+  "source_cursor": 0,
+  "rate": 0
+}

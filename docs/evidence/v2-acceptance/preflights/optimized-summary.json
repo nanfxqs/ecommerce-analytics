@@ -1,0 +1,42 @@
+{
+  "normal_window": {
+    "samples": 608,
+    "p95_upper_ms": 12274.032348,
+    "definition": "Every actual ACK from first ACK through requested duration+2s, with visibility completed BEFORE separately labelled intentional preflight browser outage; formal runs include all ACKs in main metrics"
+  },
+  "accepted": false,
+  "background_check": null,
+  "run_id": "v2-5c57adf2724d49e38eaf0fbf6571cc74",
+  "dataset": "small",
+  "requested_rate": 5,
+  "duration_requested_seconds": 120,
+  "actual_ack_span_seconds": 122.490286241,
+  "samples": 611,
+  "matched_samples": 611,
+  "p50_upper_ms": 9224.609208,
+  "p95_upper_ms": 12274.032348,
+  "p99_upper_ms": 14259.272106,
+  "maximum_upper_ms": 15511.501925,
+  "calibration_offset_span_ms": 208.340774,
+  "lag_minute_buckets": [
+    {
+      "minute": 0,
+      "median": 37,
+      "max": 65,
+      "samples": 59
+    },
+    {
+      "minute": 1,
+      "median": 37,
+      "max": 51,
+      "samples": 59
+    }
+  ],
+  "lag_end_minus_start_median": 0,
+  "lag_median_slope_messages_per_second": 0,
+  "measured_ack_rate": 4.979986729721761,
+  "historical_batch_preserved": "v2-58e8ae0622ec45269dd5e147cb226a3f",
+  "browser_poll_interval_median_seconds": 2.014435053,
+  "browser_poll_interval_p95_seconds": 2.017272469,
+  "protocol": "All actual Future ACK callbacks after empty-topic readiness barrier, no latency/startup sample exclusions; first two-animation-frame painted DOM coverage by same run/topic/partition exclusive offset; upperbound includes measured clock-calibration uncertainty and host binding transit. Intentional stop/drain after normalwindow separately recorded."
+}

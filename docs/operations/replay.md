@@ -24,9 +24,9 @@ python -m retailrocket.api --store /operator/published --cluster-config /operato
 
 每轮 edge 保存 request、state、input、replay 及日志。本机保存 current 和每轮状态镜像。ACK 游标仅越过连续确认的源记录；正常结束生成的 replay.rows 按实际 Kafka offset 范围计算，不能与唯一源记录量混用。源重试需要继续沿用同一源记录身份。故障后通过页面手动恢复控制继续同一轮，恢复先校验输入、topic、检查点并停用旧拥有者；不能直接删除检查点重启。
 
-页面分别显示 Kafka 当前独占末端、Spark 已提交检查点 offset 和持久结果覆盖 offset。检查点以 `commits/<batch>` 存在为依据，不能用先写出的 `offsets/<batch>` 或结果快照代替。driver 每秒通过已建立的 JVM Hadoop 客户端核对 HDFS 提交记录及对应结果，原子写出本轮本地 `stream-observation.json`。edge 观测只读取这个小文件和 Kafka 末端，不在每次查询中启动 HDFS CLI 或 Spark 作业。只有检查点与结果 offset 完全匹配的快照才进入业务页面；空分区明确按 0 处理。页面每 2 秒查询本机缓存，并分别显示观测时间与业务结果更新时间；端到端性能仍须独立验收。
+页面分别显示 Kafka 当前独占末端、Spark 已提交检查点 offset 和持久结果覆盖 offset。检查点以 `commits/<batch>` 存在为依据，不能用先写出的 `offsets/<batch>` 或结果快照代替。driver 每秒通过已建立的 JVM Hadoop 客户端核对 HDFS 提交记录及对应结果，原子写出本轮本地 `stream-observation.json`。edge 观测只读取这个小文件和 Kafka 末端，不在每次查询中启动 HDFS CLI 或 Spark 作业。只有检查点与结果 offset 完全匹配的快照才进入业务页面；空分区明确按 0 处理。页面每 2 秒查询本机缓存，并分别显示观测时间与业务结果更新时间；独立15分钟实测及可复现配置见 [验收记录](v2-acceptance.md)。
 
-正常 EOF 后等待所有发送确认，捕获最终 offset，等待检查点与结果都覆盖范围，然后向 driver 写入停止请求，等待 Spark 释放资源。完成状态表示回放范围处理完成，仍不是已发布历史分析；自动历史发布由后续任务接入。失败保留状态及日志，阻止另一个轮次抢占不确定资源；不要手工改 current 指针绕过保护。
+正常 EOF 后等待所有发送确认，捕获最终 offset，等待检查点与结果都覆盖范围，然后向 driver 写入停止请求，等待 Spark 释放资源。完成状态表示回放范围处理完成，仍不是已发布历史分析；随后自动执行历史分析与安全发布，见 [发布说明](automatic-publication.md)。失败保留状态及日志，阻止另一个轮次抢占不确定资源；不要手工改 current 指针绕过保护。
 
 控制 API：`GET /api/replay/datasets`、`GET /api/replay/current`、`POST /api/replay/runs`（dataset、正数 rate）。无活动轮次返回 null；并发启动 409，未知输入/非法速率 422。生产环境必须传入真实 cluster 配置；不配置时不会注册回放 API。
 

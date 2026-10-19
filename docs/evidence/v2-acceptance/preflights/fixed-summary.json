@@ -1,0 +1,64 @@
+{
+  "normal_window": {
+    "samples": 607,
+    "p95_upper_ms": 13621.713483,
+    "definition": "Every actual ACK from first ACK through requested duration+2s, with visibility completed BEFORE separately labelled intentional preflight browser outage; formal runs include all ACKs in main metrics"
+  },
+  "accepted": false,
+  "background_check": {
+    "accepted": true,
+    "run_id": "v2-6bfc937e27784118936433c79d986a6c",
+    "closed_host_ns": "16982341958368",
+    "reopened_host_ns": "16997485165787",
+    "before": {
+      "confirmed": 629,
+      "committed": {
+        "0": 213,
+        "1": 205,
+        "2": 192
+      }
+    },
+    "after": {
+      "confirmed": 712,
+      "committed": {
+        "0": 235,
+        "1": 231,
+        "2": 216
+      }
+    },
+    "protocol": "Intentional preflight-only browser-close stage after requested normal window; all ACKs retained, excluded from no formal900s run"
+  },
+  "run_id": "v2-6bfc937e27784118936433c79d986a6c",
+  "dataset": "small",
+  "requested_rate": 5,
+  "duration_requested_seconds": 120,
+  "actual_ack_span_seconds": 150.77367785,
+  "samples": 751,
+  "matched_samples": 751,
+  "p50_upper_ms": 10595.656397,
+  "p95_upper_ms": 16911.156673,
+  "p99_upper_ms": 22953.766298,
+  "maximum_upper_ms": 24355.319669,
+  "calibration_offset_span_ms": 211.783471,
+  "lag_minute_buckets": [
+    {
+      "minute": 0,
+      "median": 31,
+      "max": 54,
+      "samples": 59
+    },
+    {
+      "minute": 1,
+      "median": 39,
+      "max": 53,
+      "samples": 59
+    }
+  ],
+  "lag_end_minus_start_median": 8,
+  "lag_median_slope_messages_per_second": 0.13333333333333333,
+  "measured_ack_rate": 4.974343072974259,
+  "historical_batch_preserved": "v2-58e8ae0622ec45269dd5e147cb226a3f",
+  "browser_poll_interval_median_seconds": 2.016139766,
+  "browser_poll_interval_p95_seconds": 2.018879469,
+  "protocol": "All actual Future ACK callbacks after empty-topic readiness barrier, no latency/startup sample exclusions; first two-animation-frame painted DOM coverage by same run/topic/partition exclusive offset; upperbound includes measured clock-calibration uncertainty and host binding transit. Intentional stop/drain after normalwindow separately recorded."
+}

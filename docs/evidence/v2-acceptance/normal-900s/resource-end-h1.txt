@@ -1,0 +1,63 @@
+2026-10-19T07:11:10Z
+cpu  711451 94 88766 1438192 36080 15902 11952 2399 0 0
+cpu0 352735 20 45054 719405 18230 8171 7989 1227 0 0
+cpu1 358715 74 43712 718787 17849 7730 3963 1172 0 0
+intr 28633634 0 9 0 0 0 0 0 0 0 0 1712 0 150 0 11416 0 0 0 0 0 0 0 0 0 0 5 31 0 0 0 25 0 553266 566060 0 2210965 2201880 0 0 44 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ctxt 44964693
+btime 1792382261
+processes 171163
+procs_running 3
+procs_blocked 0
+softirq 29846556 15 1905845 1 20129560 5700 0 183392 3097454 0 4524589
+MemTotal:        3753656 kB
+MemFree:          111720 kB
+MemAvailable:     837228 kB
+Buffers:               4 kB
+Cached:           923512 kB
+SwapCached:       145612 kB
+Active:           808132 kB
+Inactive:        2578268 kB
+Active(anon):     504088 kB
+Inactive(anon):  2004288 kB
+Active(file):     304044 kB
+Inactive(file):   573980 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       4149244 kB
+SwapFree:        2628052 kB
+Dirty:               888 kB
+Writeback:             0 kB
+AnonPages:       2415236 kB
+Mapped:            91716 kB
+Shmem:             45492 kB
+KReclaimable:     103176 kB
+Slab:             164568 kB
+SReclaimable:     103176 kB
+SUnreclaim:        61392 kB
+KernelStack:       14800 kB
+PageTables:        18000 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     6026072 kB
+Committed_AS:    6130960 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:       35812 kB
+VmallocChunk:          0 kB
+Percpu:              896 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:    866304 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+DirectMap4k:      192368 kB
+DirectMap2M:     4001792 kB
+DirectMap1G:     2097152 kB
+ 141012  140949 773484 3635312 39.4 java          /usr/local/jdk1.8.0_212/bin/java -cp /home/hadoop/opt/retailrocket-runtime/pyspark/conf:/home/hadoop/opt/retailrocket-runtime/pyspark/jars/*:/usr/local/hadoop/etc/hadoop/ -Xmx512m -XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/jdk.internal.ref=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/sun.nio.cs=ALL-UNNAMED --add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.util.calendar=ALL-UNNAMED --add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED -Djdk.reflect.useDirectMethodHandle=false org.apache.spark.deploy.SparkSubmit --master yarn --deploy-mode client --conf spark.yarn.am.memory=512m --conf spark.driver.memory=512m --conf spark.yarn.am.extraJavaOptions=-XX:CompressedClassSpaceSize=64m -XX:ReservedCodeCacheSize=64m --conf spark.executor.memoryOverhead=512 --conf spark.hadoop.yarn.client.failover-sleep-max-ms=2000 --conf spark.executor.extraJavaOptions=-XX:CompressedClassSpaceSize=64m -XX:ReservedCodeCacheSize=64m --conf spark.sql.streaming.stateStore.rocksdb.changelogCheckpointing.enabled=true --conf spark.sql.shuffle.partitions=1 --conf spark.dynamicAllocation.enabled=false --conf spark.hadoop.yarn.client.failover-sleep-base-ms=500 --executor-memory 512m --executor-cores 1 --num-executors 2 --jars /home/hadoop/opt/retailrocket-jars/spark-sql-kafka-0-10_2.12-3.5.6.jar,/home/hadoop/opt/retailrocket-jars/spark-token-provider-kafka-0-10_2.12-3.5.6.jar,/home/hadoop/opt/retailrocket-jars/kafka-clients-3.4.1.jar,/home/hadoop/opt/retailrocket-jars/jsr305-3.0.0.jar,/home/hadoop/opt/retailrocket-jars/commons-pool2-2.11.1.jar /home/hadoop/opt/ecommerce-v2-acceptance/scripts/../retailrocket/spark_stream.py --brokers hadoop01:9092,hadoop02:9092,hadoop03:9092 --topic v2-716a15738eae4aca89399b0c37f3a483 --run-id v2-716a15738eae4aca89399b0c37f3a483 --output hdfs://mycluster/retailrocket/streams/v2-716a15738eae4aca89399b0c37f3a483 --checkpoint hdfs://mycluster/retailrocket/stream-checkpoints/v2-716a15738eae4aca89399b0c37f3a483 --max-offsets 1000 --stop-file /home/hadoop/opt/ecommerce-v2-acceptance/runs-normal-changelog/v2-716a15738eae4aca89399b0c37f3a483/stop-stream --observation-file /home/hadoop/opt/ecommerce-v2-acceptance/runs-normal-changelog/v2-716a15738eae4aca89399b0c37f3a483/stream-observation.json --observation-interval-seconds 0.1 --ready-file /home/hadoop/opt/ecommerce-v2-acceptance/runs-normal-changelog/v2-716a15738eae4aca89399b0c37f3a483/stream-ready.json
