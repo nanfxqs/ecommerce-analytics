@@ -1,0 +1,55 @@
+{
+  "batch_id": "full-v2-20261019",
+  "revision": "ea9a9fb0f17d8e462a16464ac77368ade707fc15fc8dbcf7d6b69ba7fd6c4a3c",
+  "pages": {
+    "概览": {
+      "metrics": {
+        "浏览事件": "2664312",
+        "加购事件": "69332",
+        "购买事件": "22457",
+        "独立访客": "1407580"
+      },
+      "date_range": "(datetime.date(2015, 5, 3), datetime.date(2015, 9, 18))"
+    },
+    "购买关联": {
+      "metrics": {
+        "浏览访客": "1404179",
+        "加购访客": "37722",
+        "购买访客": "11719",
+        "浏览与购买访客交集": "11291",
+        "加购与购买访客交集": "10576",
+        "浏览购买交集 / 浏览访客": "0.80%",
+        "加购购买交集 / 加购访客": "28.04%"
+      },
+      "date_range": "(datetime.date(2015, 5, 3), datetime.date(2015, 9, 18))"
+    },
+    "分类偏好": {
+      "metrics": {},
+      "date_range": "(datetime.date(2015, 5, 3), datetime.date(2015, 9, 18))"
+    },
+    "用户画像": {
+      "metrics": {},
+      "date_range": "(datetime.date(2015, 5, 3), datetime.date(2015, 9, 18))"
+    },
+    "数据质量": {
+      "metrics": {
+        "有效行为": "2756101",
+        "可确定事件日期的异常记录": "0",
+        "输入记录": "2756101",
+        "消费消息": "2756101",
+        "唯一源记录": "2756101",
+        "异常记录": "0",
+        "疑似重复": "460"
+      },
+      "date_range": "(datetime.date(2015, 5, 3), datetime.date(2015, 9, 18))"
+    }
+  },
+  "checks": {
+    "no_exceptions": true,
+    "utc_and_batch_caption": true,
+    "date_range_shared": true,
+    "positive_visitor_query": true,
+    "missing_visitor_empty": true,
+    "out_of_range_page_empty": true
+  }
+}

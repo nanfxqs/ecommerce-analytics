@@ -1,0 +1,78 @@
+{
+  "batch_id": "full-v2-20261019",
+  "directory": "/home/nanfl/.cache/retailrocket-published/batches/full-v2-20261019/a02d179ad84639104b7b46831d9351af2e6091cde3268a96a4b8f8bede289cee",
+  "bounds": [
+    "2015-05-03",
+    "2015-09-18"
+  ],
+  "event_counts": {
+    "view": 2664312,
+    "addtocart": 69332,
+    "transaction": 22457
+  },
+  "conversion": {
+    "visitors": 1407580,
+    "view_visitors": 1404179,
+    "cart_visitors": 37722,
+    "purchase_visitors": 11719,
+    "view_purchase_visitors": 11291,
+    "cart_purchase_visitors": 10576,
+    "view_purchase_rate": 0.008040997622098037,
+    "cart_purchase_rate": 0.28036689465033665
+  },
+  "quality": {
+    "category_associated_count": 2099173,
+    "category_coverage": 0.761645890335659,
+    "category_unknown_count": 656928,
+    "consumed_count": 2756101,
+    "input_count": 2756101,
+    "invalid_count": 0,
+    "retry_count": 0,
+    "suspected_duplicate_count": 460,
+    "unique_source_count": 2756101,
+    "valid_count": 2756101
+  },
+  "profiles_total": 1407580,
+  "profile_sample": [
+    {
+      "visitorid": "0",
+      "active_days": 1,
+      "events": 3,
+      "purchases": 0,
+      "last_event_time": "2015-09-11 20:55:17.175000",
+      "recency_seconds": 540270.613,
+      "categories": [
+        {
+          "categoryid": "1188",
+          "views": 1,
+          "purchases": 0
+        },
+        {
+          "categoryid": "256",
+          "views": 1,
+          "purchases": 0
+        },
+        {
+          "categoryid": "333",
+          "views": 1,
+          "purchases": 0
+        }
+      ]
+    },
+    {
+      "visitorid": "1",
+      "active_days": 1,
+      "events": 1,
+      "purchases": 0,
+      "last_event_time": "2015-08-13 17:46:06.444000",
+      "recency_seconds": 3057221.344,
+      "categories": [
+        {
+          "categoryid": "1192",
+          "views": 1,
+          "purchases": 0
+        }
+      ]
+    }
+  ]
+}

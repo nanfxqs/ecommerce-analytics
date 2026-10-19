@@ -1,0 +1,35 @@
+{
+  "batch_id": "full-v2-20261019",
+  "rows": 2756101,
+  "quality": {
+    "input_count": 2756101,
+    "consumed_count": 2756101,
+    "unique_source_count": 2756101,
+    "valid_count": 2756101,
+    "invalid_count": 0,
+    "retry_count": 0,
+    "suspected_duplicate_count": 460,
+    "category_associated_count": 2099173,
+    "category_unknown_count": 656928,
+    "category_coverage": 0.761645890335659
+  },
+  "application_id": "application_1792359468585_0004",
+  "master": "yarn",
+  "executor_hosts": "List(hadoop02:35135, hadoop01:38579, hadoop01:44097)",
+  "output": "hdfs://mycluster/retailrocket/batches/full-v2-20261019",
+  "retry_from_raw": true,
+  "startingOffsets": {
+    "retailrocket-full-v2-20261019": {
+      "0": 0,
+      "1": 0,
+      "2": 0
+    }
+  },
+  "endingOffsets": {
+    "retailrocket-full-v2-20261019": {
+      "0": 920007,
+      "1": 917873,
+      "2": 918221
+    }
+  }
+}

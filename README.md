@@ -4,7 +4,7 @@
 
 ## 环境与数据
 
-已验证环境：Hadoop3.1.3、Java8u212、Kafka3.7.0，新增隔离的 CPython3.11.16、Spark3.5.6/Scala2.12 及匹配 Kafka 连接器；本机依赖锁定在 `uv.lock`。运行记录见 [验收证据](docs/evidence/)。三个虚拟节点共享一个物理宿主，不提供宿主故障容灾。虚拟机初始状态与网络、资源、时钟约束见 [运行说明](docs/operations/small-sample.md)。
+已验证环境：Hadoop3.1.3、Java8u212、Kafka3.7.0，新增隔离的 CPython3.11.16、Spark3.5.6/Scala2.12 及匹配 Kafka 连接器；本机依赖锁定在 `uv.lock`。运行记录见 [全量验收证据](docs/evidence/full/README.md)。三个虚拟节点共享一个物理宿主，不提供宿主故障容灾。虚拟机初始状态与网络、资源、时钟约束见 [运行说明](docs/operations/small-sample.md)。
 
 宿主机先启动现有集群和三个 Kafka broker，确认 SSH `h1` 可用；不要替换已有 Hadoop/Java/Kafka 配置。需要 `uv`、curl、tar、SSH。安装只在 edge 节点 `~/opt` 添加独立运行时：
 
@@ -86,7 +86,13 @@ scripts/submit-batch.sh --replay "$WORK/replay.json" --brokers hadoop01:9092,had
 scripts/export-batch.sh "hdfs://mycluster/retailrocket/batches/$BATCH" "$WORK/export-retry" "$WORK/spark-evidence.json"
 ```
 
-可控失败演练、已发布结果保护及重试证据见最终验收记录。准备失败后仅清理该次未完成的准备目录；回放失败使用重新确认的 manifest，不发布部分回放。保留 input/replay、参考 manifest、状态、Spark/YARN 日志与 HDFS raw。
+在宿主机可用下列命令演练发布前失败：脚本复制有效导出并添加一个明确的验收 marker，创建不同 revision；注入失败后核对旧指针和查询数量，再重试并核对指针实际切换且指标不累加。候选目录必须不存在，分析数据不会修改。
+
+```bash
+uv run python scripts/verify-publication-recovery.py runs/published runs/demo-v2-001/replay.json runs/demo-v2-001/export runs/demo-v2-001/export-fault-candidate > runs/demo-v2-001/recovery-report.json
+```
+
+实际可控失败、已发布结果保护及重试证据见最终验收记录。准备失败后仅清理该次未完成的准备目录；回放失败使用重新确认的 manifest，不发布部分回放。保留 input/replay、参考 manifest、状态、Spark/YARN 日志与 HDFS raw。
 
 测试统一通过公开批次与查询边界；本地测试只证明语义，不替代真实分布式验收：
 

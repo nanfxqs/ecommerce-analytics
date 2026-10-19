@@ -1,0 +1,48 @@
+{
+  "batch_id": "full-v2-20261019",
+  "status": "failed",
+  "application_id": "application_1792359468585_0003",
+  "failure": "Quality summary DataFrame required unavailable Python worker on executor; no result published",
+  "history": [
+    {
+      "stage": "preparing",
+      "at": "2026-10-19T05:47:32.722543+00:00"
+    },
+    {
+      "stage": "prepared",
+      "at": "2026-10-19T05:48:01.911007+00:00"
+    },
+    {
+      "stage": "replaying",
+      "at": "2026-10-18T21:48:47.520201+00:00"
+    },
+    {
+      "stage": "replayed",
+      "at": "2026-10-18T22:00:04.174324+00:00",
+      "records": 2756101
+    },
+    {
+      "stage": "collecting",
+      "at": "2026-10-18T22:00:09.544759+00:00",
+      "retry_from_raw": false
+    },
+    {
+      "stage": "collected",
+      "at": "2026-10-18T22:02:12.335202+00:00",
+      "persisted_input": "hdfs://mycluster/retailrocket/batches/full-v2-20261019/raw",
+      "retry_from_raw": false,
+      "records": 2756101
+    },
+    {
+      "stage": "analyzing",
+      "at": "2026-10-18T22:02:12.356948+00:00"
+    },
+    {
+      "stage": "failed",
+      "at": "2026-10-18T22:06:03.040922+00:00"
+    }
+  ],
+  "source_revision": "457fa8c",
+  "preserved_log": "h1:~/opt/retailrocket-full-v2/spark-failed-0003.log",
+  "preserved_state": "h1:~/opt/retailrocket-full-v2/state-failed-0003.json"
+}

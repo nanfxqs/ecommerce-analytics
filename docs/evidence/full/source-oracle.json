@@ -13,5 +13,6 @@
   "minimum_event_ms": 1430622004384,
   "maximum_event_ms": 1442545187788,
   "minimum_event_utc": "2015-05-03T03:00:04.384000+00:00",
-  "maximum_event_utc": "2015-09-18T02:59:47.788000+00:00"
+  "maximum_event_utc": "2015-09-18T02:59:47.788000+00:00",
+  "suspected_duplicate_count": 460
 }
