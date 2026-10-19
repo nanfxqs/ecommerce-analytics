@@ -1,0 +1,39 @@
+{
+  "dataset_version": "kaggle-retailrocket-v2",
+  "events_input": {
+    "dataset_version": "kaggle-retailrocket-v2",
+    "source_file": "events.csv",
+    "source_sha256": "3745aa83238b1e6d44d8fda209807899f420084398f94ddf745f3cbcfecbf9e7",
+    "rows": 2756101,
+    "first_source_line": 2,
+    "last_source_line": 2756102,
+    "events": "events.jsonl",
+    "raw_source": "source.csv",
+    "mode": "historical_replay",
+    "timezone": "UTC"
+  },
+  "properties": "categories.csv",
+  "tree": "category_tree.csv",
+  "sources": [
+    {
+      "file": "item_properties_part1.csv",
+      "sha256": "30aad5aeca58b2dc27dcc73e1708565f5818e45adb3eb57401f91e87355b0b81",
+      "rows": 10999999,
+      "category_rows": 426305
+    },
+    {
+      "file": "item_properties_part2.csv",
+      "sha256": "d5e7d1a91dc40f522aeb596b267e6c87d8aed689a7192d12369cfb165eb987e5",
+      "rows": 9275903,
+      "category_rows": 361909
+    },
+    {
+      "file": "category_tree.csv",
+      "sha256": "94e865eb0a3d48cbbfe3b79079018dd92509315c88f5fd8d00d0b4b5af434f5b",
+      "rows": 1669
+    }
+  ],
+  "loaded_properties": [
+    "categoryid"
+  ]
+}

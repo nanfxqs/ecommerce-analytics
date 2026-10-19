@@ -1,0 +1,17 @@
+{
+  "event_counts": {
+    "view": 2664312,
+    "addtocart": 69332,
+    "transaction": 22457
+  },
+  "visitors": 1407580,
+  "view_visitors": 1404179,
+  "cart_visitors": 37722,
+  "purchase_visitors": 11719,
+  "view_purchase_visitors": 11291,
+  "cart_purchase_visitors": 10576,
+  "minimum_event_ms": 1430622004384,
+  "maximum_event_ms": 1442545187788,
+  "minimum_event_utc": "2015-05-03T03:00:04.384000+00:00",
+  "maximum_event_utc": "2015-09-18T02:59:47.788000+00:00"
+}
