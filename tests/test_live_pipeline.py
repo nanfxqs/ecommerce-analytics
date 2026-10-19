@@ -36,6 +36,8 @@ def test_live_round_exact_state_survives_restart_and_drives_http(tmp_path):
         result=read_snapshot(spark,output)
         assert result['quality']==dict(consumed_count=6,unique_source_count=4,valid_count=3,
             invalid_count=1,retry_count=2,suspected_duplicate_count=1)
+        assert result['samples']==[]  # raw monitoring is independently sampled from Kafka, not the committed business frame
+        assert result.get('sample_records',[])==[]
         assert result['visitors']==1
         assert result['overview']=={'view':3}
         assert result['daily']==[dict(event_date='1970-01-01',event='view',count=2),dict(event_date='1970-01-02',event='view',count=1)]

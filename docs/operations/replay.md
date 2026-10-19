@@ -5,7 +5,7 @@
 本机启动：
 
 ```bash
-python -m retailrocket.api --store /operator/published --cluster-config /operator/local-cluster.json
+python -m retailrocket.api --store /operator/published --cluster-config /operator/local-cluster.json --poll-seconds 0.25
 ```
 
 本机配置由操作者提供，不接受页面上传：

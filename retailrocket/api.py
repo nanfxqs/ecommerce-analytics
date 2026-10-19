@@ -117,13 +117,15 @@ def main():
     parser.add_argument('--store', required=True)
     parser.add_argument('--port', type=int, default=8000)
     parser.add_argument('--cluster-config')
+    parser.add_argument('--poll-seconds',type=float,default=2,help='Serial background cache refresh delay; browser remains2seconds')
     args = parser.parse_args()
+    if not 0 < args.poll_seconds <= 60:parser.error('--poll-seconds must be in(0,60]')
     cluster = None
     if args.cluster_config:
         import json
         from retailrocket.runs import SSHCluster
         cluster = SSHCluster(json.loads(Path(args.cluster_config).read_text()))
-    uvicorn.run(create_app(args.store, cluster=cluster), host='127.0.0.1', port=args.port)
+    uvicorn.run(create_app(args.store, cluster=cluster,poll_seconds=args.poll_seconds), host='127.0.0.1', port=args.port)
 
 
 if __name__ == '__main__':

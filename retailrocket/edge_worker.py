@@ -209,7 +209,7 @@ def work(config,run_id,resume=False):
                 finally: admin.close()
                 consumer=kafka(config); starting=ends(consumer,run_id)
             atomic(root/'input.json',metadata)
-            command=[str(Path(config['code'])/'scripts/submit-stream.sh'),'--brokers',config['brokers'],'--topic',run_id,'--run-id',run_id,'--output',state['output'],'--checkpoint',state['checkpoint'],'--max-offsets',str(config.get('max_offsets',1000)),'--stop-file',str(root/'stop-stream'),'--observation-file',str(root/'stream-observation.json')]
+            command=[str(Path(config['code'])/'scripts/submit-stream.sh'),'--brokers',config['brokers'],'--topic',run_id,'--run-id',run_id,'--output',state['output'],'--checkpoint',state['checkpoint'],'--max-offsets',str(config.get('max_offsets',1000)),'--stop-file',str(root/'stop-stream'),'--observation-file',str(root/'stream-observation.json'),'--observation-interval-seconds',str(config.get('observation_interval_seconds',1))]
             if config.get('wait_for_stream_ready'):
                 (root/'stream-ready.json').unlink(missing_ok=True)
                 command+=['--ready-file',str(root/'stream-ready.json')]

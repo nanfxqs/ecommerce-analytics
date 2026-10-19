@@ -104,12 +104,11 @@ def _commit_delta(batch, batch_id, output, run_id):
         quality['suspected_duplicate_count']+=counts['source']-counts['content']
         snapshot['visitors']+=counts['visitor']
         snapshot['daily']=[dict(event_date=day,event=event,count=count) for (day,event),count in sorted(daily.items())]
-        new_samples=[dict(microbatch_id=batch_id,topic=r.topic,partition=r.partition,offset=r.offset,record=json.loads(r.payload))
-            for r in batch.filter("kind = 'message'").orderBy(F.desc('offset'),'partition').limit(20).collect()]
-        samples=snapshot.get('sample_records',[])+new_samples
-        samples=sorted(samples,key=lambda r:(r.get('microbatch_id',-1),r['offset'],r['partition']),reverse=True)[:20]
+        # Raw monitoring now samples Kafka independently, including unconsumed
+        # messages. Keep legacy snapshot fields empty rather than run another
+        # distributed order/collect or present stale committed raw samples.
         snapshot.update(microbatch_id=batch_id,updated_at=datetime.now(timezone.utc).isoformat(),
-            sample_records=samples,samples=[row['record'] for row in samples],
+            sample_records=[],samples=[],
             application_id=spark.sparkContext.applicationId,master=spark.sparkContext.master,
             executor_hosts=str(spark.sparkContext._jsc.sc().getExecutorMemoryStatus().keys().toList()))
         _commit_text(spark,output+'/snapshots/%020d'%batch_id,json.dumps(snapshot,ensure_ascii=False))

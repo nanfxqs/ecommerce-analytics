@@ -43,11 +43,11 @@ class KafkaAdminClient:
  def close(self):pass
 ''')
     code=tmp_path/'driver';(code/'scripts').mkdir(parents=True)
-    driver=code/'scripts/submit-stream.sh';driver.write_text('#!/bin/sh\nprintf %s \"$RETAILROCKET_SHUFFLE_PARTITIONS\" > \"$0.partitions\"\nexec sleep 120\n');driver.chmod(0o755)
+    driver=code/'scripts/submit-stream.sh';driver.write_text('#!/bin/sh\nprintf %s \"$RETAILROCKET_SHUFFLE_PARTITIONS\" > \"$0.partitions\"\nprintf \"%s\\n\" \"$@\" > \"$0.args\"\nexec sleep 120\n');driver.chmod(0o755)
     run_id='v2-'+'1'*32;root=tmp_path/'runs';owned=root/run_id;owned.mkdir(parents=True)
     (owned/'request.json').write_text(json.dumps(dict(run_id=run_id,dataset='small',requested_rate=1000000)))
     config=dict(root=str(root),code=str(code),brokers='external:9092',audit_crash_after_ack=35,
-                cursor_flush_records=flush_records,cursor_flush_seconds=seconds,shuffle_partitions=24,audit_ack_log=True,
+                cursor_flush_records=flush_records,cursor_flush_seconds=seconds,shuffle_partitions=24,audit_ack_log=True,observation_interval_seconds=.1,
                 datasets={'small':dict(manifest=str(manifest),events_sha256=hashlib.sha256(events.read_bytes()).hexdigest())})
     path=tmp_path/'config.json';path.write_text(json.dumps(config))
     env=dict(os.environ,ACK_DELAY=str(delay),PYTHONPATH=str(fake)+os.pathsep+str(Path(__file__).parents[1]))
@@ -61,6 +61,7 @@ class KafkaAdminClient:
         assert traced[0]['ack_monotonic_ns']>0 and traced[0]['ack_wall_ns']>0
         assert len(traced[0]['source_record_id'])==64
         assert Path(str(driver)+'.partitions').read_text()=='24'
+        assert '--observation-interval-seconds\n0.1' in Path(str(driver)+'.args').read_text()
         assert state['stream_profile']['shuffle_partitions']==24
         assert state['cursor']==expected
         assert state['confirmed']==expected

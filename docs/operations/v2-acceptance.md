@@ -16,6 +16,7 @@ worker operator JSON 支持：
 | `cursor_flush_seconds` | 1 | 1 |
 | `wait_for_stream_ready` | false | 正常延迟验收true |
 | `audit_ack_log` | false | 正常延迟验收true |
+| `observation_interval_seconds` | 1 | 正常延迟验收0.1 |
 
 `stream_profile` 固定轮次状态分区数；恢复拒绝改变分区配置，旧版未记录 profile 的检查点按原2分区处理。更改分区数创建新轮次，不迁移或覆盖旧检查点。游标批量落盘仅影响故障重发上界，源身份精确去重保证结果；暂停、停止、EOF 强制落盘。正常验收的 readiness 在专属空 topic 上等待 executor 注册与空查询预热后才允许生产，第一条 ACK 也纳入统计，没有隐藏数据预热或启动样本排除。
 
@@ -37,6 +38,8 @@ node scripts/acceptance-performance.mjs \
 python scripts/benchmark-cursor.py --help
 ```
 
+正常验收 API 使用 `--poll-seconds 0.25`，后台 SSH 观察串行执行，调用耗时与配置等待共同决定实际缓存周期；前端轮询仍为2秒。驱动每0.1秒检查新 checkpoint commit，只在新不可变提交出现时完整读取并验证 snapshot/offset；恢复后的首次读取始终重新验证。原始样本独立读取 Kafka，业务快照保留旧 `samples` / `sample_records` 字段为空列表，消除一次多余的分布式样本排序收集，全部原始 Kafka 消息仍持久落盘。
+
 性能脚本读取真实 Kafka `Future.add_callback` 的 partition/offset 与 ACK 单调时间，而非稍后更新的连续游标计数。Chromium DOM 在两次 animation frame 后报告实际绘制的同轮次、同 topic、同 partition 的 exclusive committed offset，逐条匹配首次覆盖该 ACK 的页面；单靠事件总数不构成可见性证据。脚本通过 SSH 往返包围的 guest monotonic / host hrtime 校准，在开始、每分钟和结束记录偏移与不确定度；P95 使用包含校准误差的保守上界。全部 ACK 样本纳入，故意制造积压、恢复和最终停止排空阶段分别记录。输出包含原始 ACK、绘制帧、逐条延迟、校准候选、浏览器轮询、每秒后端观察和每分钟积压分布。
 
 当前节点 UTC 比宿主晚28800秒，禁止未经校准直接相减。浏览器绑定回传延迟保守计入，不扣除。验收脚本要求实际 ACK 跨度≥900秒、全部 ACK 有页面覆盖、P95上界≤10000ms、无持续增长的积压，提前停止不改变已发布完整历史。
@@ -51,3 +54,6 @@ python scripts/benchmark-cursor.py --help
 - 容量观察：edge根盘36GiB中15GiB空闲，HDFS105.1GiB中55.0GiB可用、7.7GiB使用；不执行自动清理。
 
 全量与完整浏览器核对已通过；15分钟正常输入与最终审核仍待完成。当前不标记 V2 完成。
+
+
+120秒最终观察路径预检的607条普通窗口 ACK 全部匹配首次页面绘制，但P95保守上界13621.7ms，未达到10秒；原始证据保留，未直接开始900秒。故意关闭浏览器15秒测试独立通过，后台源游标629→712、提交量610→682，重新打开同轮次后结果可见，提前停止后751条消息排空且旧完整历史保持不变。后续优化使用上述0.1秒驱动观察与0.25秒后台等待，并删除旧 Spark 样本收集动作；新的真实预检及900秒正式结果待完成，不下调目标。

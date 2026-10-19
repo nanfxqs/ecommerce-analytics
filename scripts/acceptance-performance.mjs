@@ -100,6 +100,14 @@ try {
     await sleep(1000);
   }
   if (options['background-check']) {
+    // Complete visibility for EVERY ACK in the normal window before the
+    // separately labelled intentional browser outage. No formal run uses this.
+    const prefix = (await remotePython('from pathlib import Path;print(Path(' + JSON.stringify(ackFile) + ').read_text(),end="")')).trim().split('\n').filter(Boolean).map(line => JSON.parse(line)).filter(ack => BigInt(ack.ack_monotonic_ns) + BigInt(initial.offset_ns) <= deadline);
+    const visibleDeadline = now() + 60000000000n;
+    while (!prefix.every(ack => frames.some(frame => frame.run_id === run.run_id && (frame.offsets[ack.topic]?.[String(ack.partition)] ?? 0) > ack.offset))) {
+      if (now() > visibleDeadline) throw new Error('Normal preflight ACK prefix never became painted before intentional browser close');
+      await sleep(500);
+    }
     const before = await request('current'), closedAt = String(now());
     await browser.close(); browser = undefined;
     await sleep(15000);
@@ -152,7 +160,8 @@ try {
   const slope = denominator ? buckets.reduce((sum, value) => sum + (value.minute - meanMinute) * (value.median - meanLag), 0) / denominator / 60 : Infinity;
   const normalPolls = polls.map(BigInt).filter(time => time >= start && time <= stopRequest);
   const intervals = normalPolls.slice(1).map((time, i) => Number(time - normalPolls[i]) / 1e9).sort((a, b) => a - b);
-  const report = { accepted: duration >= 900 && inputSpan >= 900 && samples.length === latencies.length && percentile(.95) <= 10000 && drift <= rate * 2 && slope <= rate * .005,
+  const normalWindow = samples.filter(ack => BigInt(ack.ack_monotonic_ns) + BigInt(initial.offset_ns) <= deadline).map(ack => ack.latency_upper_ms).filter(value => value !== null).sort((a,b) => a-b);
+  const report = { normal_window: { samples: normalWindow.length, p95_upper_ms: normalWindow[Math.ceil(normalWindow.length*.95)-1], definition: 'Every actual ACK from first ACK through requested duration+2s, with visibility completed BEFORE separately labelled intentional preflight browser outage; formal runs include all ACKs in main metrics' }, accepted: duration >= 900 && inputSpan >= 900 && samples.length === latencies.length && percentile(.95) <= 10000 && drift <= rate * 2 && slope <= rate * .005,
     background_check: backgroundCheck || null,
     run_id: run.run_id, dataset: 'small', requested_rate: rate, duration_requested_seconds: duration, actual_ack_span_seconds: inputSpan,
     samples: samples.length, matched_samples: latencies.length, p50_upper_ms: percentile(.5), p95_upper_ms: percentile(.95), p99_upper_ms: percentile(.99), maximum_upper_ms: latencies.at(-1),
