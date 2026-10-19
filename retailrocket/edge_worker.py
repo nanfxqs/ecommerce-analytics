@@ -74,9 +74,13 @@ def kafka(config):
     return KafkaConsumer(bootstrap_servers=config['brokers'].split(','),enable_auto_commit=False,request_timeout_ms=15000,api_version_auto_timeout_ms=10000,fetch_max_wait_ms=100,max_poll_records=60)
 
 
-def ends(consumer,topic):
+def ends(consumer,topic,wait_seconds=0):
     from kafka import TopicPartition
+    deadline=time.monotonic()+wait_seconds
     parts=consumer.partitions_for_topic(topic)
+    while not parts and time.monotonic()<deadline:
+        time.sleep(min(.1,max(0,deadline-time.monotonic())))
+        parts=consumer.partitions_for_topic(topic)
     if not parts: raise ValueError('Run topic missing')
     return {str(p.partition):offset for p,offset in consumer.end_offsets([TopicPartition(topic,p) for p in sorted(parts)]).items()}
 
@@ -211,7 +215,7 @@ def work(config,run_id,resume=False):
                 admin=KafkaAdminClient(bootstrap_servers=config['brokers'].split(','))
                 try: admin.create_topics([NewTopic(run_id,num_partitions=3,replication_factor=3)])
                 finally: admin.close()
-                consumer=kafka(config); starting=ends(consumer,run_id)
+                consumer=kafka(config); starting=ends(consumer,run_id,wait_seconds=30)
             atomic(root/'input.json',metadata)
             command=[str(Path(config['code'])/'scripts/submit-stream.sh'),'--brokers',config['brokers'],'--topic',run_id,'--run-id',run_id,'--output',state['output'],'--checkpoint',state['checkpoint'],'--max-offsets',str(config.get('max_offsets',1000)),'--stop-file',str(root/'stop-stream'),'--observation-file',str(root/'stream-observation.json'),'--observation-interval-seconds',str(config.get('observation_interval_seconds',1))]
             if config.get('wait_for_stream_ready'):

@@ -20,8 +20,10 @@ def test_worker_crash_preserves_bounded_contiguous_ack_prefix(tmp_path,flush_rec
 import os,time
 TopicPartition=namedtuple('TopicPartition','topic partition')
 class KafkaConsumer:
- def __init__(self,**kw):pass
- def partitions_for_topic(self,t):return {0,1,2}
+ def __init__(self,**kw):self.metadata_calls=0
+ def partitions_for_topic(self,t):
+  self.metadata_calls+=1
+  return None if self.metadata_calls==1 else {0,1,2}
  def end_offsets(self,ps):return {p:0 for p in ps}
  def close(self):pass
 class Future:
@@ -69,7 +71,7 @@ class KafkaAdminClient:
         assert state['confirmed']==expected
         assert 35-state['cursor']<=flush_records
     finally:
-        os.killpg(state['stream_pid'],signal.SIGTERM)
+        if state.get('stream_pid'):os.killpg(state['stream_pid'],signal.SIGTERM)
     config['rocksdb_changelog']=False;path.write_text(json.dumps(config))
     rejected=subprocess.run([sys.executable,'-m','retailrocket.edge_worker','work','--resume','--config',str(path),'--run-id',run_id],env=env,capture_output=True,text=True,timeout=10)
     unchanged=json.loads((owned/'state.json').read_text())
