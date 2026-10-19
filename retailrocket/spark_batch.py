@@ -26,12 +26,15 @@ def associate_categories(events, references, replay):
     return joined.select('e.*', F.coalesce(F.col('p.categoryid'), F.lit('unknown')).alias('categoryid')), metadata
 
 
-def analyze(raw, replay, output, reuse_raw=False, references=None):
+def analyze(raw, replay, output, reuse_raw=False, references=None, tracking=None):
     """Persist one captured batch; usable locally for contracts, not acceptance."""
     raw.sparkSession.conf.set('spark.sql.session.timeZone', 'UTC')
     if not reuse_raw:
         raw.write.mode('errorifexists').parquet(output + '/raw')
     raw = raw.sparkSession.read.parquet(output + '/raw')
+    if tracking:
+        tracking.stage('collected', records=raw.count(), persisted_input=output + '/raw', retry_from_raw=reuse_raw)
+        tracking.stage('analyzing')
     schema = 'timestamp STRING,visitorid STRING,event STRING,itemid STRING,transactionid STRING,source_record_id STRING,source_line LONG,source_file STRING,dataset_version STRING,batch_id STRING,replay_time STRING'
     events = raw.select(F.from_json(F.col('value').cast('string'), schema).alias('record')).select('record.*')
     consumed = events.count()
@@ -85,29 +88,43 @@ def analyze(raw, replay, output, reuse_raw=False, references=None):
     return quality
 
 
-def run(replay_path, brokers, output, retry_from_raw=False, references=None):
+def run(replay_path, brokers, output, retry_from_raw=False, references=None, store=None):
+    try:
+        from retailrocket.publication import BatchRun
+    except ModuleNotFoundError:
+        # spark-submit executes this file directly; its sibling is on sys.path.
+        from publication import BatchRun
     replay = json.loads(Path(replay_path).read_text())
-    if not replay.get('replay_confirmed'):
-        raise ValueError('Replay is not confirmed')
-    spark = SparkSession.builder.appName('retailrocket-' + replay['batch_id']).getOrCreate()
-    spark.conf.set('spark.sql.session.timeZone', 'UTC')
-    if spark.sparkContext.master != 'yarn':
-        raise ValueError('Distributed batch requires YARN')
-    if retry_from_raw:
-        raw = spark.read.parquet(output + '/raw')
-    else:
-        raw = (spark.read.format('kafka').option('kafka.bootstrap.servers', brokers)
-               .option('subscribe', replay['topic']).option('startingOffsets', json.dumps(replay['startingOffsets']))
-               .option('endingOffsets', json.dumps(replay['endingOffsets'])).option('failOnDataLoss', 'true').load())
-    quality = analyze(raw, replay, output, reuse_raw=retry_from_raw, references=references)
-    count = quality['consumed_count']
-    # Executor registration provides actual host allocation, not a local-mode claim.
-    executor_hosts = str(spark.sparkContext._jsc.sc().getExecutorMemoryStatus().keys().toList())
-    evidence = dict(batch_id=replay['batch_id'], rows=count, application_id=spark.sparkContext.applicationId,
-                    master=spark.sparkContext.master, executor_hosts=executor_hosts, output=output,
-                    startingOffsets=replay['startingOffsets'], endingOffsets=replay['endingOffsets'])
-    Path(replay_path).with_name('spark-evidence.json').write_text(json.dumps(evidence, indent=2))
-    spark.stop()
+    tracking = BatchRun(store or Path(replay_path).parent / 'batch-state', replay['batch_id'])
+    spark = None
+    try:
+        with tracking.tracking('collecting', replay=replay, output=output, retry_from_raw=retry_from_raw):
+            if not replay.get('replay_confirmed'):
+                raise ValueError('Replay is not confirmed')
+            spark = SparkSession.builder.appName('retailrocket-' + replay['batch_id']).getOrCreate()
+            spark.conf.set('spark.sql.session.timeZone', 'UTC')
+            if spark.sparkContext.master != 'yarn':
+                raise ValueError('Distributed batch requires YARN')
+            if retry_from_raw:
+                path = spark.sparkContext._jvm.org.apache.hadoop.fs.Path(output + '/raw')
+                if not path.getFileSystem(spark.sparkContext._jsc.hadoopConfiguration()).exists(path):
+                    raise FileNotFoundError('Persisted raw input is missing: ' + output + '/raw')
+                raw = spark.read.parquet(output + '/raw')
+            else:
+                raw = (spark.read.format('kafka').option('kafka.bootstrap.servers', brokers)
+                       .option('subscribe', replay['topic']).option('startingOffsets', json.dumps(replay['startingOffsets']))
+                       .option('endingOffsets', json.dumps(replay['endingOffsets'])).option('failOnDataLoss', 'true').load())
+            quality = analyze(raw, replay, output, reuse_raw=retry_from_raw, references=references, tracking=tracking)
+            executor_hosts = str(spark.sparkContext._jsc.sc().getExecutorMemoryStatus().keys().toList())
+            evidence = dict(batch_id=replay['batch_id'], rows=quality['consumed_count'], quality=quality,
+                            application_id=spark.sparkContext.applicationId, master=spark.sparkContext.master,
+                            executor_hosts=executor_hosts, output=output, retry_from_raw=retry_from_raw,
+                            startingOffsets=replay['startingOffsets'], endingOffsets=replay['endingOffsets'])
+            Path(replay_path).with_name('spark-evidence.json').write_text(json.dumps(evidence, indent=2))
+            tracking.stage('analyzed', records=quality['valid_count'], quality=quality, evidence=evidence)
+    finally:
+        if spark is not None:
+            spark.stop()
 
 
 if __name__ == '__main__':
@@ -117,5 +134,6 @@ if __name__ == '__main__':
     parser.add_argument('--output', required=True)
     parser.add_argument('--references', required=True, help='HDFS reference directory containing references.json, categories.csv and category_tree.csv')
     parser.add_argument('--retry-from-raw', action='store_true')
+    parser.add_argument('--store', help='Driver-local batch state registry')
     args = parser.parse_args()
-    run(args.replay, args.brokers, args.output, args.retry_from_raw, args.references)
+    run(args.replay, args.brokers, args.output, args.retry_from_raw, args.references, args.store)

@@ -34,3 +34,13 @@ retailrocket status --store exports --batch-id batch-1
 （包含 revision）及所有筛选条件，不能只用可变 store 路径。发布过程可通过
 `publish_batch(..., validate=...)` 加入业务校验，通过 `before_switch` 设置发布前
 故障演练。任何校验异常都保留此前可查询的成功批次。
+
+生产命令 `retailrocket publish` 额外调用 Retailrocket 结果契约校验：必须完整导出
+raw/events/quarantine/quality 及全部看板结果，源行范围完整且唯一，数量与回放、
+质量摘要相符，事件和参考数据的版本及源校验和一致。通用 publish_batch API 通过
+validate 回调扩展，不依赖指标清单。`scripts/export-batch.sh HDFS_BATCH DESTINATION
+[SPARK_EVIDENCE_JSON]` 下载全部已完成的结果目录并平铺 metadata，输出目录必须新建。
+
+Spark 提交命令传 `--store /driver/path/batch-state`（省略时默认 replay.json 同级
+batch-state）；它记录采集、落盘、分析成功和失败，重算用同一 store。
+各机器的 store 是本机文件目录，演示证据收集时一并保存各阶段 runs/<batch>.json。

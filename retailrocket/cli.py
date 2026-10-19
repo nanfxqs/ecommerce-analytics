@@ -44,7 +44,8 @@ def main():
             import_references(manifest.parent,args.hdfs_directory)
         print(manifest)
     elif args.command == 'publish':
-        result = publish_batch(args.store, args.replay, args.export_directory)
+        from retailrocket.validation import validate_analysis
+        result = publish_batch(args.store, args.replay, args.export_directory, validate=validate_analysis)
         print(json.dumps(dict(batch_id=result.batch_id, directory=str(result.directory))))
     elif args.command == 'status':
         if args.batch_id:
@@ -57,16 +58,17 @@ def main():
             parser.error('--store requires --batch-id for prepare')
         if args.store:
             run = BatchRun(args.store, args.batch_id)
-            with run.tracking('preparing', source=args.source, dataset_version=args.version):
+            with run.tracking('preparing', source=str(Path(args.source).resolve()), dataset_version=args.version):
                 result = prepare(args.source, args.output, args.version, args.limit)
-                run.stage('prepared', **json.loads(result.read_text()))
+                run.stage('prepared', records=json.loads(result.read_text())['rows'], input=json.loads(result.read_text()), manifest=str(result.resolve()))
         else:
             result = prepare(args.source, args.output, args.version, args.limit)
         print(result)
     else:
         store = args.store or str(Path(args.output).parent / 'batch-state')
         run = BatchRun(store, args.batch_id)
-        with run.tracking('replaying', manifest=args.manifest, topic=args.topic):
+        with run.tracking('replaying', manifest=str(Path(args.manifest).resolve()), topic=args.topic):
+            run.stage('replaying', input=json.loads(Path(args.manifest).read_text()), prepared_directory=str(Path(args.manifest).resolve().parent))
             result = replay(args.manifest, args.brokers, args.topic, args.batch_id, args.output)
             run.stage('replayed', records=result['rows'], replay=result)
 
