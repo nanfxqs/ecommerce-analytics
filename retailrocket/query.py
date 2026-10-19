@@ -10,3 +10,15 @@ def overview(directory, start, end):
     result = dict.fromkeys(('view', 'addtocart', 'transaction'), 0)
     result.update(dict(rows))
     return result
+
+
+def quality_summary(directory):
+    """Return batch-wide reconciliation; suspected duplicates overlap valid/invalid."""
+    path = str(Path(directory) / 'quality' / '*.parquet')
+    with duckdb.connect() as connection:
+        row = connection.execute('SELECT * FROM read_parquet(?)', [path])
+        names = [column[0] for column in row.description]
+        values = row.fetchall()
+    if len(values) != 1:
+        raise ValueError('Expected one batch quality summary')
+    return dict(zip(names, values[0]))
