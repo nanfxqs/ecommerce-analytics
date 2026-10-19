@@ -1,0 +1,11 @@
+{
+  "source": "original source.csv first61 data rows",
+  "rows": 61,
+  "events": {
+    "view": 59,
+    "addtocart": 2
+  },
+  "visitors": 60,
+  "event_min_utc": "2015-06-02T04:54:59.221000+00:00",
+  "event_max_utc": "2015-06-02T05:58:03.817000+00:00"
+}

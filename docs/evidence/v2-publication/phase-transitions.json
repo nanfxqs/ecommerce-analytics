@@ -1,0 +1,65 @@
+[
+  {
+    "host_observed_epoch": 1792414671.2415104,
+    "phase": "draining",
+    "historical_status": null,
+    "batch_application": null,
+    "error": null
+  },
+  {
+    "host_observed_epoch": 1792414703.38935,
+    "phase": "historical_pending",
+    "historical_status": "pending",
+    "batch_application": null,
+    "error": null
+  },
+  {
+    "host_observed_epoch": 1792414732.6258993,
+    "phase": "analyzing",
+    "historical_status": "analyzing",
+    "batch_application": null,
+    "error": null
+  },
+  {
+    "host_observed_epoch": 1792414763.8566508,
+    "phase": "failed",
+    "historical_status": "failed",
+    "batch_application": null,
+    "error": "YARN application CLI status timed out; explicit retry reattached same batch after fix"
+  },
+  {
+    "host_observed_epoch": 1792414835.8624513,
+    "phase": "analyzing",
+    "historical_status": "analyzing",
+    "batch_application": null,
+    "error": null
+  },
+  {
+    "host_observed_epoch": 1792414880.2221515,
+    "phase": "analyzing",
+    "historical_status": "exporting",
+    "batch_application": "application_1792382297034_0016",
+    "error": null
+  },
+  {
+    "host_observed_epoch": 1792414883.248063,
+    "phase": "exporting",
+    "historical_status": "exported",
+    "batch_application": "application_1792382297034_0016",
+    "error": null
+  },
+  {
+    "host_observed_epoch": 1792414884.2593043,
+    "phase": "publishing",
+    "historical_status": "publishing",
+    "batch_application": "application_1792382297034_0016",
+    "error": null
+  },
+  {
+    "host_observed_epoch": 1792414885.268357,
+    "phase": "completed",
+    "historical_status": "published",
+    "batch_application": "application_1792382297034_0016",
+    "error": null
+  }
+]
