@@ -1,0 +1,51 @@
+(node:546385) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[2m[WebServer] [22m(node:546578) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:546671) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:546671) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(node:546671) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22m11:17:45 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:17:45 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:17:48 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:17:50 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:17:52 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:17:54 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:17:56 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:17:58 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:18:00 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:18:02 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:18:04 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+[2m[WebServer] [22m11:18:06 PM [vite] http proxy error: /api/history/overview?
+[2m[WebServer] [22mError: connect ECONNREFUSED 127.0.0.1:8006
+[2m[WebServer] [22m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)
+  ✓  1 frontend/tests/acceptance-full.spec.ts:3:1 › full registered input becomes complete history and realtime view without losing V1 pages (30.5s)
+
+  1 passed (32.6s)

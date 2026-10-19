@@ -5,7 +5,7 @@
 ## 版本与路线图
 
 - **V1：已完成并验收。** 当前代码与下方运行命令对应历史数据批处理、Streamlit + Plotly 看板和可靠发布；[全量验收证据](docs/evidence/full/README.md)。
-- **V2：已实现，最终验收中。** React + TypeScript + Vite 页面、FastAPI、Structured Streaming、回放控制、恢复与自动历史发布已实现；真实全量链路及完整页面已通过，连续15分钟正常负载 P95保守上界8.58秒已通过，最终审核待完成。[验收记录](docs/operations/v2-acceptance.md)。
+- **V2：已完成并通过验收。** React + TypeScript + Vite 页面、FastAPI、Structured Streaming、回放控制、恢复与自动历史发布已交付；真实全量链路、完整页面及连续15分钟正常负载验收通过，P95保守上界8.58秒。最终双轴审查及修复已完成，详见[验收记录](docs/operations/v2-acceptance.md)和[审查记录](docs/evidence/v2-acceptance/final-review.md)。
 
 完整版本范围和计划见 [项目路线图](roadmap.md)（[详细路线图](docs/roadmap.md)）。这里的 V1 / V2 是项目里程碑；数据集 `version2` 和现有名称中的 `v2` 是数据版本标识，两者独立。
 
@@ -143,7 +143,7 @@ V2 产物默认永久保留。需要释放空间时，使用[离线手动清理�
 正常完整回放自动顺序执行 YARN 历史分析、导出传回和完整校验发布。需要在 edge 注册参考文件校验和；配置、阶段与失败重试见[自动历史发布说明](docs/operations/automatic-publication.md)。提前停止不进入历史发布，失败继续展示此前成功批次。
 
 
-V2 实时回放、控制、手动恢复与最终验收分别见 [回放说明](docs/operations/replay.md)、[流处理说明](docs/operations/streaming.md) 和 [验收运行记录](docs/operations/v2-acceptance.md)。流任务使用两个 512MiB heap + 512MiB overhead executor、128MiB RocksDB 共享原生缓存及 512MiB AM；历史任务仍采用原批处理资源。分区数影响完整精确状态的资源压力：小样本默认 2，已验收正常 profile 显式 small_shuffle_partitions=1，全量部署使用已验证的 24；检查点固定状态分区数，调整须使用新隔离轮次。真实全量与15分钟浏览器性能均已通过，最终审核前不标记 V2 完成，也不保证实测之外的速率。
+V2 实时回放、控制、手动恢复与最终验收分别见 [回放说明](docs/operations/replay.md)、[流处理说明](docs/operations/streaming.md) 和 [验收运行记录](docs/operations/v2-acceptance.md)。流任务使用两个 512MiB heap + 512MiB overhead executor、128MiB RocksDB 共享原生缓存及 512MiB AM heap（AM 实际容器为 1024MiB，YARN 总分配 3GiB，client driver 另计）；历史任务仍采用原批处理资源。分区数影响完整精确状态的资源压力：小样本默认 2，已验收正常 profile 显式 small_shuffle_partitions=1，全量部署使用已验证的 24；检查点固定状态分区数，调整须使用新隔离轮次。真实全量、15分钟浏览器性能及最终双轴审查与修复均已完成；验收范围限于记录的输入规模、资源和速率。
 
 
 V2 正常负载验收使用明确的部署配置：API 后台串行缓存等待0.25秒，驱动观察0.1秒，浏览器2秒。带集群控制的启动入口为：
