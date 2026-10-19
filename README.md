@@ -1,11 +1,11 @@
 # Retailrocket 历史行为分析
 
-使用现有三节点 Kafka、HDFS HA 和 YARN，回放 Retailrocket 历史事件；Spark 在集群清洗、关联历史分类并计算结果，本机 DuckDB 查询不可变 Parquet，Streamlit + Plotly 展示概览、购买关联、商品与分类、用户画像及质量摘要。所有日期使用源事件 UTC，回放不表示实时业务操作。
+使用现有三节点 Kafka、HDFS HA 和 YARN，回放 Retailrocket 历史事件；Spark 在集群清洗并持续处理，完整轮次再关联历史分类计算结果；本机 DuckDB 查询不可变 Parquet，React + FastAPI 提供实时监控、回放控制与历史分析，保留 V1 Streamlit + Plotly 看板。所有日期使用源事件 UTC，回放不表示实时业务操作。
 
 ## 版本与路线图
 
 - **V1：已完成并验收。** 当前代码与下方运行命令对应历史数据批处理、Streamlit + Plotly 看板和可靠发布；[全量验收证据](docs/evidence/full/README.md)。
-- **V2：规划中，尚未实现。** 增加清洗前后的实时数据流展示，采用 React + TypeScript + Vite 重建页面交互与视觉布局；其他组件与流处理细节待确认。
+- **V2：已实现，最终验收中。** React + TypeScript + Vite 页面、FastAPI、Structured Streaming、回放控制、恢复与自动历史发布已实现；真实全量链路及完整页面已通过，连续15分钟正常负载 P95≤10秒及最终审核仍待完成。[验收记录](docs/operations/v2-acceptance.md)。
 
 完整版本范围和计划见 [项目路线图](roadmap.md)（[详细路线图](docs/roadmap.md)）。这里的 V1 / V2 是项目里程碑；数据集 `version2` 和现有名称中的 `v2` 是数据版本标识，两者独立。
 

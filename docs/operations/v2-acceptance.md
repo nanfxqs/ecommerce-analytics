@@ -27,7 +27,7 @@ worker operator JSON 支持：
 # 完整真实链路；也可 --attach-run 已启动轮次
 python scripts/acceptance-pipeline.py --api http://127.0.0.1:8006 --out NEW_FULL_EVIDENCE
 # 完整结果已成功发布后，实际 Chromium 检查历史五类页面与实时结果
-V2_FULL_ACCEPTANCE=1 npm --prefix frontend exec playwright test -- --config playwright.acceptance.config.ts
+(cd frontend && V2_FULL_ACCEPTANCE=1 npx playwright test --config playwright.acceptance.config.ts)
 # 正常 API8007、前端5179；务必独占集群并停止宿主重测试等干扰负载
 node scripts/acceptance-performance.mjs \
   --cluster LOCAL_SSH_CLUSTER_JSON --edge LOCAL_EDGE_CONFIG_JSON \
@@ -46,8 +46,8 @@ python scripts/benchmark-cursor.py --help
 - 已有流可行性、控制、恢复及自动发布证据分别位于 `docs/evidence/v2-stream`、`docs/evidence/v2-controls`、`docs/evidence/v2-recovery`、`docs/evidence/v2-publication`。已知输入验证源重试、内容相同的不同源行、异常、乱序和跨日访客；恢复包含 ACK35 / durable cursor34、重发不翻倍及损坏检查点拒绝。它们不能替代本次完整链路和15分钟验收。
 - 旧版每批累计重扫全量 trigger126秒，已被增量状态架构替代。独立旧topic全量探测的24分区 / 100k微批次结果与 V1 完全一致；这是状态规模证据，不是完整 V2 生产者链路验收。
 - 本次实际完整 worker 轮次 `v2-b68af3f678234c1aae86dd6e851fc54e` 使用2分区，在 confirmed1516976时因 RocksDB `Insert failed due to LRU cache being full` 失败。保留全部 topic、检查点及日志，不发布部分结果。该失败说明小样本2分区资源配置不能直接用于全量。
-- 随后以新隔离轮次 `v2-58e8ae0622ec45269dd5e147cb226a3f` 使用24分区重做完整链路。当前仍在执行，不提前宣称成功。完整注册数据与 V1 来源校验一致，原始 V1 结果和topic均未修改。
+- 随后以新隔离轮次 `v2-58e8ae0622ec45269dd5e147cb226a3f` 使用24分区重做完整链路。该轮次真实全链路已成功，流应用0018和历史应用0019均 FINISHED/SUCCEEDED；新发布历史与实时417个 UTC 行为桶逐一一致。实际 Chromium 完整页面1项测试通过7.7秒，详见 [永久证据](../evidence/v2-acceptance/README.md)。完整注册数据与 V1 来源校验一致，原始 V1 结果和topic均未修改。
 - 实际边缘 fsync1000次在并行全量负载下：每条落盘11.289秒，100条批量落盘0.102秒。实际完整生产者约2500–2700条/秒；请求速率100000仅为上限，不是已实现吞吐或10秒延迟承诺。全量突发积压与另行5条/秒正常延迟验收分别报告。
 - 容量观察：edge根盘36GiB中15GiB空闲，HDFS105.1GiB中55.0GiB可用、7.7GiB使用；不执行自动清理。
 
-最终全量、浏览器及15分钟摘要待实际完成后补充；当前保留为待验收。
+全量与完整浏览器核对已通过；15分钟正常输入与最终审核仍待完成。当前不标记 V2 完成。

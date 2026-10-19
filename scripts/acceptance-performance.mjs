@@ -11,10 +11,12 @@ const { values: options } = parseArgs({ options: {
   api: { type: 'string', default: 'http://127.0.0.1:8007' },
   frontend: { type: 'string', default: 'http://127.0.0.1:5179' },
   cluster: { type: 'string' }, edge: { type: 'string' }, out: { type: 'string' },
+  'background-check': { type: 'boolean', default: false },
   seconds: { type: 'string', default: '900' }, rate: { type: 'string', default: '5' },
 } });
 for (const key of ['cluster', 'edge', 'out']) if (!options[key]) throw new Error('--' + key + ' is required');
 const duration = Number(options.seconds), rate = Number(options.rate);
+if (options['background-check'] && duration >= 900) throw new Error('Browser-close check belongs only to separate preflight, never formal normal window');
 if (!(duration > 0 && rate > 0)) throw new Error('Positive duration/rate required');
 const out = path.resolve(options.out); await fs.mkdir(out, { recursive: true });
 const cluster = JSON.parse(await fs.readFile(options.cluster)), edge = JSON.parse(await fs.readFile(options.edge));
@@ -44,9 +46,10 @@ async function request(suffix, body) {
 }
 const frames = [], observations = [], polls = [];
 let run, browser, page, firstAck, start, stopRequest, stoppedState, publishedBefore;
-let failure;
+let failure, backgroundCheck;
 try {
   const initial = await calibrate(7);
+  const openBrowser = async () => {
   browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox'] });
   page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   await page.exposeFunction('__acceptanceVisible', data => { frames.push({ ...data, host_monotonic_ns: String(now()) }); });
@@ -72,6 +75,8 @@ try {
   });
   page.on('request', request => { if (request.url().endsWith('/api/replay/current')) polls.push(String(now())); });
   await page.goto(options.frontend); await page.getByText('实时监控', { exact: true }).click();
+  };
+  await openBrowser();
   publishedBefore = (await (await fetch(options.api + '/api/history/overview')).json()).snapshot;
   run = await request('runs', { dataset: 'small', rate });
   await fs.writeFile(path.join(out, 'start.json'), JSON.stringify(run, null, 2));
@@ -93,6 +98,17 @@ try {
     if (now() - start > 60000000000n && !frames.some(frame => frame.run_id === run.run_id && Object.keys(frame.offsets).length)) throw new Error('No painted committed result during first60seconds');
     if (now() >= nextCalibration) { await calibrate(); nextCalibration = now() + 60000000000n; }
     await sleep(1000);
+  }
+  if (options['background-check']) {
+    const before = await request('current'), closedAt = String(now());
+    await browser.close(); browser = undefined;
+    await sleep(15000);
+    const after = await request('current');
+    const committed = state => Object.values(state.committed || {}).reduce((sum, value) => sum + value, 0);
+    if (after.run_id !== before.run_id || after.confirmed <= before.confirmed || committed(after) <= committed(before)) throw new Error('Backend did not continue after actual Chromium close');
+    backgroundCheck = { accepted: true, run_id: run.run_id, closed_host_ns: closedAt, reopened_host_ns: String(now()), before: { confirmed: before.confirmed, committed: before.committed }, after: { confirmed: after.confirmed, committed: after.committed }, protocol: 'Intentional preflight-only browser-close stage after requested normal window; all ACKs retained, excluded from no formal900s run' };
+    await fs.writeFile(path.join(out, 'background-check.json'), JSON.stringify(backgroundCheck, null, 2));
+    await openBrowser(); await sleep(4000);
   }
   stopRequest = now(); await request('current/stop', {});
   const drainDeadline = now() + 180000000000n;
@@ -137,6 +153,7 @@ try {
   const normalPolls = polls.map(BigInt).filter(time => time >= start && time <= stopRequest);
   const intervals = normalPolls.slice(1).map((time, i) => Number(time - normalPolls[i]) / 1e9).sort((a, b) => a - b);
   const report = { accepted: duration >= 900 && inputSpan >= 900 && samples.length === latencies.length && percentile(.95) <= 10000 && drift <= rate * 2 && slope <= rate * .005,
+    background_check: backgroundCheck || null,
     run_id: run.run_id, dataset: 'small', requested_rate: rate, duration_requested_seconds: duration, actual_ack_span_seconds: inputSpan,
     samples: samples.length, matched_samples: latencies.length, p50_upper_ms: percentile(.5), p95_upper_ms: percentile(.95), p99_upper_ms: percentile(.99), maximum_upper_ms: latencies.at(-1),
     calibration_offset_span_ms: Number(upperOffset - lowerOffset) / 1e6, lag_minute_buckets: buckets, lag_end_minus_start_median: drift, lag_median_slope_messages_per_second: slope, measured_ack_rate: (samples.length - 1) / inputSpan, historical_batch_preserved: publishedAfter?.batch_id,

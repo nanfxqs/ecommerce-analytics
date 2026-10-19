@@ -1,0 +1,10 @@
+{
+  "quality": true,
+  "visitors": true,
+  "overview": true,
+  "daily": true,
+  "invalid_reasons": true,
+  "event_time_min": true,
+  "event_time_max": true,
+  "utc_daily_buckets": 417
+}
