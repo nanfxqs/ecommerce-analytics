@@ -33,6 +33,7 @@ class SSHCluster:
     def datasets(self): return self._call('datasets')
     def start(self,run): return self._call('start',run)
     def observe(self,run): return self._call('observe',run)
+    def control(self,run,action): return self._call('control',dict(run,action=action))
 
 
 class Runs:
@@ -58,6 +59,42 @@ class Runs:
             try: self.current.update(self.cluster.start(dict(self.current)))
             except Exception as error: self.current.update(phase='failed',error=str(error))
             self._save(); return dict(self.current)
+    def control(self, action):
+        with self.lock:
+            state = self.current
+            if action not in ('pause', 'continue', 'stop'):
+                raise ValueError('未知控制操作')
+            if not state:
+                raise ValueError('没有可控制的回放轮次')
+            target = {'pause': 'paused', 'continue': 'running', 'stop': 'stopped'}[action]
+            pending = state.get('pending_control')
+            if pending and pending['action'] != action and action != 'stop':
+                raise ValueError('已有控制请求等待后台确认')
+            if (state['phase'] == target and not pending) or (pending and pending['action'] == action):
+                return dict(accepted=True, action=action, duplicate=True, run_id=state['run_id'])
+            allowed = {'pause': ('running',), 'continue': ('paused',), 'stop': ('running', 'paused')}
+            if state['phase'] not in allowed[action] or (pending and pending['action'] == 'stop'):
+                raise ValueError('当前状态不允许此操作')
+            # Intent survives API failure even if the SSH acknowledgement is lost.
+            intent = dict(action=action, operation_id=uuid4().hex)
+            state['control_generation'] = state.get('control_generation', 0) + 1
+            state['pending_control'] = intent
+            self._save()
+            try:
+                result = self.cluster.control(dict(state), action)
+            except Exception as error:
+                state['control_error'] = str(error)
+                self._save()
+                raise RuntimeError('控制请求未确认，请检查轮次状态：' + str(error)) from error
+            if ((result.get('last_control') or {}).get('operation_id') == intent['operation_id']
+                    and result.get('phase') in ('running', 'paused', 'stopping', 'draining')):
+                state.update({key: result[key] for key in ('phase','last_control','confirmed','cursor','rate') if key in result})
+                if state['phase'] == target:
+                    state.pop('pending_control', None)
+            state.pop('control_error', None)
+            self._save()
+            return dict(result, run_id=state['run_id'], duplicate=False)
+
     def read(self):
         with self.lock: return dict(self.current) if self.current else None
     def _supervise(self):
@@ -70,7 +107,18 @@ class Runs:
                 if any(committed.get(p,0)>end for p,end in ends.items()): raise ValueError('处理进度超出 Kafka 末端')
                 update['lag']=sum(end-committed.get(p,0) for p,end in ends.items())
                 update['updated_at']=datetime.now(timezone.utc).isoformat()
-                with self.lock: self.current.update(update); self.current.pop('observation_error',None); self._save()
+                with self.lock:
+                    if (not self.current or self.current['run_id'] != state['run_id']
+                            or self.current.get('control_generation', 0) != state.get('control_generation', 0)):
+                        continue
+                    self.current.update(update)
+                    pending = self.current.get('pending_control')
+                    if (pending and self.current['phase'] == {'pause':'paused','continue':'running','stop':'stopped'}[pending['action']]
+                            and (update.get('last_control') or {}).get('operation_id') == pending['operation_id']
+                            and (update.get('last_control') or {}).get('acknowledged') is True):
+                        self.current.pop('pending_control', None)
+                    self.current.pop('observation_error', None)
+                    self._save()
             except Exception as error:
                 with self.lock: self.current['observation_error']=str(error); self._save()
 
@@ -93,4 +141,14 @@ def replay_router(runs):
         try: return runs.start(request.dataset,request.rate)
         except ValueError as error: raise HTTPException(409,str(error)) from error
         except KeyError as error: raise HTTPException(422,str(error)) from error
+    @router.post('/current/{action}')
+    def control(action: str):
+        from fastapi.responses import JSONResponse
+        try:
+            result = runs.control(action)
+            return JSONResponse(result, status_code=200 if result['duplicate'] else 202)
+        except ValueError as error:
+            raise HTTPException(409, str(error)) from error
+        except RuntimeError as error:
+            raise HTTPException(503, str(error)) from error
     return router
