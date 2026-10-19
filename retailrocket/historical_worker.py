@@ -10,6 +10,8 @@ import shutil
 import subprocess
 import sys
 import tarfile
+import urllib.request
+import xml.etree.ElementTree as ET
 from uuid import uuid4
 from retailrocket.cleanup import identity, safe, read, inactive_pid
 from retailrocket.edge_worker import atomic
@@ -68,6 +70,26 @@ def bound_references(config, replay):
     return remote
 
 
+
+def yarn_released(config,app_id):
+    addresses=config.get('yarn_webapps')
+    if addresses is None:
+        directory=Path(os.environ.get('HADOOP_CONF_DIR','/usr/local/hadoop/etc/hadoop'))
+        properties={p.findtext('name'):p.findtext('value') for p in ET.parse(directory/'yarn-site.xml').findall('property')}
+        prefix='yarn.resourcemanager.webapp.address'
+        addresses=['http://'+value for key,value in properties.items() if key==prefix or key.startswith(prefix+'.')]
+    if not addresses: raise ValueError('ResourceManager web addresses are not configured')
+    opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    errors=[]
+    for address in addresses:
+        try:
+            with opener.open(address.rstrip('/')+'/ws/v1/cluster/apps/'+app_id,timeout=3) as response:
+                application=json.load(response)['app']
+            if application.get('id')!=app_id: raise ValueError('YARN application identity mismatch')
+            return application.get('state')=='FINISHED' and application.get('finalStatus')=='SUCCEEDED'
+        except Exception as error: errors.append(str(error))
+    raise RuntimeError('Cannot confirm YARN application release: '+'; '.join(errors))
+
 def ready(config, run_id):
     root=safe(Path(config['root'])/identity(run_id),tree=True)
     state=read(root/'state.json'); replay=read(root/'replay.json')
@@ -85,19 +107,13 @@ def ready(config, run_id):
     final=state.get('final',{})
     if not final or any(observed.get(name,{}).get(p,-1)<end for name in ('committed','result_offsets') for p,end in final.items()):
         raise ValueError('Final streaming result and checkpoint do not cover replay')
-    yarn=subprocess.run(['/usr/local/hadoop/bin/yarn','application','-status',app_id],capture_output=True,text=True,timeout=30)
-    if yarn.returncode or not re.search(r'(?m)^\s*State\s*:\s*FINISHED\s*$',yarn.stdout) or not re.search(r'(?m)^\s*Final-State\s*:\s*SUCCEEDED\s*$',yarn.stdout):
+    if not yarn_released(config,app_id):
         raise ValueError('Streaming YARN resources are not confirmed released')
     return root,replay
 
 
 def start(config,run):
-    try:
-        root,replay=ready(config,run['run_id'])
-    except ValueError as error:
-        if str(error) in ('Recorded worker or stream process is still active','Streaming YARN resources are not confirmed released'):
-            return dict(historical_status='pending')
-        raise
+    root=safe(Path(config['root'])/identity(run['run_id']),tree=True)
     with (root/'history-launch.lock').open('a') as launch:
         fcntl.flock(launch,fcntl.LOCK_EX)
         path=root/'history.json'
@@ -109,6 +125,12 @@ def start(config,run):
             state.update(historical_status='failed',historical_error='Historical worker exited before completion')
             atomic(path,state)
         if state and state['historical_status']=='failed' and not run.get('history_retry'): return state
+        try:
+            root,replay=ready(config,run['run_id'])
+        except ValueError as error:
+            if str(error) in ('Recorded worker or stream process is still active','Streaming YARN resources are not confirmed released'):
+                return dict(historical_status='pending')
+            raise
         # The streaming worker may have written complete immediately before closing its lease.
         lease=(root/'worker.lock').open('a')
         try:
