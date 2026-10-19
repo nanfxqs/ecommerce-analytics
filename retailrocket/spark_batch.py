@@ -73,6 +73,8 @@ def analyze(raw, replay, output, reuse_raw=False, references=None, tracking=None
     daily = valid.withColumn('event_date', F.to_date('event_time'))
     for key, name in [('categoryid', 'category_daily'), ('itemid', 'item_daily')]:
         daily.groupBy('event_date', key).agg(F.count('*').alias('events'), *[F.sum(F.when(F.col('event') == event, 1).otherwise(0)).alias(label) for event, label in [('view', 'views'), ('addtocart', 'addtocarts'), ('transaction', 'transactions')]]).write.mode('overwrite').parquet(output + '/' + name)
+    from retailrocket.visitor_analysis import write_visitor_profiles
+    write_visitor_profiles(valid, output)
     invalid.write.mode('overwrite').parquet(output + '/quarantine')
     raw.sparkSession.createDataFrame([quality]).write.mode('overwrite').parquet(output + '/quality')
     valid.groupBy('event').count().write.mode('overwrite').parquet(output + '/overview')

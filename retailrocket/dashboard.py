@@ -28,7 +28,7 @@ if len(selected) != 2:
     st.stop()
 start, end = selected
 st.caption(f'包含 {start} 00:00:00 UTC 至 {end} 23:59:59.999 UTC（结束日全天）')
-page = st.sidebar.radio('分析页面', ['概览', '购买关联', '分类偏好', '数据质量'])
+page = st.sidebar.radio('分析页面', ['概览', '购买关联', '分类偏好', '用户画像', '数据质量'])
 if page == '概览':
     counts = overview(root / 'events', start, end)
     visitors = visitor_conversion(root, start, end)
@@ -52,6 +52,9 @@ elif page == '购买关联':
     st.caption('同一范围内访客交集，不要求事件先后；这是购买关联，不是严格漏斗，也不是事件数量比。')
 elif page == '分类偏好':
     from retailrocket.category_view import render
+    render(root, start, end)
+elif page == '用户画像':
+    from retailrocket.profile_view import render
     render(root, start, end)
 else:
     st.subheader('所选 UTC 日期范围的记录质量')
