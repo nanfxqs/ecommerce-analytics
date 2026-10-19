@@ -38,6 +38,6 @@ RETAILROCKET_SHUFFLE_PARTITIONS=2 \
 
 当前方案每次从 HDFS 原始账本重算累计聚合，优先保证有界内存、可审计输入和精确恢复，代价是累计输入越多扫描成本越高。检查点不在 executor 内存中保存无限增长的访客集合。该实现是可运行的正确性基线，不能凭小样本或 Spark 的 `processedRowsPerSecond` 宣称完整数据满足10秒页面可见延迟。
 
-初始实测 shuffle24、500个源记录的恢复回调为42.229秒，trigger为44.486秒，未达到 V2 延迟目标；随后合并聚合动作并用每作业 shuffle2 复测。既有资源配置仍为2个512MiB heap +384MiB overhead executor，单核，AM512MiB，JVM class/code cache各64MiB。完整数据、持续15分钟及浏览器 P95 仍需最终验收；未通过时必须优化或重新与用户确认，不能自行下调门槛。
+初始实测 shuffle24、500个源记录的恢复回调为42.229秒，trigger为44.486秒，未达到 V2 延迟目标；随后合并聚合动作并用每作业 shuffle2 复测：预热后99条微批次trigger约5.0–7.1秒，冷启动仍22–33秒。小样本与短时吞吐不代表完整范围满足目标。既有资源配置仍为2个512MiB heap +384MiB overhead executor，单核，AM512MiB，JVM class/code cache各64MiB。完整数据、持续15分钟及浏览器 P95 仍需最终验收；未通过时必须优化或重新与用户确认，不能自行下调门槛。
 
 实测记录见 [流处理证据](../evidence/v2-stream/README.md)。该节点组 UTC 比宿主晚28800秒，未经校准，不能直接跨机器相减估算延迟。最终可由宿主时钟记录 Kafka 发送确认回执到页面观察的时间，或先完成明确的时钟校准。
