@@ -22,12 +22,14 @@ def complete_export(tmp_path, batch):
                     references=dict(dataset_version='v1', events_input=source, sources=[dict(file='properties.csv',sha256='b'*64,rows=2),dict(file='tree.csv',sha256='c'*64,rows=1)]))
     (directory/'metadata.json').write_text(json.dumps(metadata))
     with duckdb.connect() as db:
-        db.execute("CREATE TABLE events AS SELECT 'v1' AS dataset_version,'events.csv' AS source_file, i AS source_line, ? AS batch_id, 'view' AS event, TIMESTAMP '2015-05-04' AS event_time FROM range(2,4) t(i)", [batch])
+        db.execute("CREATE TABLE events AS SELECT 'v1' AS dataset_version,'events.csv' AS source_file, i AS source_line, ? AS batch_id, 'visitor-1' AS visitorid, 'item-1' AS itemid, 'category-1' AS categoryid, 'view' AS event, TIMESTAMP '2015-05-04' AS event_time FROM range(2,4) t(i)", [batch])
         tables = {'events':'SELECT * FROM events', 'quarantine':'SELECT * FROM events WHERE false',
                   'raw':"SELECT to_json(events) AS value FROM events", 'quality':'SELECT * FROM quality',
-                  'overview':"SELECT event,count(*) AS count FROM events GROUP BY event", 'visitor_events':'SELECT * FROM events',
-                  'category_daily':'SELECT * FROM events', 'item_daily':'SELECT * FROM events',
-                  'visitor_daily':'SELECT * FROM events', 'visitor_category_daily':'SELECT * FROM events'}
+                  'overview':"SELECT event,count(*) AS count FROM events GROUP BY event", 'visitor_events':"SELECT DATE '2015-05-04' AS event_date, 'visitor-1' AS visitorid, 'view' AS event",
+                  'category_daily':"SELECT DATE '2015-05-04' AS event_date, 'category-1' AS categoryid, 2 AS events, 2 AS views, 0 AS addtocarts, 0 AS transactions",
+                  'item_daily':"SELECT DATE '2015-05-04' AS event_date, 'item-1' AS itemid, 2 AS events, 2 AS views, 0 AS addtocarts, 0 AS transactions",
+                  'visitor_daily':"SELECT DATE '2015-05-04' AS event_date, 'visitor-1' AS visitorid, 2 AS events, 0 AS purchases, TIMESTAMP '2015-05-04' AS last_event_time",
+                  'visitor_category_daily':"SELECT DATE '2015-05-04' AS event_date, 'visitor-1' AS visitorid, 'category-1' AS categoryid, 2 AS views, 0 AS purchases"}
         q = tmp_path / (batch+'-quality.json')
         q.write_text(json.dumps(quality))
         db.execute('CREATE TABLE quality AS SELECT * FROM read_json_auto(?)', [str(q)])
@@ -116,3 +118,50 @@ def test_fixed_inputs_to_spark_export_to_validated_publication(tmp_path, monkeyp
         assert snapshot.metadata['quality']['invalid_count'] == 1
     finally:
         spark.stop()
+
+
+@pytest.mark.parametrize('table', ['overview', 'category_daily', 'item_daily', 'visitor_daily', 'visitor_category_daily', 'visitor_events'])
+def test_publication_rejects_truncated_dashboard_results_and_retries(tmp_path, monkeypatch, table):
+    store = tmp_path/'store'
+    replay, good = complete_export(tmp_path, 'good')
+    publish(monkeypatch, store, replay, good)
+    replay, damaged = complete_export(tmp_path, 'damaged')
+    path = damaged/table/'part.parquet'
+    original = path.read_bytes()
+    with duckdb.connect() as db:
+        db.execute('CREATE TABLE empty AS SELECT * FROM read_parquet(?) WHERE false', [str(path)])
+        db.execute('COPY empty TO ? (FORMAT PARQUET)', [str(path)])
+    with pytest.raises(ValueError, match=table):
+        publish(monkeypatch, store, replay, damaged)
+    assert current_snapshot(store).batch_id == 'good'
+    path.write_bytes(original)
+    publish(monkeypatch, store, replay, damaged)
+    assert current_snapshot(store).batch_id == 'damaged'
+
+
+def test_publication_rejects_changed_category_key_despite_unchanged_totals(tmp_path, monkeypatch):
+    replay, directory = complete_export(tmp_path, 'wrong-category')
+    path = directory/'category_daily'/'part.parquet'
+    with duckdb.connect() as db:
+        db.execute("CREATE TABLE changed AS SELECT * REPLACE ('wrong-category' AS categoryid) FROM read_parquet(?)", [str(path)])
+        db.execute('COPY changed TO ? (FORMAT PARQUET)', [str(path)])
+    with pytest.raises(ValueError, match='category_daily'):
+        publish(monkeypatch, tmp_path/'store', replay, directory)
+
+
+def test_publication_accepts_all_invalid_inputs_with_empty_dashboard_results(tmp_path, monkeypatch):
+    replay, directory = complete_export(tmp_path, 'all-invalid')
+    metadata = json.loads((directory/'metadata.json').read_text())
+    metadata['quality'].update(valid_count=0, invalid_count=2)
+    (directory/'metadata.json').write_text(json.dumps(metadata))
+    with duckdb.connect() as db:
+        db.execute('CREATE TABLE invalid AS SELECT * FROM read_parquet(?)', [str(directory/'events'/'part.parquet')])
+        db.execute('COPY invalid TO ? (FORMAT PARQUET)', [str(directory/'quarantine'/'part.parquet')])
+        for table in ['events', 'overview', 'category_daily', 'item_daily', 'visitor_daily', 'visitor_category_daily', 'visitor_events']:
+            path = directory/table/'part.parquet'
+            db.execute('CREATE OR REPLACE TABLE empty AS SELECT * FROM read_parquet(?) WHERE false', [str(path)])
+            db.execute('COPY empty TO ? (FORMAT PARQUET)', [str(path)])
+        db.execute('CREATE TABLE quality AS SELECT * REPLACE (0 AS valid_count, 2 AS invalid_count) FROM read_parquet(?)', [str(directory/'quality'/'part.parquet')])
+        db.execute('COPY quality TO ? (FORMAT PARQUET)', [str(directory/'quality'/'part.parquet')])
+    publish(monkeypatch, tmp_path/'store', replay, directory)
+    assert current_snapshot(tmp_path/'store').metadata['quality']['invalid_count'] == 2
