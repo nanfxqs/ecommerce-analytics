@@ -82,12 +82,12 @@ class History:
             return result
 
 
-def create_app(store, *, run_store=None, cluster=None, poll_seconds=2):
+def create_app(store, *, run_store=None, cluster=None, poll_seconds=2, publication_checkpoint=None):
     app = FastAPI(title='Retailrocket 历史数据回放')
     app.state.history = History(store)
     if cluster is not None:
         from retailrocket.runs import Runs, replay_router
-        runs = Runs(run_store or Path(store).parent/'replay-runs', cluster, poll_seconds)
+        runs = Runs(run_store or Path(store).parent/'replay-runs', cluster, poll_seconds, publication_store=store, publication_checkpoint=publication_checkpoint)
         app.state.runs = runs
         app.include_router(replay_router(runs))
         app.add_event_handler('shutdown', runs.close)

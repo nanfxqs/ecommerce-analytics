@@ -1,0 +1,10 @@
+{
+  "batch_application": "application_1792382297034_0016",
+  "batch_yarn_released": true,
+  "stream_yarn_released": true,
+  "actual_batch_task_hosts": [
+    "hadoop01",
+    "hadoop02"
+  ],
+  "batch_attempt": 1
+}

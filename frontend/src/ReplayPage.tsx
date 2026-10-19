@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Card, Empty, InputNumber, Select, Space, Statistic, Table, Tag, Typography } from 'antd';
 import { LiveMetrics, type LiveSnapshot } from './LiveMetrics';
 type Dataset = { id: string; label: string; rows: number };
-type Run = { snapshot?: LiveSnapshot | null; run_id: string; phase: string; complete: boolean; confirmed: number; rate?: number; lag?: number; ends?: Record<string, number>; committed?: Record<string, number>; result_offsets?: Record<string, number>; samples?: unknown[]; updated_at?: string; error?: string; observation_error?: string; pending_control?: { action: string }; last_control?: { action: string; acknowledged: boolean }; recovery_error?: string; remote_phase?: string; failure_stage?: string };
+type Run = { recovery_error?: string; remote_phase?: string; historical_status?: string; failure_stage?: string; published_batch_id?: string; published_revision?: string; historical_application_id?: string; snapshot?: LiveSnapshot | null; run_id: string; phase: string; complete: boolean; confirmed: number; rate?: number; lag?: number; ends?: Record<string, number>; committed?: Record<string, number>; result_offsets?: Record<string, number>; samples?: unknown[]; updated_at?: string; error?: string; observation_error?: string; pending_control?: { action: string }; last_control?: { action: string; acknowledged: boolean } };
 async function request(path: string, init?: RequestInit) {
   const response = await fetch('/api/replay/' + path, init);
   if (!response.ok) { const body = await response.json(); throw new Error(body.detail || '回放服务暂不可用'); }
@@ -18,14 +18,14 @@ export function ReplayPage() {
     void poll(); return () => { live = false; clearTimeout(timer); };
   }, []);
   const start = async () => { setBusy(true); setError(''); try { setRun(await request('runs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ dataset, rate }) })); } catch (e) { setError((e as Error).message); } finally { setBusy(false); } };
-  const control = async (action: 'pause' | 'continue' | 'stop' | 'recover') => {
+  const control = async (action: 'pause' | 'continue' | 'stop' | 'retry-history' | 'recover') => {
     setBusy(true); setError('');
     try { const result = await request('current/' + action, { method: 'POST' }); setFeedback(result.duplicate ? '该操作已生效或已提交，无需重复执行' : '操作请求已接受，等待后台确认实际状态'); }
     catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   };
   const active = run && !['completed', 'stopped'].includes(run.phase);
-  const phases: Record<string, string> = { recovery_required: '等待手动恢复', starting: '启动中', running: '回放中', paused: '已暂停发送 · 消费继续', stopping: '正在停止发送', stopped: '提前停止 · 结果不完整', draining: '正在消化积压', completed: '回放处理完成', failed: '失败 · 需要处理' };
+  const phases: Record<string, string> = { recovery_required: '等待手动恢复', starting: '启动中', running: '回放中', paused: '已暂停发送 · 消费继续', stopping: '正在停止发送', stopped: '提前停止 · 结果不完整', draining: '正在消化积压', completed: '回放处理完成', historical_pending: '等待完整历史分析', analyzing: '完整历史分析中', exporting: '导出历史结果', publishing: '校验并发布历史结果', failed: '失败 · 需要处理' };
   const partitions = Object.entries(run?.ends || {}).map(([partition, end]) => ({ partition, end, committed: run?.committed?.[partition] || 0, result: run?.result_offsets?.[partition] || 0, lag: end - (run?.committed?.[partition] || 0) }));
   return <>
     <header><Typography.Title level={2}>历史数据回放监控</Typography.Title><Tag color="blue">历史数据回放</Tag></header>
@@ -39,10 +39,12 @@ export function ReplayPage() {
         <Button onClick={() => control('pause')} disabled={busy || run.phase !== 'running'}>暂停发送</Button>
         <Button onClick={() => control('continue')} disabled={busy || run.phase !== 'paused'}>继续发送</Button>
         <Button danger onClick={() => control('stop')} disabled={busy || !['running', 'paused'].includes(run.phase)}>提前停止</Button>
+        {['failed','recovery_required'].includes(run.phase) && run.failure_stage === 'history' && <Button onClick={() => control('retry-history')} disabled={busy}>重试历史分析与发布</Button>}
         {run.pending_control && <Typography.Text>等待后台确认：{run.pending_control.action}</Typography.Text>}
         {run.last_control?.acknowledged && <Typography.Text>后台已确认：{({pause:'暂停',continue:'继续',stop:'停止'} as Record<string,string>)[run.last_control.action]}</Typography.Text>}
       </Space><Typography.Paragraph type="secondary">暂停仅停止新消息发送，处理端继续消化积压；提前停止不会自动发布历史分析。</Typography.Paragraph></Card>
-      <Card className="section"><Space wrap><Tag color={run.complete ? 'green' : 'orange'}>{phases[run.phase] || run.phase}</Tag><Typography.Text>轮次 {run.run_id}</Typography.Text><Typography.Text>{run.complete ? '回放范围处理完整 · 尚非已发布历史批次' : '部分结果 · 回放范围尚未完整处理'}</Typography.Text><Typography.Text type="secondary">更新时间 {run.updated_at || '等待首次观测'} · 当前处理时间</Typography.Text></Space></Card>
+      <Card className="section"><Space wrap><Tag color={run.complete ? 'green' : 'orange'}>{phases[run.phase] || run.phase}</Tag><Typography.Text>轮次 {run.run_id}</Typography.Text><Typography.Text>{run.historical_status === 'published' ? '完整历史分析已通过校验并发布' : run.complete ? '回放范围处理完整 · 尚非已发布历史批次' : '部分结果 · 回放范围尚未完整处理'}</Typography.Text><Typography.Text type="secondary">更新时间 {run.updated_at || '等待首次观测'} · 当前处理时间</Typography.Text></Space></Card>
+      {run.historical_status && <Card className="section" title="历史分析与可靠发布"><Typography.Paragraph>{run.historical_status === 'published' ? '已发布，可在历史分析导航查看完整结果。' : '流资源释放后顺序执行完整批处理、导出和校验；完成前继续展示此前成功历史批次。'}</Typography.Paragraph><Typography.Text>阶段：{({pending:'等待历史分析',analyzing:'完整历史分析中',exporting:'正在导出',exported:'导出完成',publishing:'校验并发布',published:'已发布',failed:'失败'} as Record<string,string>)[run.historical_status] || run.historical_status}</Typography.Text>{run.historical_application_id && <p>YARN 批处理应用：{run.historical_application_id}</p>}{run.published_batch_id && <p>已发布批次：{run.published_batch_id} · revision {run.published_revision}</p>}</Card>}
       {(run.recovery_error || run.error || run.observation_error) && <Alert type="error" message={run.recovery_error || run.error || run.observation_error} className="section" />}
       <Card className="section"><Space size={60} wrap><Statistic title="生产确认消息量" value={run.confirmed} /><Statistic title="生产确认速率（条/秒）" value={run.rate || 0} precision={2} /><Statistic title="积压（Kafka 末端 − 已提交检查点）" value={run.lag ?? 0} /></Space></Card>
       <LiveMetrics snapshot={run.snapshot} />

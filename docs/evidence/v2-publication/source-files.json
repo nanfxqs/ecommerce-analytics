@@ -1,0 +1,7 @@
+{
+  "retailrocket/historical_worker.py": "bfb5564578b9c91a6ffab2d4b488f31adad553abd96c046b5baa0bbf8a132c3a",
+  "retailrocket/finalization.py": "62177bfd09534b50543dde8bb9996dfd5d411add4e473f42541878dfa96e9a6d",
+  "retailrocket/spark_batch.py": "c1c4443621f0c7d814dc8d0498d315de1df4effcd41e915d024f4623f3907c6f",
+  "scripts/submit-batch.sh": "327969d8b5a115f7ce6bf461f873b8a9b2655f2e7e3bddfd3c832798ba433234",
+  "scripts/export-batch.sh": "fb2e3682be289672c41de60eeaef7b87dc8185477482a43c3b555c6b5df9127f"
+}
