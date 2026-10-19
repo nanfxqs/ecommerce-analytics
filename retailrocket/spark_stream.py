@@ -1,8 +1,7 @@
-"""Bounded-round streaming capture and recoverable, queryable cumulative results.
+"""Streaming entrypoints and atomic HDFS snapshot/checkpoint observations.
 
-The append-only raw microbatch ledger is the exact full-round deduplication state.
-It deliberately has no watermark: late valid source records survive. Recomputing
-from this ledger trades CPU/I/O for bounded executor memory and simple recovery.
+Production queries use incremental exact RocksDB state in spark_live. The legacy
+captured-microbatch contract remains available for V1 comparison and old audits.
 """
 import argparse
 import json
@@ -33,12 +32,33 @@ def _directories(spark, location):
     return sorted(str(item.getPath()) for item in fs.listStatus(path) if item.isDirectory())
 
 
+def _read_text(spark, location):
+    fs, path = _filesystem(spark, location)
+    stream = fs.open(path)
+    try:
+        return spark.sparkContext._jvm.org.apache.commons.io.IOUtils.toString(stream, 'UTF-8')
+    finally:
+        stream.close()
+
+
+def _write_text(spark, location, value):
+    fs, path = _filesystem(spark, location)
+    stream = fs.create(path, False)
+    try:
+        stream.write(bytearray(value.encode('utf-8')))
+        stream.hsync()
+    finally:
+        stream.close()
+
+
 def _commit_text(spark, target, text):
     temporary = target + '.pending'
     fs, path = _filesystem(spark, temporary)
     if fs.exists(path):
         fs.delete(path, True)
-    spark.range(1).select(F.lit(text).alias('value')).coalesce(1).write.text(temporary)
+    fs.mkdirs(path)
+    _write_text(spark, temporary + '/part-00000', text)
+    _write_text(spark, temporary + '/_SUCCESS', '')
     _, final = _filesystem(spark, target)
     if fs.exists(final):
         raise ValueError('Refusing to replace committed output: ' + target)
@@ -46,13 +66,68 @@ def _commit_text(spark, target, text):
         raise IOError('Unable to commit ' + target)
 
 
-def read_snapshot(spark, output):
-    """Read latest complete immutable result; never expose a partial result."""
-    complete = [p for p in _directories(spark, output + '/snapshots')
-                if not p.endswith('.pending') and _exists(spark, p + '/_SUCCESS')]
-    if not complete:
+def _snapshot_at(spark, output, batch_id):
+    path = output + '/snapshots/%020d' % batch_id
+    if not _exists(spark, path + '/_SUCCESS'):
         return None
-    return json.loads(spark.read.text(complete[-1], wholetext=True).first()[0])
+    fs, directory = _filesystem(spark, path)
+    parts = [str(item.getPath()) for item in fs.listStatus(directory)
+             if item.getPath().getName().startswith('part-')]
+    if len(parts) != 1:
+        raise ValueError('Invalid committed streaming snapshot')
+    return json.loads(_read_text(spark, parts[0]))
+
+
+def read_snapshot(spark, output):
+    """Read latest complete immutable result without launching a Spark job."""
+    complete = [p for p in _directories(spark, output + '/snapshots')
+                if p.rsplit('/', 1)[-1].isdigit() and _exists(spark, p + '/_SUCCESS')]
+    return _snapshot_at(spark, output, int(complete[-1].rsplit('/', 1)[-1])) if complete else None
+
+
+def publish_observation(spark, output, checkpoint, observation_file, run_id):
+    """Atomic local cache of a result AND its durable Spark checkpoint commit.
+
+    Read existing HDFS clients directly; no CLI subprocess or Spark SQL job.
+    Only checkpoint-committed result snapshots can reach the live API.
+    """
+    fs, directory = _filesystem(spark, checkpoint + '/commits')
+    commits = ([int(item.getPath().getName()) for item in fs.listStatus(directory)
+                if item.getPath().getName().isdigit()] if fs.exists(directory) else [])
+    if not commits:
+        return None
+    batch_id = max(commits)
+    snapshot = _snapshot_at(spark, output, batch_id)
+    if snapshot is None:
+        raise ValueError('Checkpoint has no matching durable result snapshot')
+    if snapshot['run_id'] != run_id:
+        raise ValueError('Observation identity mismatch')
+    lines = _read_text(spark, checkpoint + '/offsets/' + str(batch_id)).splitlines()
+    if len(lines) < 3 or lines[0] != 'v1':
+        raise ValueError('Unsupported checkpoint offset log')
+    sources = [json.loads(line) for line in lines[2:]]
+    if any(source != sources[0] for source in sources[1:]):
+        raise ValueError('Streaming source branches have different committed offsets')
+    offsets = sources[0]
+    if len(offsets) != 1 or set(snapshot['processed_offsets']) - set(offsets):
+        raise ValueError('Checkpoint topic mismatch')
+    topic = next(iter(offsets))
+    committed = offsets[topic]
+    covered = snapshot['processed_offsets'].get(topic, {})
+    result_offsets = {partition: covered.get(partition, 0) for partition in committed}
+    if set(covered) - set(committed) or committed != result_offsets:
+        raise ValueError('Checkpoint/result offset mismatch')
+    observed = dict(snapshot=snapshot, committed=committed, committed_batch=batch_id,
+                    result_offsets=result_offsets, samples=snapshot['samples'][:20])
+    target = Path(observation_file)
+    temporary = target.with_suffix('.tmp')
+    import os
+    with temporary.open('w') as stream:
+        json.dump(observed, stream)
+        stream.flush()
+        os.fsync(stream.fileno())
+    os.replace(temporary, target)
+    return observed
 
 
 def commit_microbatch(raw, batch_id, output, run_id):
@@ -138,20 +213,19 @@ def commit_microbatch(raw, batch_id, output, run_id):
         events.unpersist()
 
 
+def start_captured_stream(frame, **kwargs):
+    """Public captured-Kafka pipeline seam, also usable with a file-stream fixture."""
+    from retailrocket.spark_live import start_captured_stream as start
+    return start(frame, **kwargs)
+
+
 def start_stream(spark, *, brokers, topic, output, checkpoint, run_id,
                  starting_offsets='earliest', max_offsets=10000, trigger_seconds=2, available_now=False):
-    """Start a resumable dedicated-topic query. Caller owns stopping/draining it."""
-    if _exists(spark, output + '/raw') and not _exists(spark, checkpoint + '/metadata'):
-        raise ValueError('Existing streaming output requires its original checkpoint; refusing silent restart')
-    previous = read_snapshot(spark, output)
-    if previous and previous['run_id'] != run_id:
-        raise ValueError('Streaming output belongs to another replay run')
     frame = (spark.readStream.format('kafka').option('kafka.bootstrap.servers', brokers)
              .option('subscribe', topic).option('startingOffsets', starting_offsets)
              .option('failOnDataLoss', 'true').option('maxOffsetsPerTrigger', max_offsets).load())
-    writer = (frame.writeStream.option('checkpointLocation', checkpoint)
-              .foreachBatch(lambda batch, batch_id: commit_microbatch(batch, batch_id, output, run_id)))
-    return writer.trigger(availableNow=True).start() if available_now else writer.trigger(processingTime=f'{trigger_seconds} seconds').start()
+    return start_captured_stream(frame, output=output, checkpoint=checkpoint, run_id=run_id,
+                                 trigger_seconds=trigger_seconds, available_now=available_now)
 
 
 def main():
@@ -162,6 +236,7 @@ def main():
     parser.add_argument('--max-offsets', type=int, default=10000)
     parser.add_argument('--trigger-seconds', type=int, default=2)
     parser.add_argument('--available-now', action='store_true')
+    parser.add_argument('--observation-file', help='Atomic driver-local committed result cache')
     parser.add_argument('--stop-file', help='Driver-local graceful shutdown request')
     parser.add_argument('--evidence', help='Driver-local JSON evidence after query exits successfully')
     args = parser.parse_args()
@@ -175,9 +250,11 @@ def main():
                              checkpoint=args.checkpoint, run_id=args.run_id,
                              starting_offsets=args.starting_offsets, max_offsets=args.max_offsets,
                              trigger_seconds=args.trigger_seconds, available_now=args.available_now)
-        if args.stop_file:
+        if args.stop_file or args.observation_file:
             while query.isActive:
-                if Path(args.stop_file).exists():
+                if args.observation_file:
+                    publish_observation(spark, args.output, args.checkpoint, args.observation_file, args.run_id)
+                if args.stop_file and Path(args.stop_file).exists():
                     query.stop()
                     break
                 query.awaitTermination(1)
@@ -185,6 +262,8 @@ def main():
                 raise RuntimeError(str(query.exception()))
         else:
             query.awaitTermination()
+        if args.observation_file:
+            publish_observation(spark, args.output, args.checkpoint, args.observation_file, args.run_id)
         if args.evidence:
             Path(args.evidence).write_text(json.dumps(dict(snapshot=read_snapshot(spark,args.output),
                 progress=query.recentProgress), indent=2))

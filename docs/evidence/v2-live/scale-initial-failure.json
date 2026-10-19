@@ -1,0 +1,20 @@
+{
+  "application_id": "application_1792382297034_0010",
+  "status": "stopped_by_operator_after_failures",
+  "input_microbatch_limit": 3000000,
+  "rocksdb_memory_mib": 64,
+  "executor_heap_mib": 512,
+  "executor_overhead_mib": 384,
+  "symptoms": [
+    "26/10/19 12:35:34 WARN TaskSetManager: Lost task 1.0 in stage 2.0 (TID 31) (hadoop03 executor 1): org.rocksdb.RocksDBException: Insert failed due to LRU cache being full.",
+    "26/10/19 12:36:17 WARN TaskSetManager: Lost task 8.0 in stage 2.0 (TID 39) (hadoop03 executor 1): org.rocksdb.RocksDBException: Insert failed due to LRU cache being full.",
+    "26/10/19 12:36:27 WARN TaskSetManager: Lost task 9.1 in stage 2.0 (TID 43) (hadoop03 executor 1): org.rocksdb.RocksDBException: Insert failed due to LRU cache being full.",
+    "Executor stderr: java.lang.OutOfMemoryError: Java heap space",
+    "Executor stderr: java.lang.OutOfMemoryError: GC overhead limit exceeded",
+    "Executor stderr: JniUtil::getJniEnv - Fatal: could not attach current thread to JVM!"
+  ],
+  "retained_driver_log": "/home/hadoop/opt/ecommerce-v2-live/full-state.log",
+  "conclusion": "Oversized one-shot microbatch is unsuitable; not a passed full-data run. Production worker already bounds each microbatch; retry uses100k limit,128MiB RocksDB and512MiB executor overhead without global config changes.",
+  "captured_driver_log_sha256": "5fbadc5b17a79ef0af5e7ad2ea05c46dd35124e2234f52f830d31b383d71b7de",
+  "capture_note": "Captured during operator stop; retained remote final log may contain additional shutdown lines."
+}

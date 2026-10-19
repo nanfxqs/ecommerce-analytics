@@ -94,31 +94,18 @@ def observation(config,run_id):
     consumer=kafka(config)
     try: state['ends']=ends(consumer,state['topic'])
     finally: consumer.close()
-    committed={p:0 for p in state['ends']}; checkpoint=state['checkpoint']
-    commits=[p for p in children(checkpoint+'/commits') if p.rsplit('/',1)[-1].isdigit()]
-    if commits:
-        latest=max(commits,key=lambda p:int(p.rsplit('/',1)[-1]))
-        index=latest.rsplit('/',1)[-1]
-        lines=hdfs('-cat',checkpoint+'/offsets/'+index).splitlines()
-        if len(lines)!=3 or lines[0]!='v1': raise ValueError('Unsupported checkpoint offset log')
-        offsets=json.loads(lines[2])
-        if set(offsets)!={state['topic']}: raise ValueError('Checkpoint topic mismatch')
-        committed=offsets[state['topic']]
-        if set(committed)!=set(state['ends']): raise ValueError('Checkpoint partition mismatch')
-        state['committed_batch']=int(index)
-    state['committed']=committed
-    snapshots=[p for p in children(state['output']+'/snapshots') if re.fullmatch(r'[0-9]{20}',p.rsplit('/',1)[-1])]
-    snapshot=None
-    for path in sorted(snapshots,reverse=True):
-        success=subprocess.run(['/usr/local/hadoop/bin/hdfs','dfs','-test','-e',path+'/_SUCCESS']).returncode==0
-        if success:
-            snapshot=json.loads(hdfs('-cat',path+'/part-*')); break
-    if snapshot:
-        if snapshot['run_id']!=run_id: raise ValueError('Snapshot identity mismatch')
-        state['result_offsets']=snapshot['processed_offsets'].get(state['topic'],{})
-        state['samples']=snapshot['samples'][:20]
-    else: state.update(result_offsets={},samples=[])
-    state['snapshot']=snapshot
+    cached = root/'stream-observation.json'
+    observed = json.loads(cached.read_text()) if cached.exists() else None
+    if observed:
+        snapshot = observed['snapshot']
+        if snapshot['run_id'] != run_id:
+            raise ValueError('Snapshot identity mismatch')
+        if set(observed['committed']) != set(state['ends']):
+            raise ValueError('Checkpoint partition mismatch')
+        state.update(observed)
+    else:
+        state.update(committed={p:0 for p in state['ends']}, result_offsets={}, samples=[], snapshot=None)
+
     return state
 
 
@@ -173,7 +160,7 @@ def work(config,run_id):
         finally: admin.close()
         consumer=kafka(config); starting=ends(consumer,run_id)
         atomic(root/'input.json',metadata)
-        command=[str(Path(config['code'])/'scripts/submit-stream.sh'),'--brokers',config['brokers'],'--topic',run_id,'--run-id',run_id,'--output',state['output'],'--checkpoint',state['checkpoint'],'--max-offsets',str(config.get('max_offsets',1000)),'--stop-file',str(root/'stop-stream')]
+        command=[str(Path(config['code'])/'scripts/submit-stream.sh'),'--brokers',config['brokers'],'--topic',run_id,'--run-id',run_id,'--output',state['output'],'--checkpoint',state['checkpoint'],'--max-offsets',str(config.get('max_offsets',1000)),'--stop-file',str(root/'stop-stream'),'--observation-file',str(root/'stream-observation.json')]
         log=(root/'stream.log').open('a')
         environment=dict(os.environ); environment['RETAILROCKET_SHUFFLE_PARTITIONS']='2'
         stream=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,env=environment,start_new_session=True)

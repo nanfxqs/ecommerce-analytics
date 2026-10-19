@@ -1,0 +1,632 @@
+{
+  "status": "partial_running_not_full_acceptance",
+  "captured_microbatches": [
+    {
+      "id": "c050a22d-6967-45b5-a9ba-7e81e11d133a",
+      "runId": "7e306dff-9ad3-486f-a63f-ec13f7ea009f",
+      "name": null,
+      "timestamp": "2026-10-19T04:40:33.588Z",
+      "batchId": 0,
+      "numInputRows": 199996,
+      "inputRowsPerSecond": 0.0,
+      "processedRowsPerSecond": 5039.459759109006,
+      "durationMs": {
+        "addBatch": 38005,
+        "commitOffsets": 117,
+        "getBatch": 28,
+        "latestOffset": 112,
+        "queryPlanning": 1290,
+        "triggerExecution": 39685,
+        "walCommit": 80
+      },
+      "stateOperators": [
+        {
+          "operatorName": "dedupe",
+          "numRowsTotal": 254884,
+          "numRowsUpdated": 254884,
+          "allUpdatesTimeMs": 4080,
+          "numRowsRemoved": 0,
+          "allRemovalsTimeMs": 0,
+          "commitTimeMs": 6798,
+          "memoryUsedBytes": 13512432,
+          "numRowsDroppedByWatermark": 0,
+          "numShufflePartitions": 24,
+          "numStateStoreInstances": 24,
+          "customMetrics": {
+            "numDroppedDuplicateRows": 45110,
+            "rocksdbBytesCopied": 6540929,
+            "rocksdbCommitCheckpointLatency": 407,
+            "rocksdbCommitCompactLatency": 0,
+            "rocksdbCommitFileSyncLatencyMs": 5637,
+            "rocksdbCommitFlushLatency": 666,
+            "rocksdbCommitPauseLatency": 0,
+            "rocksdbCommitWriteBatchLatency": 0,
+            "rocksdbFilesCopied": 24,
+            "rocksdbFilesReused": 0,
+            "rocksdbGetCount": 554878,
+            "rocksdbGetLatency": 829,
+            "rocksdbPinnedBlocksMemoryUsage": 13424064,
+            "rocksdbPutCount": 254884,
+            "rocksdbPutLatency": 501,
+            "rocksdbReadBlockCacheHitCount": 0,
+            "rocksdbReadBlockCacheMissCount": 48,
+            "rocksdbSstFileSize": 6540929,
+            "rocksdbTotalBytesRead": 766870,
+            "rocksdbTotalBytesReadByCompaction": 0,
+            "rocksdbTotalBytesReadThroughIterator": 0,
+            "rocksdbTotalBytesWritten": 37236214,
+            "rocksdbTotalBytesWrittenByCompaction": 0,
+            "rocksdbTotalBytesWrittenByFlush": 6550217,
+            "rocksdbTotalCompactionLatencyMs": 0,
+            "rocksdbWriterStallLatencyMs": 0,
+            "rocksdbZipFileBytesUncompressed": 185016
+          }
+        },
+        {
+          "operatorName": "dedupe",
+          "numRowsTotal": 99998,
+          "numRowsUpdated": 99998,
+          "allUpdatesTimeMs": 4450,
+          "numRowsRemoved": 0,
+          "allRemovalsTimeMs": 5,
+          "commitTimeMs": 8218,
+          "memoryUsedBytes": 7731840,
+          "numRowsDroppedByWatermark": 0,
+          "numShufflePartitions": 24,
+          "numStateStoreInstances": 24,
+          "customMetrics": {
+            "numDroppedDuplicateRows": 0,
+            "rocksdbBytesCopied": 1681943,
+            "rocksdbCommitCheckpointLatency": 472,
+            "rocksdbCommitCompactLatency": 0,
+            "rocksdbCommitFileSyncLatencyMs": 6212,
+            "rocksdbCommitFlushLatency": 450,
+            "rocksdbCommitPauseLatency": 0,
+            "rocksdbCommitWriteBatchLatency": 0,
+            "rocksdbFilesCopied": 24,
+            "rocksdbFilesReused": 0,
+            "rocksdbGetCount": 199996,
+            "rocksdbGetLatency": 295,
+            "rocksdbPinnedBlocksMemoryUsage": 7643520,
+            "rocksdbPutCount": 99998,
+            "rocksdbPutLatency": 216,
+            "rocksdbReadBlockCacheHitCount": 0,
+            "rocksdbReadBlockCacheMissCount": 48,
+            "rocksdbSstFileSize": 1681943,
+            "rocksdbTotalBytesRead": 0,
+            "rocksdbTotalBytesReadByCompaction": 0,
+            "rocksdbTotalBytesReadThroughIterator": 0,
+            "rocksdbTotalBytesWritten": 10499790,
+            "rocksdbTotalBytesWrittenByCompaction": 0,
+            "rocksdbTotalBytesWrittenByFlush": 1688087,
+            "rocksdbTotalCompactionLatencyMs": 0,
+            "rocksdbWriterStallLatencyMs": 0,
+            "rocksdbZipFileBytesUncompressed": 181824
+          }
+        }
+      ],
+      "sources": [
+        {
+          "description": "KafkaV2[Subscribe[retailrocket-full-v2-20261019, v2-state-retry-20261019]]",
+          "startOffset": null,
+          "endOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 33315,
+              "1": 33303,
+              "0": 33380
+            }
+          },
+          "latestOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 918221,
+              "1": 917873,
+              "0": 920007
+            }
+          },
+          "numInputRows": 199996,
+          "inputRowsPerSecond": 0.0,
+          "processedRowsPerSecond": 5039.459759109006,
+          "metrics": {
+            "avgOffsetsBehindLatest": "442683.8333333333",
+            "maxOffsetsBehindLatest": "886627",
+            "minOffsetsBehindLatest": "0"
+          }
+        }
+      ],
+      "sink": {
+        "description": "ForeachBatchSink",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "c050a22d-6967-45b5-a9ba-7e81e11d133a",
+      "runId": "7e306dff-9ad3-486f-a63f-ec13f7ea009f",
+      "name": null,
+      "timestamp": "2026-10-19T04:41:13.323Z",
+      "batchId": 1,
+      "numInputRows": 199996,
+      "inputRowsPerSecond": 5033.245249779791,
+      "processedRowsPerSecond": 10824.051523515722,
+      "durationMs": {
+        "addBatch": 18240,
+        "commitOffsets": 52,
+        "getBatch": 1,
+        "latestOffset": 1,
+        "queryPlanning": 112,
+        "triggerExecution": 18477,
+        "walCommit": 66
+      },
+      "stateOperators": [
+        {
+          "operatorName": "dedupe",
+          "numRowsTotal": 508443,
+          "numRowsUpdated": 253559,
+          "allUpdatesTimeMs": 3637,
+          "numRowsRemoved": 0,
+          "allRemovalsTimeMs": 0,
+          "commitTimeMs": 4654,
+          "memoryUsedBytes": 81427944,
+          "numRowsDroppedByWatermark": 0,
+          "numShufflePartitions": 24,
+          "numStateStoreInstances": 24,
+          "customMetrics": {
+            "numDroppedDuplicateRows": 46435,
+            "rocksdbBytesCopied": 6443691,
+            "rocksdbCommitCheckpointLatency": 355,
+            "rocksdbCommitCompactLatency": 0,
+            "rocksdbCommitFileSyncLatencyMs": 3587,
+            "rocksdbCommitFlushLatency": 650,
+            "rocksdbCommitPauseLatency": 0,
+            "rocksdbCommitWriteBatchLatency": 0,
+            "rocksdbFilesCopied": 24,
+            "rocksdbFilesReused": 24,
+            "rocksdbGetCount": 553553,
+            "rocksdbGetLatency": 904,
+            "rocksdbPinnedBlocksMemoryUsage": 24489056,
+            "rocksdbPutCount": 253559,
+            "rocksdbPutLatency": 410,
+            "rocksdbReadBlockCacheHitCount": 18287,
+            "rocksdbReadBlockCacheMissCount": 745,
+            "rocksdbSstFileSize": 12984620,
+            "rocksdbTotalBytesRead": 789395,
+            "rocksdbTotalBytesReadByCompaction": 0,
+            "rocksdbTotalBytesReadThroughIterator": 0,
+            "rocksdbTotalBytesWritten": 37136192,
+            "rocksdbTotalBytesWrittenByCompaction": 0,
+            "rocksdbTotalBytesWrittenByFlush": 6453267,
+            "rocksdbTotalCompactionLatencyMs": 0,
+            "rocksdbWriterStallLatencyMs": 0,
+            "rocksdbZipFileBytesUncompressed": 197400
+          }
+        },
+        {
+          "operatorName": "dedupe",
+          "numRowsTotal": 199996,
+          "numRowsUpdated": 99998,
+          "allUpdatesTimeMs": 2190,
+          "numRowsRemoved": 0,
+          "allRemovalsTimeMs": 0,
+          "commitTimeMs": 6051,
+          "memoryUsedBytes": 38237264,
+          "numRowsDroppedByWatermark": 0,
+          "numShufflePartitions": 24,
+          "numStateStoreInstances": 24,
+          "customMetrics": {
+            "numDroppedDuplicateRows": 0,
+            "rocksdbBytesCopied": 1514992,
+            "rocksdbCommitCheckpointLatency": 324,
+            "rocksdbCommitCompactLatency": 0,
+            "rocksdbCommitFileSyncLatencyMs": 5221,
+            "rocksdbCommitFlushLatency": 435,
+            "rocksdbCommitPauseLatency": 0,
+            "rocksdbCommitWriteBatchLatency": 0,
+            "rocksdbFilesCopied": 24,
+            "rocksdbFilesReused": 24,
+            "rocksdbGetCount": 199996,
+            "rocksdbGetLatency": 311,
+            "rocksdbPinnedBlocksMemoryUsage": 18494496,
+            "rocksdbPutCount": 99998,
+            "rocksdbPutLatency": 150,
+            "rocksdbReadBlockCacheHitCount": 1109,
+            "rocksdbReadBlockCacheMissCount": 789,
+            "rocksdbSstFileSize": 3196935,
+            "rocksdbTotalBytesRead": 0,
+            "rocksdbTotalBytesReadByCompaction": 0,
+            "rocksdbTotalBytesReadThroughIterator": 0,
+            "rocksdbTotalBytesWritten": 10499790,
+            "rocksdbTotalBytesWrittenByCompaction": 0,
+            "rocksdbTotalBytesWrittenByFlush": 1521160,
+            "rocksdbTotalCompactionLatencyMs": 0,
+            "rocksdbWriterStallLatencyMs": 0,
+            "rocksdbZipFileBytesUncompressed": 190776
+          }
+        }
+      ],
+      "sources": [
+        {
+          "description": "KafkaV2[Subscribe[retailrocket-full-v2-20261019, v2-state-retry-20261019]]",
+          "startOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 33315,
+              "1": 33303,
+              "0": 33380
+            }
+          },
+          "endOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 66630,
+              "1": 66606,
+              "0": 66760
+            }
+          },
+          "latestOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 918221,
+              "1": 917873,
+              "0": 920007
+            }
+          },
+          "numInputRows": 199996,
+          "inputRowsPerSecond": 5033.245249779791,
+          "processedRowsPerSecond": 10824.051523515722,
+          "metrics": {
+            "avgOffsetsBehindLatest": "426017.5",
+            "maxOffsetsBehindLatest": "853247",
+            "minOffsetsBehindLatest": "0"
+          }
+        }
+      ],
+      "sink": {
+        "description": "ForeachBatchSink",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "c050a22d-6967-45b5-a9ba-7e81e11d133a",
+      "runId": "7e306dff-9ad3-486f-a63f-ec13f7ea009f",
+      "name": null,
+      "timestamp": "2026-10-19T04:41:31.807Z",
+      "batchId": 2,
+      "numInputRows": 199996,
+      "inputRowsPerSecond": 10819.952391257302,
+      "processedRowsPerSecond": 11604.734826505743,
+      "durationMs": {
+        "addBatch": 16990,
+        "commitOffsets": 56,
+        "getBatch": 0,
+        "latestOffset": 3,
+        "queryPlanning": 124,
+        "triggerExecution": 17234,
+        "walCommit": 57
+      },
+      "stateOperators": [
+        {
+          "operatorName": "dedupe",
+          "numRowsTotal": 759676,
+          "numRowsUpdated": 251233,
+          "allUpdatesTimeMs": 3522,
+          "numRowsRemoved": 0,
+          "allRemovalsTimeMs": 0,
+          "commitTimeMs": 4936,
+          "memoryUsedBytes": 189120912,
+          "numRowsDroppedByWatermark": 0,
+          "numShufflePartitions": 24,
+          "numStateStoreInstances": 24,
+          "customMetrics": {
+            "numDroppedDuplicateRows": 48761,
+            "rocksdbBytesCopied": 6423687,
+            "rocksdbCommitCheckpointLatency": 339,
+            "rocksdbCommitCompactLatency": 0,
+            "rocksdbCommitFileSyncLatencyMs": 3920,
+            "rocksdbCommitFlushLatency": 613,
+            "rocksdbCommitPauseLatency": 0,
+            "rocksdbCommitWriteBatchLatency": 0,
+            "rocksdbFilesCopied": 24,
+            "rocksdbFilesReused": 48,
+            "rocksdbGetCount": 551227,
+            "rocksdbGetLatency": 1012,
+            "rocksdbPinnedBlocksMemoryUsage": 35466704,
+            "rocksdbPutCount": 251233,
+            "rocksdbPutLatency": 390,
+            "rocksdbReadBlockCacheHitCount": 25981,
+            "rocksdbReadBlockCacheMissCount": 780,
+            "rocksdbSstFileSize": 19408307,
+            "rocksdbTotalBytesRead": 828937,
+            "rocksdbTotalBytesReadByCompaction": 0,
+            "rocksdbTotalBytesReadThroughIterator": 0,
+            "rocksdbTotalBytesWritten": 36969873,
+            "rocksdbTotalBytesWrittenByCompaction": 0,
+            "rocksdbTotalBytesWrittenByFlush": 6433287,
+            "rocksdbTotalCompactionLatencyMs": 0,
+            "rocksdbWriterStallLatencyMs": 0,
+            "rocksdbZipFileBytesUncompressed": 209808
+          }
+        },
+        {
+          "operatorName": "dedupe",
+          "numRowsTotal": 299994,
+          "numRowsUpdated": 99998,
+          "allUpdatesTimeMs": 2064,
+          "numRowsRemoved": 0,
+          "allRemovalsTimeMs": 0,
+          "commitTimeMs": 5330,
+          "memoryUsedBytes": 134008648,
+          "numRowsDroppedByWatermark": 0,
+          "numShufflePartitions": 24,
+          "numStateStoreInstances": 24,
+          "customMetrics": {
+            "numDroppedDuplicateRows": 0,
+            "rocksdbBytesCopied": 1485307,
+            "rocksdbCommitCheckpointLatency": 358,
+            "rocksdbCommitCompactLatency": 0,
+            "rocksdbCommitFileSyncLatencyMs": 4494,
+            "rocksdbCommitFlushLatency": 422,
+            "rocksdbCommitPauseLatency": 0,
+            "rocksdbCommitWriteBatchLatency": 0,
+            "rocksdbFilesCopied": 24,
+            "rocksdbFilesReused": 48,
+            "rocksdbGetCount": 199996,
+            "rocksdbGetLatency": 375,
+            "rocksdbPinnedBlocksMemoryUsage": 29289328,
+            "rocksdbPutCount": 99998,
+            "rocksdbPutLatency": 162,
+            "rocksdbReadBlockCacheHitCount": 2573,
+            "rocksdbReadBlockCacheMissCount": 1227,
+            "rocksdbSstFileSize": 4682242,
+            "rocksdbTotalBytesRead": 0,
+            "rocksdbTotalBytesReadByCompaction": 0,
+            "rocksdbTotalBytesReadThroughIterator": 0,
+            "rocksdbTotalBytesWritten": 10499790,
+            "rocksdbTotalBytesWrittenByCompaction": 0,
+            "rocksdbTotalBytesWrittenByFlush": 1491475,
+            "rocksdbTotalCompactionLatencyMs": 0,
+            "rocksdbWriterStallLatencyMs": 0,
+            "rocksdbZipFileBytesUncompressed": 199752
+          }
+        }
+      ],
+      "sources": [
+        {
+          "description": "KafkaV2[Subscribe[retailrocket-full-v2-20261019, v2-state-retry-20261019]]",
+          "startOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 66630,
+              "1": 66606,
+              "0": 66760
+            }
+          },
+          "endOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 99945,
+              "1": 99909,
+              "0": 100140
+            }
+          },
+          "latestOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 918221,
+              "1": 917873,
+              "0": 920007
+            }
+          },
+          "numInputRows": 199996,
+          "inputRowsPerSecond": 10819.952391257302,
+          "processedRowsPerSecond": 11604.734826505743,
+          "metrics": {
+            "avgOffsetsBehindLatest": "409351.1666666667",
+            "maxOffsetsBehindLatest": "819867",
+            "minOffsetsBehindLatest": "0"
+          }
+        }
+      ],
+      "sink": {
+        "description": "ForeachBatchSink",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "c050a22d-6967-45b5-a9ba-7e81e11d133a",
+      "runId": "7e306dff-9ad3-486f-a63f-ec13f7ea009f",
+      "name": null,
+      "timestamp": "2026-10-19T04:41:49.044Z",
+      "batchId": 3,
+      "numInputRows": 199996,
+      "inputRowsPerSecond": 11602.715089632768,
+      "processedRowsPerSecond": 10947.88701554631,
+      "durationMs": {
+        "addBatch": 17991,
+        "commitOffsets": 46,
+        "getBatch": 1,
+        "latestOffset": 2,
+        "queryPlanning": 136,
+        "triggerExecution": 18268,
+        "walCommit": 88
+      },
+      "stateOperators": [
+        {
+          "operatorName": "dedupe",
+          "numRowsTotal": 1009043,
+          "numRowsUpdated": 249367,
+          "allUpdatesTimeMs": 3666,
+          "numRowsRemoved": 0,
+          "allRemovalsTimeMs": 0,
+          "commitTimeMs": 6279,
+          "memoryUsedBytes": 336406448,
+          "numRowsDroppedByWatermark": 0,
+          "numShufflePartitions": 24,
+          "numStateStoreInstances": 24,
+          "customMetrics": {
+            "numDroppedDuplicateRows": 50627,
+            "rocksdbBytesCopied": 6381087,
+            "rocksdbCommitCheckpointLatency": 549,
+            "rocksdbCommitCompactLatency": 0,
+            "rocksdbCommitFileSyncLatencyMs": 4687,
+            "rocksdbCommitFlushLatency": 984,
+            "rocksdbCommitPauseLatency": 0,
+            "rocksdbCommitWriteBatchLatency": 0,
+            "rocksdbFilesCopied": 24,
+            "rocksdbFilesReused": 72,
+            "rocksdbGetCount": 549361,
+            "rocksdbGetLatency": 1105,
+            "rocksdbPinnedBlocksMemoryUsage": 18069040,
+            "rocksdbPutCount": 249367,
+            "rocksdbPutLatency": 387,
+            "rocksdbReadBlockCacheHitCount": 32161,
+            "rocksdbReadBlockCacheMissCount": 16812,
+            "rocksdbSstFileSize": 20333823,
+            "rocksdbTotalBytesRead": 860659,
+            "rocksdbTotalBytesReadByCompaction": 22749943,
+            "rocksdbTotalBytesReadThroughIterator": 0,
+            "rocksdbTotalBytesWritten": 36838300,
+            "rocksdbTotalBytesWrittenByCompaction": 20333823,
+            "rocksdbTotalBytesWrittenByFlush": 6390687,
+            "rocksdbTotalCompactionLatencyMs": 1615,
+            "rocksdbWriterStallLatencyMs": 0,
+            "rocksdbZipFileBytesUncompressed": 222216
+          }
+        },
+        {
+          "operatorName": "dedupe",
+          "numRowsTotal": 399992,
+          "numRowsUpdated": 99998,
+          "allUpdatesTimeMs": 2105,
+          "numRowsRemoved": 0,
+          "allRemovalsTimeMs": 0,
+          "commitTimeMs": 5246,
+          "memoryUsedBytes": 254422832,
+          "numRowsDroppedByWatermark": 0,
+          "numShufflePartitions": 24,
+          "numStateStoreInstances": 24,
+          "customMetrics": {
+            "numDroppedDuplicateRows": 0,
+            "rocksdbBytesCopied": 1493789,
+            "rocksdbCommitCheckpointLatency": 430,
+            "rocksdbCommitCompactLatency": 0,
+            "rocksdbCommitFileSyncLatencyMs": 4200,
+            "rocksdbCommitFlushLatency": 558,
+            "rocksdbCommitPauseLatency": 0,
+            "rocksdbCommitWriteBatchLatency": 0,
+            "rocksdbFilesCopied": 24,
+            "rocksdbFilesReused": 72,
+            "rocksdbGetCount": 199996,
+            "rocksdbGetLatency": 414,
+            "rocksdbPinnedBlocksMemoryUsage": 34638128,
+            "rocksdbPutCount": 99998,
+            "rocksdbPutLatency": 172,
+            "rocksdbReadBlockCacheHitCount": 7604,
+            "rocksdbReadBlockCacheMissCount": 5914,
+            "rocksdbSstFileSize": 4587134,
+            "rocksdbTotalBytesRead": 0,
+            "rocksdbTotalBytesReadByCompaction": 3637367,
+            "rocksdbTotalBytesReadThroughIterator": 0,
+            "rocksdbTotalBytesWritten": 10499790,
+            "rocksdbTotalBytesWrittenByCompaction": 4587134,
+            "rocksdbTotalBytesWrittenByFlush": 1500026,
+            "rocksdbTotalCompactionLatencyMs": 548,
+            "rocksdbWriterStallLatencyMs": 0,
+            "rocksdbZipFileBytesUncompressed": 208773
+          }
+        }
+      ],
+      "sources": [
+        {
+          "description": "KafkaV2[Subscribe[retailrocket-full-v2-20261019, v2-state-retry-20261019]]",
+          "startOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 99945,
+              "1": 99909,
+              "0": 100140
+            }
+          },
+          "endOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 133260,
+              "1": 133212,
+              "0": 133520
+            }
+          },
+          "latestOffset": {
+            "v2-state-retry-20261019": {
+              "2": 0,
+              "1": 0,
+              "0": 0
+            },
+            "retailrocket-full-v2-20261019": {
+              "2": 918221,
+              "1": 917873,
+              "0": 920007
+            }
+          },
+          "numInputRows": 199996,
+          "inputRowsPerSecond": 11602.715089632768,
+          "processedRowsPerSecond": 10947.88701554631,
+          "metrics": {
+            "avgOffsetsBehindLatest": "392684.8333333333",
+            "maxOffsetsBehindLatest": "786487",
+            "minOffsetsBehindLatest": "0"
+          }
+        }
+      ],
+      "sink": {
+        "description": "ForeachBatchSink",
+        "numOutputRows": -1
+      }
+    }
+  ],
+  "input_microbatch_limit": 100000,
+  "rocksdb_memory_mib": 128,
+  "executor_heap_mib": 512,
+  "executor_overhead_mib": 512,
+  "output": "hdfs://mycluster/retailrocket/streams/v2-state-scale-2",
+  "checkpoint": "hdfs://mycluster/retailrocket/stream-checkpoints/v2-state-scale-2"
+}

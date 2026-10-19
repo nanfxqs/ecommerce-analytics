@@ -1,0 +1,12 @@
+{
+  "seconds": [
+    0.9334584979987994,
+    0.6271981070003676,
+    0.6428733940010716,
+    0.7008833640011289,
+    0.6058681000013166
+  ],
+  "maximum": 0.9334584979987994,
+  "snapshot_run_id": "v2-4af02cc63a584069b89c38ef31f61e4b",
+  "meaning": "SSH observe including Kafka end lookup and local committed driver cache; not browser end-to-end latency"
+}
