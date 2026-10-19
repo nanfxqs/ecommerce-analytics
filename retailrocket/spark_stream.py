@@ -38,7 +38,7 @@ def _commit_text(spark, target, text):
     fs, path = _filesystem(spark, temporary)
     if fs.exists(path):
         fs.delete(path, True)
-    spark.createDataFrame([(text,)], 'value STRING').coalesce(1).write.text(temporary)
+    spark.range(1).select(F.lit(text).alias('value')).coalesce(1).write.text(temporary)
     _, final = _filesystem(spark, target)
     if fs.exists(final):
         raise ValueError('Refusing to replace committed output: ' + target)
@@ -77,14 +77,17 @@ def commit_microbatch(raw, batch_id, output, run_id):
         raw.select(F.col('value').cast('string'), 'topic', 'partition', 'offset').write.parquet(raw_path)
     paths = [p for p in _directories(spark, output + '/raw') if _exists(spark, p + '/_SUCCESS')]
     captured = spark.read.parquet(*paths)
-    records = captured.select(F.from_json('value', SCHEMA).alias('r')).select('r.*')
+    records = captured.select(F.from_json('value', SCHEMA).alias('r'), 'topic', 'partition', 'offset').select('r.*', 'topic', 'partition', 'offset')
     bad_identity = (F.col('batch_id').isNull() | (F.col('batch_id') != run_id) |
                     F.col('source_line').isNull() | (F.col('source_line') < 2) |
                     F.col('source_file').isNull() | (F.trim('source_file') == '') |
                     F.col('dataset_version').isNull() | (F.trim('dataset_version') == ''))
-    if records.filter(bad_identity).limit(1).count():
+    partition_stats = records.groupBy('topic', 'partition').agg(
+        F.count('*').alias('consumed'), (F.max('offset')+1).alias('end'),
+        F.sum(F.when(bad_identity,1).otherwise(0)).alias('invalid_identity')).collect()
+    if any(r.invalid_identity for r in partition_stats):
         raise ValueError('Missing source provenance or incorrect replay run identity')
-    unique = records.dropDuplicates(['dataset_version', 'source_file', 'source_line']).cache()
+    unique = records.drop('topic', 'partition', 'offset').dropDuplicates(['dataset_version', 'source_file', 'source_line'])
     events = unique.withColumn('event_time', F.expr('''CASE
         WHEN try_cast(timestamp AS bigint) BETWEEN -62135596800000 AND 253402300799999
         THEN timestamp_millis(try_cast(timestamp AS bigint)) END'''))
@@ -94,27 +97,37 @@ def commit_microbatch(raw, batch_id, output, run_id):
               .when(F.col('event').isNull() | ~F.col('event').isin('view', 'addtocart', 'transaction'), 'invalid_event'))
     events = events.withColumn('invalid_reason', reason).cache()
     try:
-        consumed, unique_count = captured.count(), unique.count()
-        valid = events.filter('invalid_reason IS NULL')
-        summary = valid.agg(F.count('*').alias('valid'), F.countDistinct('visitorid').alias('visitors'),
-                            F.min('event_time').cast('string').alias('event_time_min'),
-                            F.max('event_time').cast('string').alias('event_time_max')).first()
-        suspected = unique_count - unique.select('timestamp', 'visitorid', 'event', 'itemid', 'transactionid').distinct().count()
+        consumed = sum(r.consumed for r in partition_stats)
+        contents = ['timestamp', 'visitorid', 'event', 'itemid', 'transactionid']
+        summary = events.agg(F.count('*').alias('unique_count'),
+            F.sum(F.when(F.col('invalid_reason').isNull(),1).otherwise(0)).alias('valid'),
+            F.countDistinct(F.when(F.col('invalid_reason').isNull(),F.col('visitorid'))).alias('visitors'),
+            F.countDistinct(F.struct(*contents)).alias('distinct_contents'),
+            F.min(F.when(F.col('invalid_reason').isNull(),F.col('event_time'))).cast('string').alias('event_time_min'),
+            F.max(F.when(F.col('invalid_reason').isNull(),F.col('event_time'))).cast('string').alias('event_time_max')).first()
+        unique_count = summary.unique_count
+        valid_count = summary.valid or 0
+        suspected = unique_count-summary.distinct_contents
         offsets = {}
-        for row in captured.groupBy('topic', 'partition').agg((F.max('offset') + 1).alias('end')).collect():
+        for row in partition_stats:
             offsets.setdefault(row.topic, {})[str(row.partition)] = row.end
+        groups = events.select(F.to_date('event_time').alias('event_date'), 'event', 'invalid_reason').groupBy('event_date','event','invalid_reason').count().collect()
+        overview, daily, invalid_reasons = {}, [], {}
+        for row in groups:
+            if row.invalid_reason is not None:
+                invalid_reasons[row.invalid_reason] = invalid_reasons.get(row.invalid_reason, 0)+row['count']
+            else:
+                overview[row.event] = overview.get(row.event, 0)+row['count']
+                daily.append(dict(event_date=str(row.event_date), event=row.event, count=row['count']))
+        daily.sort(key=lambda row:(row['event_date'],row['event']))
         snapshot = dict(run_id=run_id, microbatch_id=batch_id, timezone='UTC',
                         updated_at=datetime.now(timezone.utc).isoformat(), complete=False,
                         quality=dict(consumed_count=consumed, unique_source_count=unique_count,
-                                     valid_count=summary.valid, invalid_count=unique_count-summary.valid,
+                                     valid_count=valid_count, invalid_count=unique_count-valid_count,
                                      retry_count=consumed-unique_count, suspected_duplicate_count=suspected),
                         visitors=summary.visitors, event_time_min=summary.event_time_min,
                         event_time_max=summary.event_time_max,
-                        overview={r.event:r['count'] for r in valid.groupBy('event').count().collect()},
-                        daily=[dict(event_date=str(r.event_date), event=r.event, count=r['count'])
-                               for r in valid.select(F.to_date('event_time').alias('event_date'), 'event')
-                               .groupBy('event_date','event').count().orderBy('event_date','event').collect()],
-                        invalid_reasons={r.invalid_reason:r['count'] for r in events.filter('invalid_reason IS NOT NULL').groupBy('invalid_reason').count().collect()},
+                        overview=overview, daily=daily, invalid_reasons=invalid_reasons,
                         processed_offsets=offsets,
                         samples=[json.loads(r.value) for r in captured.orderBy(F.desc('offset'), 'partition').limit(20).collect()],
                         application_id=spark.sparkContext.applicationId, master=spark.sparkContext.master,
@@ -122,7 +135,6 @@ def commit_microbatch(raw, batch_id, output, run_id):
         _commit_text(spark, snapshot_path, json.dumps(snapshot, ensure_ascii=False))
         return snapshot
     finally:
-        unique.unpersist()
         events.unpersist()
 
 

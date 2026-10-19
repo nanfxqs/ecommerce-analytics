@@ -29,5 +29,13 @@ def test_stream_pipeline_retries_and_utc_visitor_scope(tmp_path):
         assert result['invalid_reasons'] == {'invalid_timestamp': 1}
         assert result['processed_offsets'] == {'topic': {'0': 3, '1': 2}}
         assert result['run_id'] == 'run'
+        # Independent existing V1 pipeline, identical captured input range.
+        from retailrocket.spark_batch import analyze
+        from retailrocket.query import visitor_conversion
+        replay = dict(batch_id='run', rows=5, input={'rows': 4})
+        v1 = tmp_path/'v1'
+        quality = analyze(spark.read.parquet(str(tmp_path/'stream/raw/*')), replay, str(v1))
+        assert {key: quality[key] for key in result['quality']} == result['quality']
+        assert visitor_conversion(v1, '1970-01-01', '1970-01-02')['visitors'] == 1
     finally:
         spark.stop()

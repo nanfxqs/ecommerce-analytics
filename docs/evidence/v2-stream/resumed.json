@@ -1,0 +1,5250 @@
+{
+  "snapshot": {
+    "run_id": "v2-feasibility",
+    "microbatch_id": 1,
+    "timezone": "UTC",
+    "updated_at": "2026-10-19T04:04:16.067975+00:00",
+    "complete": false,
+    "quality": {
+      "consumed_count": 1011,
+      "unique_source_count": 1001,
+      "valid_count": 991,
+      "invalid_count": 10,
+      "retry_count": 10,
+      "suspected_duplicate_count": 1
+    },
+    "visitors": 25,
+    "event_time_min": "1970-01-11 00:00:00",
+    "event_time_max": "1972-09-26 00:00:00",
+    "overview": {
+      "view": 991
+    },
+    "daily": [
+      {
+        "event_date": "1970-01-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-01-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-02-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-03-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-04-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-05-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-06-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-07-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-08-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-09-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-10-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-11-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1970-12-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-01-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-02-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-03-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-04-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-05-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-06-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-07-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-08-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-09-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-10-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-11-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1971-12-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-01-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-02-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-03-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-04-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-05-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-06-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-07-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-26",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-27",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-28",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-29",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-30",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-08-31",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-01",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-02",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-03",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-04",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-05",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-06",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-07",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-08",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-09",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-10",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-11",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-12",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-13",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-14",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-15",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-16",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-17",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-18",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-19",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-20",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-21",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-22",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-23",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-24",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-25",
+        "event": "view",
+        "count": 1
+      },
+      {
+        "event_date": "1972-09-26",
+        "event": "view",
+        "count": 2
+      }
+    ],
+    "invalid_reasons": {
+      "invalid_timestamp": 10
+    },
+    "processed_offsets": {
+      "v2-stream-feasibility-20261019": {
+        "0": 337,
+        "2": 337,
+        "1": 337
+      }
+    },
+    "samples": [
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 1000,
+        "batch_id": "v2-feasibility",
+        "timestamp": "bad",
+        "visitorid": "23",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 1001,
+        "batch_id": "v2-feasibility",
+        "timestamp": "bad",
+        "visitorid": "24",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 1002,
+        "batch_id": "v2-feasibility",
+        "timestamp": "86313600000",
+        "visitorid": "0",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 997,
+        "batch_id": "v2-feasibility",
+        "timestamp": "bad",
+        "visitorid": "20",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 998,
+        "batch_id": "v2-feasibility",
+        "timestamp": "bad",
+        "visitorid": "21",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 999,
+        "batch_id": "v2-feasibility",
+        "timestamp": "bad",
+        "visitorid": "22",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 994,
+        "batch_id": "v2-feasibility",
+        "timestamp": "bad",
+        "visitorid": "17",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 995,
+        "batch_id": "v2-feasibility",
+        "timestamp": "bad",
+        "visitorid": "18",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 996,
+        "batch_id": "v2-feasibility",
+        "timestamp": "bad",
+        "visitorid": "19",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 991,
+        "batch_id": "v2-feasibility",
+        "timestamp": "864000000",
+        "visitorid": "14",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 992,
+        "batch_id": "v2-feasibility",
+        "timestamp": "bad",
+        "visitorid": "15",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 993,
+        "batch_id": "v2-feasibility",
+        "timestamp": "bad",
+        "visitorid": "16",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 988,
+        "batch_id": "v2-feasibility",
+        "timestamp": "1123200000",
+        "visitorid": "11",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 989,
+        "batch_id": "v2-feasibility",
+        "timestamp": "1036800000",
+        "visitorid": "12",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 990,
+        "batch_id": "v2-feasibility",
+        "timestamp": "950400000",
+        "visitorid": "13",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 985,
+        "batch_id": "v2-feasibility",
+        "timestamp": "1382400000",
+        "visitorid": "8",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 986,
+        "batch_id": "v2-feasibility",
+        "timestamp": "1296000000",
+        "visitorid": "9",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 987,
+        "batch_id": "v2-feasibility",
+        "timestamp": "1209600000",
+        "visitorid": "10",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 982,
+        "batch_id": "v2-feasibility",
+        "timestamp": "1641600000",
+        "visitorid": "5",
+        "event": "view",
+        "itemid": "a"
+      },
+      {
+        "dataset_version": "v2-feasibility",
+        "source_file": "fixture.csv",
+        "source_line": 983,
+        "batch_id": "v2-feasibility",
+        "timestamp": "1555200000",
+        "visitorid": "6",
+        "event": "view",
+        "itemid": "a"
+      }
+    ],
+    "application_id": "application_1792382297034_0003",
+    "master": "yarn",
+    "executor_hosts": "List(hadoop02:42437, hadoop01:43003, hadoop03:43205)"
+  },
+  "progress": [
+    {
+      "id": "792d016e-6a68-46f3-877a-2d44abb6d2a1",
+      "runId": "105d5359-75cc-4573-8111-0dfe458defc9",
+      "name": null,
+      "timestamp": "2026-10-19T04:03:48.116Z",
+      "batchId": 1,
+      "numInputRows": 501,
+      "inputRowsPerSecond": 0.0,
+      "processedRowsPerSecond": 15.19332827899924,
+      "durationMs": {
+        "addBatch": 32258,
+        "commitOffsets": 141,
+        "getBatch": 5,
+        "latestOffset": 11,
+        "queryPlanning": 201,
+        "triggerExecution": 32974,
+        "walCommit": 109
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "KafkaV2[Subscribe[v2-stream-feasibility-20261019]]",
+          "startOffset": {
+            "v2-stream-feasibility-20261019": {
+              "2": 170,
+              "1": 170,
+              "0": 170
+            }
+          },
+          "endOffset": {
+            "v2-stream-feasibility-20261019": {
+              "2": 337,
+              "1": 337,
+              "0": 337
+            }
+          },
+          "latestOffset": {
+            "v2-stream-feasibility-20261019": {
+              "2": 337,
+              "1": 337,
+              "0": 337
+            }
+          },
+          "numInputRows": 501,
+          "inputRowsPerSecond": 0.0,
+          "processedRowsPerSecond": 15.19332827899924,
+          "metrics": {
+            "avgOffsetsBehindLatest": "0.0",
+            "maxOffsetsBehindLatest": "0",
+            "minOffsetsBehindLatest": "0"
+          }
+        }
+      ],
+      "sink": {
+        "description": "ForeachBatchSink",
+        "numOutputRows": -1
+      }
+    }
+  ]
+}
