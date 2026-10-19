@@ -118,6 +118,30 @@ def start(config,run):
     return dict(phase='starting',confirmed=0)
 
 
+def control(config, run):
+    root = directory(config, run['run_id'])
+    with (root/'control.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        state = json.loads((root/'state.json').read_text())
+        action = run['action']
+        allowed = {'pause': ('running', 'paused'), 'continue': ('paused', 'running'), 'stop': ('running', 'paused', 'stopped')}
+        if action not in allowed or state['phase'] not in allowed[action]:
+            raise ValueError('Current worker phase does not allow control')
+        intent = run['pending_control']
+        if intent['action'] != action:
+            raise ValueError('Control intent mismatch')
+        atomic(root/'control.json', intent)
+    receipt = dict(accepted=True, action=action, operation_id=intent['operation_id'])
+    deadline = time.monotonic() + 2
+    while time.monotonic() < deadline:
+        observed = json.loads((root/'state.json').read_text())
+        if observed.get('last_control', {}).get('operation_id') == intent['operation_id']:
+            receipt.update({key: observed[key] for key in ('phase','last_control','confirmed','cursor','rate')})
+            break
+        time.sleep(.05)
+    return receipt
+
+
 def work(config,run_id):
     root=directory(config,run_id)
     lease=(root/'worker.lock').open('a'); fcntl.flock(lease,fcntl.LOCK_EX|fcntl.LOCK_NB)
@@ -150,19 +174,57 @@ def work(config,run_id):
             confirmed+=1
             state.update(cursor=position,confirmed=confirmed,rate=confirmed/max(.001,time.monotonic()-began))
             atomic(root/'state.json',state)
+        def desired():
+            return json.loads((root/'control.json').read_text()) if (root/'control.json').exists() else None
+        stopped = False
+        next_send = time.monotonic()
         with events.open() as source:
             for position,line in enumerate(source,1):
                 if stream.poll() is not None: raise RuntimeError('YARN streaming driver exited before producer completion')
                 row=json.loads(line); row.update(batch_id=run_id,replay_time=datetime.now(timezone.utc).isoformat())
-                target=began+(position-1)/run['requested_rate']
-                if target>time.monotonic(): time.sleep(target-time.monotonic())
+                while True:
+                    if stream.poll() is not None:
+                        raise RuntimeError('Streaming driver exited during replay control')
+                    intent = desired()
+                    action = intent['action'] if intent else None
+                    if action in ('pause', 'stop'):
+                        while pending:
+                            acknowledge()
+                        target_phase = 'paused' if action == 'pause' else 'stopping'
+                        if state['phase'] != target_phase or state.get('last_control', {}).get('operation_id') != intent['operation_id']:
+                            state['last_control'] = dict(intent, acknowledged=True)
+                            state['phase'] = target_phase
+                            atomic(root/'state.json', state)
+                        if action == 'stop':
+                            stopped = True
+                            break
+                        time.sleep(.1)
+                        next_send = time.monotonic()
+                        continue
+                    if state['phase'] == 'paused':
+                        state.update(phase='running', last_control=dict(intent, acknowledged=True))
+                        atomic(root/'state.json', state)
+                    if time.monotonic() >= next_send:
+                        break
+                    time.sleep(max(0, min(.1, next_send-time.monotonic())))
+                if stopped:
+                    break
+                next_send = time.monotonic() + 1/run['requested_rate']
+                row['replay_time'] = datetime.now(timezone.utc).isoformat()
                 pending.append((position,producer.send(run_id,key=row['source_record_id'].encode(),value=row)))
                 if len(pending)>=min(1000,max(1,int(run['requested_rate']))): acknowledge()
             while pending: acknowledge()
         producer.flush(timeout=120); final=ends(consumer,run_id)
         replay=dict(batch_id=run_id,topic=run_id,rows=sum(final[p]-starting[p] for p in final),replay_confirmed=True,startingOffsets={run_id:starting},endingOffsets={run_id:final},input=metadata)
         atomic(root/'replay.json',replay)
-        state.update(phase='draining',final=final); atomic(root/'state.json',state)
+        with (root/'control.lock').open('a') as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            intent = desired()
+            stopped = stopped or bool(intent and intent['action'] == 'stop')
+            state.update(phase='draining', final=final, early_stopped=stopped)
+            if intent:
+                state['last_control'] = dict(intent, acknowledged=True)
+            atomic(root/'state.json',state)
         deadline=time.monotonic()+config.get('drain_timeout',1800)
         while True:
             if stream.poll() is not None: raise RuntimeError('Stream exited before committed drain')
@@ -173,7 +235,7 @@ def work(config,run_id):
         (root/'stop-stream').touch()
         stream.wait(timeout=120)
         if stream.returncode: raise RuntimeError('Streaming shutdown failed')
-        state.update(phase='completed',complete=True,stream_released=True)
+        state.update(phase='stopped' if stopped else 'completed',complete=not stopped,stream_released=True)
         atomic(root/'state.json',state)
     except Exception as error:
         state.update(phase='failed',error=str(error)); atomic(root/'state.json',state)
@@ -188,12 +250,13 @@ def work(config,run_id):
 
 
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('operation',choices=['datasets','start','observe','work']); parser.add_argument('--config',required=True); parser.add_argument('--run-id')
+    parser=argparse.ArgumentParser(); parser.add_argument('operation',choices=['datasets','start','observe','work','control']); parser.add_argument('--config',required=True); parser.add_argument('--run-id')
     args=parser.parse_args(); config=json.loads(Path(args.config).read_text()); config['_file']=str(Path(args.config).resolve())
     if args.operation=='datasets':
         # Checksum validation occurs at start; registry entries are operator-prevalidated.
         result=[dict(id=key,label=value['label'],rows=json.loads(Path(value['manifest']).read_text())['rows']) for key,value in config['datasets'].items()]
     elif args.operation=='start': result=start(config,json.load(sys.stdin))
+    elif args.operation=='control': result=control(config,json.load(sys.stdin))
     elif args.operation=='observe': result=observation(config,identity(args.run_id))
     else: work(config,identity(args.run_id)); return
     print(json.dumps(result))

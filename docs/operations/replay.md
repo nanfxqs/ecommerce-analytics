@@ -29,3 +29,17 @@ python -m retailrocket.api --store /operator/published --cluster-config /operato
 正常 EOF 后等待所有发送确认，捕获最终 offset，等待检查点与结果都覆盖范围，然后向 driver 写入停止请求，等待 Spark 释放资源。完成状态表示回放范围处理完成，仍不是已发布历史分析；自动历史发布由后续任务接入。失败保留状态及日志，阻止另一个轮次抢占不确定资源；不要手工改 current 指针绕过保护。
 
 控制 API：`GET /api/replay/datasets`、`GET /api/replay/current`、`POST /api/replay/runs`（dataset、正数 rate）。无活动轮次返回 null；并发启动 409，未知输入/非法速率 422。生产环境必须传入真实 cluster 配置；不配置时不会注册回放 API。
+
+## 暂停、继续与提前停止
+
+页面提供“暂停发送”“继续发送”“提前停止”。API 接受操作不等于处理已完成；页面区分已提交请求和后台实际确认。暂停会确认在途消息并保存连续 ACK 游标，随后停止新发送；Spark 持续消化 Kafka 积压。继续沿同一轮次和游标发送，不追赶暂停时间造成突发加速。提前停止会确认已发送数据、固定结束 offsets、等待检查点与结果覆盖、释放流任务，最终 `stopped`、`complete=false`、`early_stopped=true`。不调用历史发布。
+
+命令行走同一 HTTP 控制入口，适合复现和排障：
+
+```bash
+python -m retailrocket.replay_control pause
+python -m retailrocket.replay_control continue
+python -m retailrocket.replay_control stop
+```
+
+`--url` 可指定本机 API 地址。对应 `POST /api/replay/current/pause`、`continue`、`stop`。新操作返回 202，重复已生效或在途操作返回 200 且 `duplicate=true`；不允许的状态返回 409。控制意图在本机保存后送达 edge 的 `control.json`，包含唯一 operation_id；worker 确认记录在 `last_control`。不允许在另一控制待确认时提交相反控制（停止除外）。观察结果的 generation 保护防止慢 SSH 响应覆盖较新的控制状态。故障时不能把“已接受”显示成“已完成”；后续恢复流程负责处理未确认意图。
