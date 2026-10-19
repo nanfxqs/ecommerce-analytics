@@ -23,7 +23,7 @@ def test_dashboard_reads_exported_overview(tmp_path):
     assert overview(tmp_path, '2015-05-04', '2015-05-04') == {'view': 1, 'addtocart': 1, 'transaction': 1}
 
 
-def test_prepared_batch_retains_original_input_and_rejects_changed_rows(tmp_path):
+def test_prepared_batch_retains_original_input(tmp_path):
     from retailrocket.ingest import records
     source = tmp_path / 'events.csv'
     original = 'timestamp,visitorid,event,itemid,transactionid\n1430622000000,1,view,2,\n'

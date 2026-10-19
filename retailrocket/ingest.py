@@ -46,15 +46,16 @@ def records(manifest):
 
 def replay(manifest, brokers, topic, batch_id, output):
     from kafka import KafkaConsumer, KafkaProducer, TopicPartition
-    consumer = KafkaConsumer(bootstrap_servers=brokers, enable_auto_commit=False)
-    partitions = consumer.partitions_for_topic(topic)
-    if not partitions:
-        raise ValueError('Topic must exist before replay')
-    assigned = [TopicPartition(topic, p) for p in sorted(partitions)]
-    start = consumer.end_offsets(assigned)
+    consumer = None
     producer = None
     count = 0
     try:
+        consumer = KafkaConsumer(bootstrap_servers=brokers, enable_auto_commit=False)
+        partitions = consumer.partitions_for_topic(topic)
+        if not partitions:
+            raise ValueError('Topic must exist before replay')
+        assigned = [TopicPartition(topic, p) for p in sorted(partitions)]
+        start = consumer.end_offsets(assigned)
         producer = KafkaProducer(bootstrap_servers=brokers, acks='all', retries=10,
                                  linger_ms=20, batch_size=65536,
                                  value_serializer=lambda value: json.dumps(value).encode())
@@ -80,4 +81,5 @@ def replay(manifest, brokers, topic, batch_id, output):
     finally:
         if producer is not None:
             producer.close()
-        consumer.close()
+        if consumer is not None:
+            consumer.close()
