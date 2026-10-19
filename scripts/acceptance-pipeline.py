@@ -41,6 +41,11 @@ assert history['snapshot']['batch_id']==run_id
 assert history['data']['counts']==dict(view=2664312,addtocart=69332,transaction=22457)
 assert history['data']['visitors']['visitors']==1407580
 assert state['snapshot']['visitors']==1407580
+# Independent complete historical recomputation must match every live UTC bucket.
+historical_daily=sorted((row['day'],event,row[event]) for row in history['data']['trend'] for event in ['view','addtocart','transaction'] if row[event])
+stream_daily=sorted((row['event_date'],row['event'],row['count']) for row in state['snapshot']['daily'])
+assert len(stream_daily)==417 and stream_daily==historical_daily
+(args.out/'daily-comparison.json').write_text(json.dumps(dict(accepted=True,utc_buckets=len(stream_daily),meaning='Every current live UTC daily/event count equals independent automatic full historical recomputation'),indent=2))
 assert quality['data']['batch_quality']['valid_count']==2756101
 (args.out/'history.json').write_text(json.dumps(history,indent=2));(args.out/'quality.json').write_text(json.dumps(quality,indent=2))
 (args.out/'summary.json').write_text(json.dumps(dict(accepted=True,run_id=run_id,published_revision=state['published_revision'],meaning='Real full registered producer→Kafka→incremental YARN→released→historical YARN→export/fetch/validated atomic publication; performance is separately tested'),indent=2))

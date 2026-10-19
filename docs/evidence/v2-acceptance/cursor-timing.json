@@ -1,0 +1,14 @@
+[
+  {
+    "records": 1000,
+    "flush_records": 1,
+    "seconds": 11.288841024000249,
+    "records_per_second": 88.58305275749608
+  },
+  {
+    "records": 1000,
+    "flush_records": 100,
+    "seconds": 0.10230908799985627,
+    "records_per_second": 9774.302748172331
+  }
+]

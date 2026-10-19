@@ -1,0 +1,1009 @@
+{
+  "snapshot": {
+    "batch_id": "v2-58e8ae0622ec45269dd5e147cb226a3f",
+    "revision": "c4e1e04acf9d96e193f751743f3feedec7c7b57c8a4b785e566587cf5902cf1e",
+    "timezone": "UTC",
+    "complete": true,
+    "event_bounds": {
+      "start": "2015-05-03",
+      "end": "2015-09-18"
+    },
+    "updated_at": "2026-10-19T13:51:31.393409+00:00"
+  },
+  "selected_range": {
+    "start": "2015-05-03",
+    "end": "2015-09-18"
+  },
+  "data": {
+    "counts": {
+      "view": 2664312,
+      "addtocart": 69332,
+      "transaction": 22457
+    },
+    "visitors": {
+      "visitors": 1407580,
+      "view_visitors": 1404179,
+      "cart_visitors": 37722,
+      "purchase_visitors": 11719,
+      "view_purchase_visitors": 11291,
+      "cart_purchase_visitors": 10576,
+      "view_purchase_rate": 0.008040997622098037,
+      "cart_purchase_rate": 0.28036689465033665
+    },
+    "trend": [
+      {
+        "day": "2015-05-03",
+        "view": 13304,
+        "addtocart": 296,
+        "transaction": 83,
+        "visitors": 7865
+      },
+      {
+        "day": "2015-05-04",
+        "view": 18681,
+        "addtocart": 579,
+        "transaction": 154,
+        "visitors": 11019
+      },
+      {
+        "day": "2015-05-05",
+        "view": 22225,
+        "addtocart": 565,
+        "transaction": 225,
+        "visitors": 13084
+      },
+      {
+        "day": "2015-05-06",
+        "view": 23015,
+        "addtocart": 647,
+        "transaction": 258,
+        "visitors": 13687
+      },
+      {
+        "day": "2015-05-07",
+        "view": 22369,
+        "addtocart": 578,
+        "transaction": 217,
+        "visitors": 13086
+      },
+      {
+        "day": "2015-05-08",
+        "view": 18766,
+        "addtocart": 532,
+        "transaction": 126,
+        "visitors": 11106
+      },
+      {
+        "day": "2015-05-09",
+        "view": 12353,
+        "addtocart": 279,
+        "transaction": 63,
+        "visitors": 7610
+      },
+      {
+        "day": "2015-05-10",
+        "view": 11771,
+        "addtocart": 312,
+        "transaction": 60,
+        "visitors": 7413
+      },
+      {
+        "day": "2015-05-11",
+        "view": 15704,
+        "addtocart": 390,
+        "transaction": 84,
+        "visitors": 9512
+      },
+      {
+        "day": "2015-05-12",
+        "view": 21611,
+        "addtocart": 577,
+        "transaction": 186,
+        "visitors": 13041
+      },
+      {
+        "day": "2015-05-13",
+        "view": 22975,
+        "addtocart": 584,
+        "transaction": 208,
+        "visitors": 13466
+      },
+      {
+        "day": "2015-05-14",
+        "view": 23231,
+        "addtocart": 669,
+        "transaction": 256,
+        "visitors": 13662
+      },
+      {
+        "day": "2015-05-15",
+        "view": 21498,
+        "addtocart": 511,
+        "transaction": 185,
+        "visitors": 12745
+      },
+      {
+        "day": "2015-05-16",
+        "view": 18766,
+        "addtocart": 417,
+        "transaction": 130,
+        "visitors": 11414
+      },
+      {
+        "day": "2015-05-17",
+        "view": 20216,
+        "addtocart": 494,
+        "transaction": 169,
+        "visitors": 11996
+      },
+      {
+        "day": "2015-05-18",
+        "view": 26189,
+        "addtocart": 650,
+        "transaction": 245,
+        "visitors": 15476
+      },
+      {
+        "day": "2015-05-19",
+        "view": 25949,
+        "addtocart": 654,
+        "transaction": 196,
+        "visitors": 15482
+      },
+      {
+        "day": "2015-05-20",
+        "view": 21688,
+        "addtocart": 423,
+        "transaction": 125,
+        "visitors": 13332
+      },
+      {
+        "day": "2015-05-21",
+        "view": 20993,
+        "addtocart": 552,
+        "transaction": 131,
+        "visitors": 12738
+      },
+      {
+        "day": "2015-05-22",
+        "view": 20446,
+        "addtocart": 463,
+        "transaction": 154,
+        "visitors": 12340
+      },
+      {
+        "day": "2015-05-23",
+        "view": 15938,
+        "addtocart": 357,
+        "transaction": 113,
+        "visitors": 9741
+      },
+      {
+        "day": "2015-05-24",
+        "view": 16831,
+        "addtocart": 320,
+        "transaction": 97,
+        "visitors": 10453
+      },
+      {
+        "day": "2015-05-25",
+        "view": 23106,
+        "addtocart": 579,
+        "transaction": 178,
+        "visitors": 14161
+      },
+      {
+        "day": "2015-05-26",
+        "view": 21222,
+        "addtocart": 581,
+        "transaction": 194,
+        "visitors": 12781
+      },
+      {
+        "day": "2015-05-27",
+        "view": 21211,
+        "addtocart": 528,
+        "transaction": 197,
+        "visitors": 12828
+      },
+      {
+        "day": "2015-05-28",
+        "view": 21215,
+        "addtocart": 582,
+        "transaction": 225,
+        "visitors": 12956
+      },
+      {
+        "day": "2015-05-29",
+        "view": 18988,
+        "addtocart": 449,
+        "transaction": 137,
+        "visitors": 11957
+      },
+      {
+        "day": "2015-05-30",
+        "view": 15463,
+        "addtocart": 451,
+        "transaction": 116,
+        "visitors": 9684
+      },
+      {
+        "day": "2015-05-31",
+        "view": 15948,
+        "addtocart": 350,
+        "transaction": 99,
+        "visitors": 9936
+      },
+      {
+        "day": "2015-06-01",
+        "view": 22074,
+        "addtocart": 522,
+        "transaction": 200,
+        "visitors": 13257
+      },
+      {
+        "day": "2015-06-02",
+        "view": 22605,
+        "addtocart": 525,
+        "transaction": 206,
+        "visitors": 13534
+      },
+      {
+        "day": "2015-06-03",
+        "view": 22776,
+        "addtocart": 579,
+        "transaction": 204,
+        "visitors": 13414
+      },
+      {
+        "day": "2015-06-04",
+        "view": 22820,
+        "addtocart": 604,
+        "transaction": 205,
+        "visitors": 13088
+      },
+      {
+        "day": "2015-06-05",
+        "view": 20213,
+        "addtocart": 452,
+        "transaction": 149,
+        "visitors": 12137
+      },
+      {
+        "day": "2015-06-06",
+        "view": 15679,
+        "addtocart": 377,
+        "transaction": 104,
+        "visitors": 9698
+      },
+      {
+        "day": "2015-06-07",
+        "view": 15699,
+        "addtocart": 346,
+        "transaction": 106,
+        "visitors": 9423
+      },
+      {
+        "day": "2015-06-08",
+        "view": 20208,
+        "addtocart": 541,
+        "transaction": 192,
+        "visitors": 12521
+      },
+      {
+        "day": "2015-06-09",
+        "view": 23078,
+        "addtocart": 472,
+        "transaction": 132,
+        "visitors": 13684
+      },
+      {
+        "day": "2015-06-10",
+        "view": 23214,
+        "addtocart": 599,
+        "transaction": 210,
+        "visitors": 13995
+      },
+      {
+        "day": "2015-06-11",
+        "view": 20255,
+        "addtocart": 503,
+        "transaction": 157,
+        "visitors": 12387
+      },
+      {
+        "day": "2015-06-12",
+        "view": 15427,
+        "addtocart": 332,
+        "transaction": 107,
+        "visitors": 9281
+      },
+      {
+        "day": "2015-06-13",
+        "view": 11932,
+        "addtocart": 278,
+        "transaction": 60,
+        "visitors": 7465
+      },
+      {
+        "day": "2015-06-14",
+        "view": 13691,
+        "addtocart": 356,
+        "transaction": 108,
+        "visitors": 8406
+      },
+      {
+        "day": "2015-06-15",
+        "view": 21451,
+        "addtocart": 624,
+        "transaction": 191,
+        "visitors": 12558
+      },
+      {
+        "day": "2015-06-16",
+        "view": 23591,
+        "addtocart": 800,
+        "transaction": 276,
+        "visitors": 13653
+      },
+      {
+        "day": "2015-06-17",
+        "view": 22948,
+        "addtocart": 680,
+        "transaction": 269,
+        "visitors": 13392
+      },
+      {
+        "day": "2015-06-18",
+        "view": 22402,
+        "addtocart": 702,
+        "transaction": 220,
+        "visitors": 13113
+      },
+      {
+        "day": "2015-06-19",
+        "view": 19962,
+        "addtocart": 493,
+        "transaction": 166,
+        "visitors": 11504
+      },
+      {
+        "day": "2015-06-20",
+        "view": 15053,
+        "addtocart": 404,
+        "transaction": 111,
+        "visitors": 8818
+      },
+      {
+        "day": "2015-06-21",
+        "view": 15217,
+        "addtocart": 333,
+        "transaction": 83,
+        "visitors": 9337
+      },
+      {
+        "day": "2015-06-22",
+        "view": 22462,
+        "addtocart": 598,
+        "transaction": 234,
+        "visitors": 12834
+      },
+      {
+        "day": "2015-06-23",
+        "view": 22733,
+        "addtocart": 633,
+        "transaction": 250,
+        "visitors": 13098
+      },
+      {
+        "day": "2015-06-24",
+        "view": 21199,
+        "addtocart": 584,
+        "transaction": 177,
+        "visitors": 12451
+      },
+      {
+        "day": "2015-06-25",
+        "view": 19557,
+        "addtocart": 510,
+        "transaction": 204,
+        "visitors": 11793
+      },
+      {
+        "day": "2015-06-26",
+        "view": 19217,
+        "addtocart": 481,
+        "transaction": 177,
+        "visitors": 11734
+      },
+      {
+        "day": "2015-06-27",
+        "view": 15014,
+        "addtocart": 372,
+        "transaction": 91,
+        "visitors": 9098
+      },
+      {
+        "day": "2015-06-28",
+        "view": 16764,
+        "addtocart": 342,
+        "transaction": 89,
+        "visitors": 10131
+      },
+      {
+        "day": "2015-06-29",
+        "view": 22257,
+        "addtocart": 524,
+        "transaction": 203,
+        "visitors": 13190
+      },
+      {
+        "day": "2015-06-30",
+        "view": 20757,
+        "addtocart": 529,
+        "transaction": 162,
+        "visitors": 12569
+      },
+      {
+        "day": "2015-07-01",
+        "view": 20089,
+        "addtocart": 480,
+        "transaction": 195,
+        "visitors": 12157
+      },
+      {
+        "day": "2015-07-02",
+        "view": 20791,
+        "addtocart": 467,
+        "transaction": 155,
+        "visitors": 12460
+      },
+      {
+        "day": "2015-07-03",
+        "view": 20131,
+        "addtocart": 496,
+        "transaction": 155,
+        "visitors": 11860
+      },
+      {
+        "day": "2015-07-04",
+        "view": 15609,
+        "addtocart": 364,
+        "transaction": 119,
+        "visitors": 9310
+      },
+      {
+        "day": "2015-07-05",
+        "view": 15173,
+        "addtocart": 477,
+        "transaction": 100,
+        "visitors": 9193
+      },
+      {
+        "day": "2015-07-06",
+        "view": 21584,
+        "addtocart": 553,
+        "transaction": 219,
+        "visitors": 12779
+      },
+      {
+        "day": "2015-07-07",
+        "view": 23467,
+        "addtocart": 671,
+        "transaction": 247,
+        "visitors": 13732
+      },
+      {
+        "day": "2015-07-08",
+        "view": 24085,
+        "addtocart": 691,
+        "transaction": 259,
+        "visitors": 14162
+      },
+      {
+        "day": "2015-07-09",
+        "view": 24112,
+        "addtocart": 678,
+        "transaction": 207,
+        "visitors": 14063
+      },
+      {
+        "day": "2015-07-10",
+        "view": 22327,
+        "addtocart": 643,
+        "transaction": 181,
+        "visitors": 14140
+      },
+      {
+        "day": "2015-07-11",
+        "view": 20319,
+        "addtocart": 377,
+        "transaction": 98,
+        "visitors": 14596
+      },
+      {
+        "day": "2015-07-12",
+        "view": 20701,
+        "addtocart": 335,
+        "transaction": 91,
+        "visitors": 14699
+      },
+      {
+        "day": "2015-07-13",
+        "view": 25234,
+        "addtocart": 669,
+        "transaction": 216,
+        "visitors": 16515
+      },
+      {
+        "day": "2015-07-14",
+        "view": 26007,
+        "addtocart": 634,
+        "transaction": 231,
+        "visitors": 16306
+      },
+      {
+        "day": "2015-07-15",
+        "view": 23361,
+        "addtocart": 564,
+        "transaction": 216,
+        "visitors": 14932
+      },
+      {
+        "day": "2015-07-16",
+        "view": 20777,
+        "addtocart": 616,
+        "transaction": 239,
+        "visitors": 13005
+      },
+      {
+        "day": "2015-07-17",
+        "view": 19599,
+        "addtocart": 448,
+        "transaction": 139,
+        "visitors": 12840
+      },
+      {
+        "day": "2015-07-18",
+        "view": 15988,
+        "addtocart": 399,
+        "transaction": 102,
+        "visitors": 10102
+      },
+      {
+        "day": "2015-07-19",
+        "view": 16316,
+        "addtocart": 372,
+        "transaction": 116,
+        "visitors": 10473
+      },
+      {
+        "day": "2015-07-20",
+        "view": 24373,
+        "addtocart": 727,
+        "transaction": 232,
+        "visitors": 15288
+      },
+      {
+        "day": "2015-07-21",
+        "view": 22713,
+        "addtocart": 673,
+        "transaction": 227,
+        "visitors": 14212
+      },
+      {
+        "day": "2015-07-22",
+        "view": 21289,
+        "addtocart": 771,
+        "transaction": 267,
+        "visitors": 13303
+      },
+      {
+        "day": "2015-07-23",
+        "view": 20710,
+        "addtocart": 657,
+        "transaction": 234,
+        "visitors": 13001
+      },
+      {
+        "day": "2015-07-24",
+        "view": 22073,
+        "addtocart": 545,
+        "transaction": 137,
+        "visitors": 14541
+      },
+      {
+        "day": "2015-07-25",
+        "view": 26551,
+        "addtocart": 439,
+        "transaction": 116,
+        "visitors": 15571
+      },
+      {
+        "day": "2015-07-26",
+        "view": 32078,
+        "addtocart": 481,
+        "transaction": 144,
+        "visitors": 17516
+      },
+      {
+        "day": "2015-07-27",
+        "view": 27622,
+        "addtocart": 673,
+        "transaction": 267,
+        "visitors": 16015
+      },
+      {
+        "day": "2015-07-28",
+        "view": 20986,
+        "addtocart": 721,
+        "transaction": 273,
+        "visitors": 13189
+      },
+      {
+        "day": "2015-07-29",
+        "view": 22330,
+        "addtocart": 630,
+        "transaction": 240,
+        "visitors": 14113
+      },
+      {
+        "day": "2015-07-30",
+        "view": 20193,
+        "addtocart": 567,
+        "transaction": 214,
+        "visitors": 12737
+      },
+      {
+        "day": "2015-07-31",
+        "view": 18232,
+        "addtocart": 544,
+        "transaction": 166,
+        "visitors": 11771
+      },
+      {
+        "day": "2015-08-01",
+        "view": 14996,
+        "addtocart": 384,
+        "transaction": 79,
+        "visitors": 9947
+      },
+      {
+        "day": "2015-08-02",
+        "view": 14753,
+        "addtocart": 362,
+        "transaction": 105,
+        "visitors": 9533
+      },
+      {
+        "day": "2015-08-03",
+        "view": 20502,
+        "addtocart": 569,
+        "transaction": 198,
+        "visitors": 13066
+      },
+      {
+        "day": "2015-08-04",
+        "view": 20438,
+        "addtocart": 588,
+        "transaction": 209,
+        "visitors": 12795
+      },
+      {
+        "day": "2015-08-05",
+        "view": 19542,
+        "addtocart": 626,
+        "transaction": 237,
+        "visitors": 12675
+      },
+      {
+        "day": "2015-08-06",
+        "view": 19669,
+        "addtocart": 534,
+        "transaction": 127,
+        "visitors": 12984
+      },
+      {
+        "day": "2015-08-07",
+        "view": 18570,
+        "addtocart": 601,
+        "transaction": 175,
+        "visitors": 11851
+      },
+      {
+        "day": "2015-08-08",
+        "view": 12459,
+        "addtocart": 331,
+        "transaction": 67,
+        "visitors": 8272
+      },
+      {
+        "day": "2015-08-09",
+        "view": 12754,
+        "addtocart": 303,
+        "transaction": 60,
+        "visitors": 8588
+      },
+      {
+        "day": "2015-08-10",
+        "view": 17772,
+        "addtocart": 523,
+        "transaction": 129,
+        "visitors": 11289
+      },
+      {
+        "day": "2015-08-11",
+        "view": 17690,
+        "addtocart": 387,
+        "transaction": 129,
+        "visitors": 11664
+      },
+      {
+        "day": "2015-08-12",
+        "view": 19331,
+        "addtocart": 557,
+        "transaction": 195,
+        "visitors": 12806
+      },
+      {
+        "day": "2015-08-13",
+        "view": 18466,
+        "addtocart": 516,
+        "transaction": 177,
+        "visitors": 12229
+      },
+      {
+        "day": "2015-08-14",
+        "view": 16442,
+        "addtocart": 422,
+        "transaction": 112,
+        "visitors": 10637
+      },
+      {
+        "day": "2015-08-15",
+        "view": 12987,
+        "addtocart": 344,
+        "transaction": 92,
+        "visitors": 8493
+      },
+      {
+        "day": "2015-08-16",
+        "view": 14033,
+        "addtocart": 381,
+        "transaction": 78,
+        "visitors": 9340
+      },
+      {
+        "day": "2015-08-17",
+        "view": 20028,
+        "addtocart": 621,
+        "transaction": 209,
+        "visitors": 12741
+      },
+      {
+        "day": "2015-08-18",
+        "view": 20020,
+        "addtocart": 530,
+        "transaction": 201,
+        "visitors": 12741
+      },
+      {
+        "day": "2015-08-19",
+        "view": 19328,
+        "addtocart": 541,
+        "transaction": 219,
+        "visitors": 12348
+      },
+      {
+        "day": "2015-08-20",
+        "view": 18488,
+        "addtocart": 519,
+        "transaction": 208,
+        "visitors": 11527
+      },
+      {
+        "day": "2015-08-21",
+        "view": 17172,
+        "addtocart": 446,
+        "transaction": 132,
+        "visitors": 11071
+      },
+      {
+        "day": "2015-08-22",
+        "view": 13817,
+        "addtocart": 340,
+        "transaction": 91,
+        "visitors": 8977
+      },
+      {
+        "day": "2015-08-23",
+        "view": 13577,
+        "addtocart": 343,
+        "transaction": 94,
+        "visitors": 9091
+      },
+      {
+        "day": "2015-08-24",
+        "view": 18033,
+        "addtocart": 528,
+        "transaction": 179,
+        "visitors": 11785
+      },
+      {
+        "day": "2015-08-25",
+        "view": 19018,
+        "addtocart": 498,
+        "transaction": 165,
+        "visitors": 12068
+      },
+      {
+        "day": "2015-08-26",
+        "view": 18204,
+        "addtocart": 569,
+        "transaction": 205,
+        "visitors": 11521
+      },
+      {
+        "day": "2015-08-27",
+        "view": 18842,
+        "addtocart": 514,
+        "transaction": 210,
+        "visitors": 12145
+      },
+      {
+        "day": "2015-08-28",
+        "view": 18886,
+        "addtocart": 564,
+        "transaction": 152,
+        "visitors": 12005
+      },
+      {
+        "day": "2015-08-29",
+        "view": 14533,
+        "addtocart": 355,
+        "transaction": 77,
+        "visitors": 9347
+      },
+      {
+        "day": "2015-08-30",
+        "view": 15557,
+        "addtocart": 575,
+        "transaction": 146,
+        "visitors": 9903
+      },
+      {
+        "day": "2015-08-31",
+        "view": 17998,
+        "addtocart": 454,
+        "transaction": 175,
+        "visitors": 11788
+      },
+      {
+        "day": "2015-09-01",
+        "view": 17576,
+        "addtocart": 444,
+        "transaction": 158,
+        "visitors": 11277
+      },
+      {
+        "day": "2015-09-02",
+        "view": 16977,
+        "addtocart": 421,
+        "transaction": 141,
+        "visitors": 11017
+      },
+      {
+        "day": "2015-09-03",
+        "view": 17453,
+        "addtocart": 450,
+        "transaction": 138,
+        "visitors": 11611
+      },
+      {
+        "day": "2015-09-04",
+        "view": 17125,
+        "addtocart": 455,
+        "transaction": 153,
+        "visitors": 11045
+      },
+      {
+        "day": "2015-09-05",
+        "view": 13974,
+        "addtocart": 311,
+        "transaction": 80,
+        "visitors": 9060
+      },
+      {
+        "day": "2015-09-06",
+        "view": 14124,
+        "addtocart": 371,
+        "transaction": 79,
+        "visitors": 9318
+      },
+      {
+        "day": "2015-09-07",
+        "view": 19032,
+        "addtocart": 572,
+        "transaction": 189,
+        "visitors": 12230
+      },
+      {
+        "day": "2015-09-08",
+        "view": 20159,
+        "addtocart": 508,
+        "transaction": 148,
+        "visitors": 12915
+      },
+      {
+        "day": "2015-09-09",
+        "view": 20995,
+        "addtocart": 574,
+        "transaction": 192,
+        "visitors": 13066
+      },
+      {
+        "day": "2015-09-10",
+        "view": 21887,
+        "addtocart": 480,
+        "transaction": 181,
+        "visitors": 14075
+      },
+      {
+        "day": "2015-09-11",
+        "view": 20672,
+        "addtocart": 634,
+        "transaction": 211,
+        "visitors": 13080
+      },
+      {
+        "day": "2015-09-12",
+        "view": 15024,
+        "addtocart": 370,
+        "transaction": 102,
+        "visitors": 9944
+      },
+      {
+        "day": "2015-09-13",
+        "view": 16373,
+        "addtocart": 398,
+        "transaction": 88,
+        "visitors": 10768
+      },
+      {
+        "day": "2015-09-14",
+        "view": 20284,
+        "addtocart": 475,
+        "transaction": 154,
+        "visitors": 13389
+      },
+      {
+        "day": "2015-09-15",
+        "view": 19674,
+        "addtocart": 595,
+        "transaction": 158,
+        "visitors": 12687
+      },
+      {
+        "day": "2015-09-16",
+        "view": 11022,
+        "addtocart": 336,
+        "transaction": 137,
+        "visitors": 6824
+      },
+      {
+        "day": "2015-09-17",
+        "view": 9830,
+        "addtocart": 253,
+        "transaction": 45,
+        "visitors": 6270
+      },
+      {
+        "day": "2015-09-18",
+        "view": 1479,
+        "addtocart": 34,
+        "transaction": 15,
+        "visitors": 1016
+      }
+    ]
+  }
+}

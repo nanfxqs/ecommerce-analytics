@@ -1,0 +1,38 @@
+{
+  "snapshot": {
+    "batch_id": "v2-58e8ae0622ec45269dd5e147cb226a3f",
+    "revision": "c4e1e04acf9d96e193f751743f3feedec7c7b57c8a4b785e566587cf5902cf1e",
+    "timezone": "UTC",
+    "complete": true,
+    "event_bounds": {
+      "start": "2015-05-03",
+      "end": "2015-09-18"
+    },
+    "updated_at": "2026-10-19T13:51:31.393409+00:00"
+  },
+  "selected_range": {
+    "start": "2015-05-03",
+    "end": "2015-09-18"
+  },
+  "data": {
+    "batch_quality": {
+      "category_associated_count": 2099173,
+      "category_coverage": 0.761645890335659,
+      "category_unknown_count": 656928,
+      "consumed_count": 2756101,
+      "input_count": 2756101,
+      "invalid_count": 0,
+      "retry_count": 0,
+      "suspected_duplicate_count": 460,
+      "unique_source_count": 2756101,
+      "valid_count": 2756101
+    },
+    "range_quality": {
+      "valid_count": 2756101,
+      "invalid_count": 0
+    },
+    "reasons": [],
+    "records": [],
+    "anomaly_scope": "batch"
+  }
+}
