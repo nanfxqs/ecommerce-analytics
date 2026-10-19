@@ -2,10 +2,17 @@
 name = "retailrocket-analytics"
 version = "0.1.0"
 requires-python = ">=3.11,<3.13"
-dependencies = ["duckdb==1.4.1", "kafka-python==2.2.15", "streamlit==1.50.0", "plotly==6.3.1"]
+dependencies = [
+    "duckdb==1.4.1",
+    "kafka-python==2.2.15",
+    "streamlit==1.50.0",
+    "plotly==6.3.1",
+    "fastapi==0.119.1",
+    "uvicorn==0.38.0",
+]
 [project.optional-dependencies]
 spark = ["pyspark==3.5.6"]
-dev = ["pytest==8.4.2"]
+dev = ["pytest==8.4.2", "httpx==0.28.1"]
 [project.scripts]
 retailrocket = "retailrocket.cli:main"
 [build-system]

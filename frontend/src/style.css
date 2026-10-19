@@ -1,0 +1,14 @@
+body { margin: 0; color: #24334b; background: #f5f7fb; }
+.shell { min-height: 100vh; }
+.sidebar { border-right: 1px solid #e8edf4; position: relative; }
+.brand { padding: 30px 24px; font-size: 22px; font-weight: 700; letter-spacing: -.6px; }
+.brand .ant-typography { display: block; font-size: 12px; font-weight: 400; margin-top: 6px; letter-spacing: 2px; }
+.sidebar-note { position: absolute; bottom: 24px; padding-left: 24px; color: #8a96aa; font-size: 12px; line-height: 1.8; }
+.content { max-width: 1440px; padding: 32px 36px; }
+header { display: flex; justify-content: space-between; align-items: center; }
+header h2.ant-typography { margin: 8px 0 12px; }
+.section { margin-top: 22px; }
+.metadata { margin-top: 8px; color: #7b889d; font-size: 12px; }
+label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #66758d; }
+input[type=date] { border: 1px solid #d9e0eb; border-radius: 6px; height: 30px; padding: 0 10px; font: inherit; color: #24334b; background: white; }
+footer { margin-top: 30px; color: #8a96aa; font-size: 12px; }
