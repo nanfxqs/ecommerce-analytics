@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Card, Empty, Space, Statistic, Table, Typography } from 'antd';
 import * as echarts from 'echarts';
 export type LiveSnapshot = {
-  run_id: string; updated_at: string; timezone: string; event_time_min: string | null; event_time_max: string | null;
+  run_id: string; updated_at: string; result_received_at?: string; timezone: string; event_time_min: string | null; event_time_max: string | null;
   processed_offsets: Record<string, Record<string, number>>;
   visitors: number; overview: Record<string, number>; quality: Record<string, number>;
   daily: { event_date: string; event: string; count: number }[]; invalid_reasons: Record<string, number>;
@@ -22,8 +22,8 @@ export function LiveMetrics({ snapshot }: { snapshot?: LiveSnapshot | null }) {
   }, [snapshot]);
   if (!snapshot) return <Card className="section" title="本轮持续分析"><Empty description="等待首个已提交业务结果" /></Card>;
   const quality = snapshot.quality;
-  return <section data-testid="live-result" data-run-id={snapshot.run_id} data-result-offsets={JSON.stringify(snapshot.processed_offsets)}>
-    <Card className="section" title="本轮持续分析 · 已提交结果"><Typography.Paragraph type="secondary">统计本轮已处理的全部有效数据，不提供日期裁剪。业务结果更新时间 {snapshot.updated_at} · 原始事件 UTC 范围 {snapshot.event_time_min ?? '暂无有效时间'} 至 {snapshot.event_time_max ?? '暂无有效时间'}。访客为 visitorid 标识的行为主体。</Typography.Paragraph><Space size={45} wrap>{[
+  return <section data-testid="live-result" data-run-id={snapshot.run_id} data-result-offsets={JSON.stringify(snapshot.processed_offsets)} data-result-received-at={snapshot.result_received_at || ""}>
+    <Card className="section" title="本轮持续分析 · 已提交结果"><Typography.Paragraph type="secondary">统计本轮已处理的全部有效数据，不提供日期裁剪。结果接收时间（本机 UTC）<span data-testid="result-received-at">{snapshot.result_received_at || '等待接收时间'}</span> · 引擎记录时间（节点 UTC）{snapshot.updated_at} · 原始事件 UTC 范围 {snapshot.event_time_min ?? '暂无有效时间'} 至 {snapshot.event_time_max ?? '暂无有效时间'}。访客为 visitorid 标识的行为主体。</Typography.Paragraph><Space size={45} wrap>{[
       ['live-valid', '有效行为事件', quality.valid_count], ['live-visitors', '本轮独立访客', snapshot.visitors],
       ['live-view', '浏览', snapshot.overview.view || 0], ['live-cart', '加购', snapshot.overview.addtocart || 0], ['live-purchase', '购买', snapshot.overview.transaction || 0],
     ].map(([id, title, value]) => <Statistic key={id} title={title} value={Number(value)} formatter={v => <span data-testid={id}>{Number(v).toLocaleString('en-US')}</span>} />)}</Space></Card>

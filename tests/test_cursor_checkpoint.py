@@ -25,6 +25,7 @@ class KafkaConsumer:
  def end_offsets(self,ps):return {p:0 for p in ps}
  def close(self):pass
 class Future:
+ def add_callback(self,callback,*args):callback(*args,None);return self
  def get(self,timeout=None):time.sleep(float(os.environ.get('ACK_DELAY','0')));return None
 class KafkaProducer:
  def __init__(self,**kw):pass
