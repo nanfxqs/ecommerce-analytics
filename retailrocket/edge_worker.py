@@ -186,7 +186,7 @@ def work(config,run_id,resume=False):
         stream=None; producer=None; consumer=None; checkpoint=None; ack_log=None
         try:
             manifest,metadata,events=dataset(config,run['dataset'])
-            partitions=config.get('shuffle_partitions',24 if run['dataset']=='full' else 2)
+            partitions=config.get(run['dataset']+'_shuffle_partitions',config.get('shuffle_partitions',24 if run['dataset']=='full' else 2))
             if type(partitions) is not int or not 1 <= partitions <= 200:
                 raise ValueError('shuffle_partitions must be an integer in 1..200')
             changelog=config.get('rocksdb_changelog',False)

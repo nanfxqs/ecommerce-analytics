@@ -8,8 +8,8 @@ import sys
 import pytest
 from retailrocket.ingest import prepare
 
-@pytest.mark.parametrize(('flush_records','seconds','delay','expected'),[(1,1,0,34),(16,1,0,32),(1000,.02,.08,34)])
-def test_worker_crash_preserves_bounded_contiguous_ack_prefix(tmp_path,flush_records,seconds,delay,expected):
+@pytest.mark.parametrize(('flush_records','seconds','delay','expected','expected_partitions'),[(1,1,0,34,24),(16,1,0,32,24),(1000,.02,.08,34,24),(1,1,0,34,1)])
+def test_worker_crash_preserves_bounded_contiguous_ack_prefix(tmp_path,flush_records,seconds,delay,expected,expected_partitions):
     source=tmp_path/'source.csv'
     source.write_text('timestamp,visitorid,event,itemid,transactionid\n'+''.join(f'{i},1,view,a,\n' for i in range(61)))
     manifest=prepare(source,tmp_path/'prepared','fixture')
@@ -51,6 +51,7 @@ class KafkaAdminClient:
     config=dict(root=str(root),code=str(code),brokers='external:9092',audit_crash_after_ack=35,
                 cursor_flush_records=flush_records,cursor_flush_seconds=seconds,shuffle_partitions=24,audit_ack_log=True,observation_interval_seconds=.1,rocksdb_changelog=True,
                 datasets={'small':dict(manifest=str(manifest),events_sha256=hashlib.sha256(events.read_bytes()).hexdigest())})
+    if expected_partitions==1:config['small_shuffle_partitions']=1
     path=tmp_path/'config.json';path.write_text(json.dumps(config))
     env=dict(os.environ,ACK_DELAY=str(delay),PYTHONPATH=str(fake)+os.pathsep+str(Path(__file__).parents[1]))
     result=subprocess.run([sys.executable,'-m','retailrocket.edge_worker','work','--config',str(path),'--run-id',run_id],env=env,capture_output=True,text=True,timeout=30)
@@ -62,9 +63,9 @@ class KafkaAdminClient:
         assert traced[0]['source_line']==2 and traced[0]['topic']=='fixture'
         assert traced[0]['ack_monotonic_ns']>0 and traced[0]['ack_wall_ns']>0
         assert len(traced[0]['source_record_id'])==64
-        assert Path(str(driver)+'.partitions').read_text()=='24'
+        assert Path(str(driver)+'.partitions').read_text()==str(expected_partitions)
         assert '--observation-interval-seconds\n0.1' in Path(str(driver)+'.args').read_text()
-        assert state['stream_profile']['shuffle_partitions']==24
+        assert state['stream_profile']['shuffle_partitions']==expected_partitions
         assert state['stream_profile']['rocksdb_changelog'] is True
         assert Path(str(driver)+'.changelog').read_text()=='true'
         assert state['cursor']==expected
@@ -79,11 +80,11 @@ class KafkaAdminClient:
     assert unchanged['stream_profile']['rocksdb_changelog'] is True
     assert unchanged['cursor']==expected
     config['rocksdb_changelog']=True
-    config['shuffle_partitions']=2;path.write_text(json.dumps(config))
+    config['small_shuffle_partitions']=2;path.write_text(json.dumps(config))
     recovered=subprocess.run([sys.executable,'-m','retailrocket.edge_worker','work','--resume','--config',str(path),'--run-id',run_id],env=env,capture_output=True,text=True,timeout=10)
     final=json.loads((owned/'state.json').read_text())
     assert recovered.returncode==0,recovered.stderr
     assert final['phase']=='failed'
     assert 'checkpoint state partitions cannot migrate' in final['error']
     assert final['cursor']==expected
-    assert final['stream_profile']['shuffle_partitions']==24
+    assert final['stream_profile']['shuffle_partitions']==expected_partitions
