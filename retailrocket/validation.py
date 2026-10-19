@@ -44,5 +44,28 @@ def validate_analysis(snapshot):
         n, unique, minimum, maximum, wrong = db.execute('SELECT count(*), count(DISTINCT source_line), min(source_line), max(source_line), count(*) FILTER (WHERE dataset_version IS DISTINCT FROM ? OR source_file IS DISTINCT FROM ? OR batch_id IS DISTINCT FROM ?) FROM '+union, [source['dataset_version'], source['source_file'], snapshot.batch_id]).fetchone()
         if wrong or n != unique or n != source['rows'] or (n and (minimum != source['first_source_line'] or maximum != source['last_source_line'] or maximum-minimum+1 != n)):
             raise ValueError('Source completeness or identity check failed')
-        if db.execute('SELECT coalesce(sum(count),0) FROM overview').fetchone()[0] != counts['events']:
-            raise ValueError('Overview count differs from valid event count')
+        # Compare multisets, not only gross totals: missing keys, duplicates and
+        # wrong dimensions must not publish plausible-looking partial dashboards.
+        summaries = {
+            'overview': ('event,count', 'SELECT event,count(*) AS count FROM events GROUP BY event'),
+            'visitor_events': ('event_date,visitorid,event', 'SELECT DISTINCT cast(event_time AS DATE) AS event_date,visitorid,event FROM events'),
+            'visitor_daily': ('event_date,visitorid,events,purchases,last_event_time',
+                "SELECT cast(event_time AS DATE) AS event_date,visitorid,count(*) AS events,count(*) FILTER (WHERE event='transaction') AS purchases,max(event_time) AS last_event_time FROM events GROUP BY event_date,visitorid"),
+            'visitor_category_daily': ('event_date,visitorid,categoryid,views,purchases',
+                "SELECT cast(event_time AS DATE) AS event_date,visitorid,categoryid,count(*) FILTER (WHERE event='view') AS views,count(*) FILTER (WHERE event='transaction') AS purchases FROM events GROUP BY event_date,visitorid,categoryid"),
+        }
+        for dimension, table in [('categoryid', 'category_daily'), ('itemid', 'item_daily')]:
+            columns = 'event_date,'+dimension+',events,views,addtocarts,transactions'
+            expected_sql = ("SELECT cast(event_time AS DATE) AS event_date,"+dimension+",count(*) AS events,"
+                            "count(*) FILTER (WHERE event='view') AS views,"
+                            "count(*) FILTER (WHERE event='addtocart') AS addtocarts,"
+                            "count(*) FILTER (WHERE event='transaction') AS transactions "
+                            "FROM events GROUP BY event_date,"+dimension)
+            summaries[table] = columns, expected_sql
+        for table, (columns, expected_sql) in summaries.items():
+            db.execute('CREATE OR REPLACE TEMP VIEW expected_result AS '+expected_sql)
+            actual = 'SELECT '+columns+' FROM '+table
+            expected_result = 'SELECT '+columns+' FROM expected_result'
+            differences = '(('+actual+') EXCEPT ALL ('+expected_result+')) UNION ALL (('+expected_result+') EXCEPT ALL ('+actual+'))'
+            if db.execute('SELECT EXISTS(SELECT 1 FROM ('+differences+'))').fetchone()[0]:
+                raise ValueError(table+' does not reconcile with authoritative events')

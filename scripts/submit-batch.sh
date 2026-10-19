@@ -14,5 +14,5 @@ exec "$SPARK_HOME/bin/spark-submit" --master yarn --deploy-mode client \
   --conf spark.yarn.am.memory=512m --conf spark.executor.memoryOverhead=384 \
   --conf "spark.yarn.am.extraJavaOptions=-XX:CompressedClassSpaceSize=64m -XX:ReservedCodeCacheSize=64m" \
   --conf "spark.executor.extraJavaOptions=-XX:CompressedClassSpaceSize=64m -XX:ReservedCodeCacheSize=64m" \
-  --conf spark.dynamicAllocation.enabled=false --conf spark.sql.shuffle.partitions=3 \
+  --conf spark.dynamicAllocation.enabled=false --conf "spark.sql.shuffle.partitions=${RETAILROCKET_SHUFFLE_PARTITIONS:-24}" \
   --jars "$jars" "$(dirname "$0")/../retailrocket/spark_batch.py" "$@"

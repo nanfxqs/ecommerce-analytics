@@ -2,10 +2,10 @@
 # Host-side additive deployment. Existing Hadoop/Java/Kafka configuration stays intact.
 set -euo pipefail
 edge=${1:-h1}
-uv sync --python 3.11 --extra spark --extra dev --frozen
+uv sync --python 3.11.16 --extra spark --extra dev --frozen
 stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
-python_home=$(uv python find 3.11)
+python_home=$(uv python find 3.11.16)
 python_home=$(dirname "$(dirname "$(readlink -f "$python_home")")")
 tar -C "$(dirname "$python_home")" -czf "$stage/python.tgz" "$(basename "$python_home")"
 tar -C .venv/lib/python3.11/site-packages -czf "$stage/runtime.tgz" pyspark py4j kafka
