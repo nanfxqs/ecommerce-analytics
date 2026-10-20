@@ -10,17 +10,17 @@ async function request(path: string, init?: RequestInit) {
 }
 export function ReplayPage() {
   const [datasets, setDatasets] = useState<Dataset[]>([]), [dataset, setDataset] = useState('small'), [rate, setRate] = useState(5);
-  const [run, setRun] = useState<Run | null>(null), [error, setError] = useState(''), [busy, setBusy] = useState(false), [feedback, setFeedback] = useState('');
+  const [run, setRun] = useState<Run | null>(null), [error, setError] = useState(''), [busy, setBusy] = useState(false), [feedback, setFeedback] = useState<{ message: string; phase: string | undefined } | null>(null);
   useEffect(() => {
     let live = true; let timer: ReturnType<typeof setTimeout>;
     request('datasets').then(body => { if (live) { setDatasets(body); if (body.length) setDataset(body[0].id); } }).catch(e => { if (live) setError(e.message); });
-    const poll = async () => { try { const body = await request('current'); if (live) setRun(body); } catch (e) { if (live) setError((e as Error).message); } finally { if (live) timer = setTimeout(poll, 2000); } };
+    const poll = async () => { try { const body = await request('current'); if (live) { setRun(body); setFeedback(previous => previous && body?.phase !== previous.phase ? null : previous); } } catch (e) { if (live) setError((e as Error).message); } finally { if (live) timer = setTimeout(poll, 2000); } };
     void poll(); return () => { live = false; clearTimeout(timer); };
   }, []);
   const start = async () => { setBusy(true); setError(''); try { setRun(await request('runs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ dataset, rate }) })); } catch (e) { setError((e as Error).message); } finally { setBusy(false); } };
   const control = async (action: 'pause' | 'continue' | 'stop' | 'retry-history' | 'recover') => {
     setBusy(true); setError('');
-    try { const result = await request('current/' + action, { method: 'POST' }); setFeedback(result.duplicate ? '该操作已生效或已提交，无需重复执行' : '操作请求已接受，等待后台确认实际状态'); }
+    try { const result = await request('current/' + action, { method: 'POST' }); setFeedback({ message: result.duplicate ? '该操作已生效或已提交，无需重复执行' : '操作请求已接受，等待后台确认实际状态', phase: run?.phase }); }
     catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   };
@@ -32,7 +32,7 @@ export function ReplayPage() {
     <Typography.Paragraph type="secondary">当前处理时间用于速率和积压；原始事件时间为历史 UTC 时间。关闭浏览器后后台继续运行。</Typography.Paragraph>
     {error && <Alert type="error" message={error} showIcon className="section" />}
     <Card className="section" title="启动有界回放"><Space wrap><Select aria-label="数据版本" value={dataset} onChange={setDataset} disabled={!!active} style={{ width: 260 }} options={datasets.map(d => ({ value: d.id, label: `${d.label}（${d.rows.toLocaleString()} 条）` }))} /><label>每秒速率 <InputNumber aria-label="每秒速率" min={0.1} max={1000000} value={rate} onChange={v => setRate(v || 5)} disabled={!!active} /></label><Button type="primary" onClick={start} loading={busy} disabled={!!active || !datasets.length}>启动回放</Button></Space><Typography.Paragraph type="secondary">每轮只播放一次，不自动循环；同时只允许一轮运行。</Typography.Paragraph></Card>
-    {feedback && <Alert type="info" message={feedback} className="section" />}
+    {feedback && <Alert type="info" message={feedback.message} className="section" />}
     {run ? <>
       <Card className="section" title="回放控制"><Space wrap>
         <Button type="primary" onClick={() => control('recover')} disabled={busy || !['recovery_required','failed'].includes(run.phase) || run.failure_stage === 'history'}>恢复此轮次</Button>
@@ -40,6 +40,7 @@ export function ReplayPage() {
         <Button onClick={() => control('continue')} disabled={busy || run.phase !== 'paused'}>继续发送</Button>
         <Button danger onClick={() => control('stop')} disabled={busy || !['running', 'paused'].includes(run.phase)}>提前停止</Button>
         {['failed','recovery_required'].includes(run.phase) && run.failure_stage === 'history' && <Button onClick={() => control('retry-history')} disabled={busy}>重试历史分析与发布</Button>}
+        {run.phase === 'recovery_required' && run.failure_stage === 'history' && <Typography.Text>回放已完整处理，历史阶段需要恢复；请点击“重试历史分析与发布”。</Typography.Text>}
         {run.pending_control && <Typography.Text>等待后台确认：{run.pending_control.action}</Typography.Text>}
         {run.last_control?.acknowledged && <Typography.Text>后台已确认：{({pause:'暂停',continue:'继续',stop:'停止'} as Record<string,string>)[run.last_control.action]}</Typography.Text>}
       </Space><Typography.Paragraph type="secondary">暂停仅停止新消息发送，处理端继续消化积压；提前停止不会自动发布历史分析。</Typography.Paragraph></Card>

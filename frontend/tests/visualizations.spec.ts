@@ -111,3 +111,28 @@ test('profile intervals use readable units and desktop navigation stays reachabl
   await page.setViewportSize({ width: 600, height: 650 });
   expect(await sidebar.evaluate(node => getComputedStyle(node).position)).toBe('relative');
 });
+
+test('history retry advances past recovery and clears accepted feedback while live results remain visible', async ({ page }) => {
+  let phase = 'recovery_required';
+  await page.route('**/api/replay/datasets', route => route.fulfill({ json: [] }));
+  await page.route('**/api/replay/current', route => route.fulfill({ json: {
+    run_id: 'history-retry', phase, failure_stage: 'history', complete: true,
+    historical_status: phase === 'recovery_required' ? 'failed' : 'analyzing',
+    snapshot: { run_id: 'history-retry', updated_at: '2026-10-20T00:00:00Z', timezone: 'UTC',
+      processed_offsets: {}, visitors: 1, overview: { view: 100 }, quality: { valid_count: 100 },
+      daily: [{ event_date: '2015-01-01', event: 'view', count: 100 }], invalid_reasons: {} },
+  } }));
+  await page.route('**/api/replay/current/retry-history', route => {
+    phase = 'analyzing';
+    return route.fulfill({ status: 202, json: { accepted: true, run_id: 'history-retry' } });
+  });
+  await page.goto('/');
+  await page.getByRole('menuitem', { name: '实时监控' }).click();
+  await expect(page.getByText('等待手动恢复', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('live-valid')).toHaveText('100');
+  await page.getByRole('button', { name: '重试历史分析与发布' }).click();
+  await expect(page.getByText('完整历史分析中', { exact: true })).toBeVisible();
+  await expect(page.getByText('操作请求已接受，等待后台确认实际状态')).toHaveCount(0);
+  await expect(page.getByText('等待手动恢复', { exact: true })).toHaveCount(0);
+  await expect(page.getByTestId('live-valid')).toHaveText('100');
+});

@@ -156,6 +156,8 @@ class Runs:
         with self.lock:
             if not self.finalizer or not self.current or self.current.get('failure_stage') != 'history' or self.current['phase'] not in ('failed','recovery_required'):
                 raise ValueError('当前轮次没有可重试的历史分析失败')
+            # Invalidate an in-flight recovery observation before changing stages.
+            self.current['control_generation'] = self.current.get('control_generation', 0) + 1
             self.current.update(phase='historical_pending',historical_status='pending',history_retry=True,error=None)
             self._save()
             return dict(accepted=True,run_id=self.current['run_id'])

@@ -142,3 +142,29 @@ def test_restart_waits_for_manual_recovery_then_adopts_existing_historical_stage
         assert client.post('/api/replay/current/recover').status_code==202
         state=wait(client,lambda s:s.get('historical_status')=='published')
         assert state['run_id']==run['run_id']
+
+
+def test_history_retry_is_not_overwritten_by_inflight_recovery_observation(tmp_path):
+    from threading import Event
+    from retailrocket.runs import atomic
+    entered, release = Event(), Event()
+
+    class Racing(Cluster):
+        def quiesce(self, run):
+            entered.set()
+            assert release.wait(5)
+            return self.observe(run)
+
+    runs = tmp_path/'runs'
+    atomic(runs/'current.json', dict(run_id='retry-race', phase='failed',
+           failure_stage='history', complete=True, stream_released=True,
+           ends={'0': 2}, committed={'0': 2}, result_offsets={'0': 2}))
+    cluster = Racing(tmp_path)
+    with TestClient(create_app(tmp_path/'pub', run_store=runs, cluster=cluster, poll_seconds=.01)) as client:
+        assert entered.wait(2)
+        try:
+            assert client.post('/api/replay/current/retry-history').status_code == 202
+        finally:
+            release.set()
+        state = wait(client, lambda s: s.get('historical_status') == 'published')
+        assert state['phase'] == 'completed'
