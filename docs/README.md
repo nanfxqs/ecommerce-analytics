@@ -7,6 +7,7 @@
 | 启动、讲解顺序、暂停/继续/停止、现场备用 | [演示操作手册](demo.md) |
 | 六人模块职责、协作接口、个人交付与答辩 | [团队分工表](team-division.md) |
 | 理解架构与数据流 | [架构说明](architecture.md) |
+| 图表说明、独立刻度与画像群体统计 | [可视化口径](visualization.md) |
 | 查看版本范围与完成状态 | [路线图](roadmap.md) |
 | 安装、下载、V1 手动批处理与发布、开发测试 | [手动命令参考](operations/manual-commands.md) |
 | 部署 V2 worker、详细控制与恢复 | [回放说明](operations/replay.md) |

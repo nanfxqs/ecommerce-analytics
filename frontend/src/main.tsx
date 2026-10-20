@@ -1,28 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Alert, Button, Card, Col, ConfigProvider, Empty, Layout, Menu, Row, Space, Spin, Statistic, Tag, Typography } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
-import * as echarts from 'echarts';
+import { BehaviorTrend } from './Charts';
 import { type HistoryResponse, type Overview } from './api';
 import { HistoryPages, fetchHistoryPage, historyLabels, initialHistoryOptions, type HistoryPage } from './HistoryPages';
 import './style.css';
 import { ReplayPage } from './ReplayPage';
 
 const { Title, Text } = Typography;
-function Trend({ rows }: { rows: Overview['trend'] }) {
-  const element = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const chart = echarts.init(element.current!);
-    chart.setOption({ tooltip: { trigger: 'axis' }, legend: { bottom: 0 }, grid: { left: 60, right: 60, top: 25, bottom: 65 }, xAxis: { type: 'category', data: rows.map(r => r.day) }, yAxis: [{ type: 'value', name: '行为事件' }, { type: 'value', name: '独立访客' }], series: [
-      ...(['view', 'addtocart', 'transaction'] as const).map((key, i) => ({ name: ['浏览', '加购', '购买'][i], type: 'line', data: rows.map(r => r[key]), smooth: false })),
-      { name: '每日独立访客', type: 'line', yAxisIndex: 1, data: rows.map(r => r.visitors), lineStyle: { type: 'dashed' } }
-    ] });
-    const observer = new ResizeObserver(() => chart.resize());
-    observer.observe(element.current!);
-    return () => { observer.disconnect(); chart.dispose(); };
-  }, [rows]);
-  return <div role="img" aria-label="UTC 每日行为与独立访客趋势" ref={element} style={{ height: 340 }} />;
-}
 
 function App() {
   const [replay, setReplay] = useState(false);
@@ -80,7 +66,7 @@ function App() {
           {snapshot.event_bounds.start && <Card className="section" size="small"><Space wrap align="end"><label>开始日期<input aria-label="开始日期" type="date" value={draft[0]} onChange={e => setDraft([e.target.value, draft[1]])} /></label><label>结束日期<input aria-label="结束日期" type="date" value={draft[1]} onChange={e => setDraft([draft[0], e.target.value])} /></label><Button type="primary" onClick={apply} loading={loading}>应用日期</Button><Text type="secondary">含开始及结束日全天 · UTC</Text></Space></Card>}
           {page !== 'overview' ? <HistoryPages page={page} payload={result?.data} options={options} onOptions={setOptions} /> : data ? <>
             <Row gutter={[16, 16]} className="section">{([['view', '浏览事件', data.counts.view], ['addtocart', '加购事件', data.counts.addtocart], ['transaction', '购买事件', data.counts.transaction], ['visitors', '独立访客', data.visitors.visitors]] as const).map(([key, label, value]) => <Col span={6} key={key}><Card><Statistic title={label} value={value} formatter={() => <span data-testid={'count-' + key}>{value.toLocaleString('en-US')}</span>} /></Card></Col>)}</Row>
-            <Card className="section" title="UTC 每日趋势"><Text type="secondary">查询范围 {result?.selected_range?.start} — {result?.selected_range?.end} · 独立访客跨日去重，每日人数不可相加。</Text>{data.trend.length ? <Trend rows={data.trend} /> : <Empty description="所选日期范围无数据" />}</Card>
+            <Card className="section" title="UTC 每日趋势"><Text type="secondary">查询范围 {result?.selected_range?.start} — {result?.selected_range?.end} · 独立访客跨日去重，每日人数不可相加。</Text>{data.trend.length ? <BehaviorTrend rows={data.trend} visitors label="UTC 每日行为与独立访客趋势" /> : <Empty description="所选日期范围无数据" />}</Card>
           </> : <Card className="section"><Empty description="无有效事件数据" /></Card>}
         </>}
         <footer>Retailrocket 公开历史数据 · 页面每 2 秒查询已发布结果 · 历史活动不代表当前访问</footer>

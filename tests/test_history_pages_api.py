@@ -68,3 +68,22 @@ def test_quality_keeps_invalid_time_in_batch_scope_and_reconciles_duplicates(cli
     assert scoped['anomaly_scope'] == 'range' and scoped['reasons'] == [] and scoped['records'] == []
     assert client.get('/api/history/quality?limit=501').status_code == 422
     assert client.get('/api/history/quality?scope=unknown').status_code == 422
+
+
+def test_profile_population_charts_use_entire_range_not_lookup_or_page(client):
+    path = '/api/history/profiles?start=1970-01-01&end=1970-01-02'
+    population = client.get(path + '&page_size=1').json()['data']['population']
+    assert population['total'] == 3
+    assert population['scope'] == 'selected_range_all_visitors'
+    assert [(r['label'], r['count']) for r in population['active_days']] == [
+        ('1天', 2), ('2～3天', 1), ('4～7天', 0), ('8天及以上', 0)]
+    assert [r['count'] for r in population['recency']] == [3, 0, 0, 0]
+    assert population['active_days'][0]['share'] == 2/3
+    for extra in ('&page_size=1&page_number=2', '&visitorid=1', '&visitorid=missing'):
+        assert client.get(path + extra).json()['data']['population'] == population
+    wider = client.get('/api/history/profiles?start=1970-01-01&end=1970-01-04').json()['data']['population']
+    assert wider['total'] == 4
+    assert [r['count'] for r in wider['recency']] == [1, 3, 0, 0]
+    empty = client.get('/api/history/profiles?start=1970-01-03&end=1970-01-03').json()['data']['population']
+    assert empty['total'] == 0
+    assert all(r['count'] == 0 and r['share'] is None for r in empty['active_days'] + empty['recency'])

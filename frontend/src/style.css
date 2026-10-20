@@ -14,3 +14,6 @@ input[type=date] { border: 1px solid #d9e0eb; border-radius: 6px; height: 30px; 
 footer { margin-top: 30px; color: #8a96aa; font-size: 12px; }
 input:not([type=date]), select { border: 1px solid #d9e0eb; border-radius: 6px; height: 30px; padding: 0 10px; font: inherit; color: #24334b; background: white; }
 input[type=number] { width: 90px; }
+.chart { width: 100%; min-width: 0; }
+.chart-scroll { max-height: 520px; overflow-y: auto; }
+.chart-note { margin-bottom: 0 !important; }
