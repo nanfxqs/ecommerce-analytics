@@ -20,9 +20,31 @@ def local_path(value):
     return path if path.is_absolute() else ROOT / path
 
 
+def require_full_history(store):
+    from retailrocket.publication import current_snapshot
+    snapshot = current_snapshot(store)
+    if snapshot.metadata['input']['rows'] != 2756101:
+        raise RuntimeError('全量展示需要已发布的 2,756,101 条完整历史；请检查 full_history_seed_store。')
+
+
+def full_history_config(config):
+    normal_store = local_path(config['store']).resolve()
+    config = dict(config)
+    config['seed_store'] = config.get('full_history_seed_store', config['seed_store'])
+    config['store'] = config.get('full_history_store', '.demo/full-history-published')
+    if local_path(config['store']).resolve() == local_path(config['seed_store']).resolve():
+        raise RuntimeError('全量展示目录不能与源历史存储相同。')
+    if local_path(config['store']).resolve() == normal_store:
+        raise RuntimeError('全量展示目录不能与普通回放存储相同。')
+    require_full_history(local_path(config['seed_store']))
+    config['cluster_config'] = None
+    return config
+
+
 def main():
     parser = argparse.ArgumentParser(description='统一启动课程演示，打开 http://127.0.0.1:5173；Ctrl+C 退出。')
     parser.add_argument('action', nargs='?', choices=['stop'], help='停止演示、集群并正常关闭项目虚拟机')
+    parser.add_argument('--full-history', action='store_true', help='直接展示已验收全量历史，不启动集群或回放')
     parser.add_argument('--history-only', action='store_true', help='仅展示已有历史结果，不启动或连接集群')
     parser.add_argument('--config', default='.demo/config.json', help='本机配置，详细说明见 docs/demo.md')
     args = parser.parse_args()
@@ -98,6 +120,8 @@ def main():
                 raise RuntimeError('指定配置不存在：' + str(config_path))
             shutil.copyfile(ROOT / 'config/demo.example.json', config_path)
         config = json.loads(config_path.read_text())
+        if args.full_history:
+            config = full_history_config(config)
         api_port = int(config.get('api_port', 8000))
         web_port = int(config.get('web_port', 5173))
         if api_port == web_port or not all(1 <= p <= 65535 for p in (api_port, web_port)):
@@ -124,7 +148,9 @@ def main():
             target.parent.mkdir(parents=True, exist_ok=True)
             run(['cp', '-a', '--reflink=auto', str(seed.directory), str(target)], 'seed', 300)
             (store / 'current.json').write_text(json.dumps(dict(batch_id=seed.batch_id, revision=seed.directory.name)))
-        cluster = config.get('cluster_config') if not args.history_only else None
+        if args.full_history:
+            require_full_history(store)
+        cluster = config.get('cluster_config') if not (args.history_only or args.full_history) else None
         if cluster:
             starter = config.get('cluster_start_script')
             if starter:
@@ -153,7 +179,7 @@ def main():
         web = start(['npm', '--prefix', 'frontend', 'run', 'preview', '--', '--port', str(web_port), '--strictPort'], 'web', env)
         url = f'http://127.0.0.1:{web_port}'
         ready(url, web)
-        print(f'\n演示已就绪：{url}\n模式：' + ('历史分析＋真实集群回放' if cluster else '历史分析（离线）') +
+        print(f'\n演示已就绪：{url}\n模式：' + ('全量历史展示（不启动回放）' if args.full_history else ('历史分析＋真实集群回放' if cluster else '历史分析（离线）')) +
               '\n结束并关闭虚拟机：另开终端运行 ./demo stop；仅关闭页面/API 可按 Ctrl+C。' +
               '\n详细操作：docs/demo.md\n', flush=True)
         while api.poll() is None and web.poll() is None:
