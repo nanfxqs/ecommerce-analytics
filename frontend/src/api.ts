@@ -1,4 +1,4 @@
-export type Snapshot = { batch_id: string; revision: string; timezone: 'UTC'; complete: boolean; event_bounds: { start: string | null; end: string | null }; updated_at: string };
+export type Snapshot = { batch_id: string; revision: string; timezone: 'UTC'; complete: boolean; pinned?: boolean; event_bounds: { start: string | null; end: string | null }; updated_at: string };
 export type HistoryResponse<T> = { snapshot: Snapshot | null; selected_range: { start: string; end: string } | null; data: T | null };
 export type Overview = { counts: { view: number; addtocart: number; transaction: number }; visitors: { visitors: number }; trend: { day: string; view: number; addtocart: number; transaction: number; visitors: number }[] };
 export async function historyOverview(range: [string, string] | null, signal: AbortSignal): Promise<HistoryResponse<Overview>> {

@@ -37,14 +37,14 @@ def full_history_config(config):
     if local_path(config['store']).resolve() == normal_store:
         raise RuntimeError('全量展示目录不能与普通回放存储相同。')
     require_full_history(local_path(config['seed_store']))
-    config['cluster_config'] = None
+    config['publication_store'] = str(normal_store)
     return config
 
 
 def main():
     parser = argparse.ArgumentParser(description='统一启动课程演示，打开 http://127.0.0.1:5173；Ctrl+C 退出。')
     parser.add_argument('action', nargs='?', choices=['stop'], help='停止演示、集群并正常关闭项目虚拟机')
-    parser.add_argument('--full-history', action='store_true', help='直接展示已验收全量历史，不启动集群或回放')
+    parser.add_argument('--full-history', action='store_true', help='历史固定展示全量结果，同时启用真实集群回放控制')
     parser.add_argument('--history-only', action='store_true', help='仅展示已有历史结果，不启动或连接集群')
     parser.add_argument('--config', default='.demo/config.json', help='本机配置，详细说明见 docs/demo.md')
     args = parser.parse_args()
@@ -150,7 +150,7 @@ def main():
             (store / 'current.json').write_text(json.dumps(dict(batch_id=seed.batch_id, revision=seed.directory.name)))
         if args.full_history:
             require_full_history(store)
-        cluster = config.get('cluster_config') if not (args.history_only or args.full_history) else None
+        cluster = config.get('cluster_config') if not args.history_only else None
         if cluster:
             starter = config.get('cluster_start_script')
             if starter:
@@ -166,6 +166,8 @@ def main():
         api_url = f'http://127.0.0.1:{api_port}'
         command = [str(ROOT / '.venv/bin/python'), '-m', 'retailrocket.api', '--store', str(store),
                    '--port', str(api_port), '--poll-seconds', '0.25']
+        if args.full_history:
+            command += ['--publication-store', str(local_path(config['publication_store']))]
         if cluster:
             command += ['--cluster-config', str(local_path(cluster))]
         print('启动后台并校验历史结果……', flush=True)
@@ -179,7 +181,7 @@ def main():
         web = start(['npm', '--prefix', 'frontend', 'run', 'preview', '--', '--port', str(web_port), '--strictPort'], 'web', env)
         url = f'http://127.0.0.1:{web_port}'
         ready(url, web)
-        print(f'\n演示已就绪：{url}\n模式：' + ('全量历史展示（不启动回放）' if args.full_history else ('历史分析＋真实集群回放' if cluster else '历史分析（离线）')) +
+        print(f'\n演示已就绪：{url}\n模式：' + (('全量历史固定展示＋真实集群回放' if cluster else '全量历史展示（离线）') if args.full_history else ('历史分析＋真实集群回放' if cluster else '历史分析（离线）')) +
               '\n结束并关闭虚拟机：另开终端运行 ./demo stop；仅关闭页面/API 可按 Ctrl+C。' +
               '\n详细操作：docs/demo.md\n', flush=True)
         while api.poll() is None and web.poll() is None:

@@ -72,7 +72,7 @@ class History:
                 trend=query.daily_trend(snapshot.directory, start, end))
             result = jsonable_encoder(dict(snapshot=dict(
                 batch_id=snapshot.batch_id, revision=snapshot.directory.name,
-                timezone='UTC', complete=True,
+                timezone='UTC', complete=True, pinned=getattr(self, 'pinned', False),
                 event_bounds=dict(start=bounds[0], end=bounds[1]),
                 updated_at=datetime.fromtimestamp((snapshot.directory/'publication.json').stat().st_mtime, timezone.utc)),
                 selected_range=dict(start=start, end=end), data=data))
@@ -82,12 +82,14 @@ class History:
             return result
 
 
-def create_app(store, *, run_store=None, cluster=None, poll_seconds=2, publication_checkpoint=None):
+def create_app(store, *, run_store=None, cluster=None, poll_seconds=2, publication_checkpoint=None, publication_store=None):
     app = FastAPI(title='Retailrocket 历史数据回放')
     app.state.history = History(store)
+    replay_store = Path(publication_store) if publication_store is not None else Path(store)
+    app.state.history.pinned = replay_store.resolve() != Path(store).resolve()
     if cluster is not None:
         from retailrocket.runs import Runs, replay_router
-        runs = Runs(run_store or Path(store).parent/'replay-runs', cluster, poll_seconds, publication_store=store, publication_checkpoint=publication_checkpoint)
+        runs = Runs(run_store or replay_store.parent/'replay-runs', cluster, poll_seconds, publication_store=replay_store, publication_checkpoint=publication_checkpoint)
         app.state.runs = runs
         app.include_router(replay_router(runs))
         app.add_event_handler('shutdown', runs.close)
@@ -117,6 +119,7 @@ def main():
     parser.add_argument('--store', required=True)
     parser.add_argument('--port', type=int, default=8000)
     parser.add_argument('--cluster-config')
+    parser.add_argument('--publication-store', help='回放结果发布目录；默认与历史查询目录相同')
     parser.add_argument('--poll-seconds',type=float,default=2,help='Serial background cache refresh delay; browser remains2seconds')
     args = parser.parse_args()
     if not 0 < args.poll_seconds <= 60:parser.error('--poll-seconds must be in(0,60]')
@@ -125,7 +128,7 @@ def main():
         import json
         from retailrocket.runs import SSHCluster
         cluster = SSHCluster(json.loads(Path(args.cluster_config).read_text()))
-    uvicorn.run(create_app(args.store, cluster=cluster,poll_seconds=args.poll_seconds), host='127.0.0.1', port=args.port)
+    uvicorn.run(create_app(args.store, cluster=cluster,poll_seconds=args.poll_seconds,publication_store=args.publication_store), host='127.0.0.1', port=args.port)
 
 
 if __name__ == '__main__':
