@@ -6,6 +6,7 @@ data/
 runs/
 .env
 .scratch/
+.demo/
 frontend/node_modules/
 frontend/dist/
 frontend/test-results/

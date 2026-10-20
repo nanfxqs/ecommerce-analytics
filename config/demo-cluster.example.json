@@ -1,0 +1,7 @@
+{
+  "host": "h1",
+  "python": "/home/hadoop/opt/cpython-3.11.16-linux-x86_64-gnu/bin/python3.11",
+  "code": "/home/hadoop/opt/ecommerce-v2-acceptance",
+  "runtime": "/home/hadoop/opt/retailrocket-runtime",
+  "remote_config": "/home/hadoop/opt/ecommerce-v2-acceptance/edge-normal.json"
+}
