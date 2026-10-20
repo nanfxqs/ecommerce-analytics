@@ -76,3 +76,38 @@ test('million-scale views and small purchases have independent readable historic
   await expect(page.getByTestId('live-purchase')).toHaveText('30');
   await page.screenshot({ path: '.scratch/visual-checks/extreme-live.png', fullPage: true });
 });
+
+test('profile intervals use readable units and desktop navigation stays reachable while scrolling', async ({ page }) => {
+  await page.route('**/api/history/profiles*', route => route.fulfill({ json: {
+    snapshot: { batch_id: 'units', revision: 'fixed', timezone: 'UTC', complete: true,
+      event_bounds: { start: '2015-01-01', end: '2015-01-03' }, updated_at: '2026-10-20T00:00:00Z' },
+    selected_range: { start: '2015-01-01', end: '2015-01-03' },
+    data: { total: 8, page: 1, page_size: 20, reference_time: '2015-01-03T00:00:00Z',
+      visitors: [129600, 5400, 90, 45, 0, null, 86400, 3600].map((seconds, index) => ({
+        visitorid: String(index), active_days: 1, events: 1, purchases: 0,
+        last_event_time: '2015-01-01T00:00:00Z', recency_seconds: seconds, categories: [],
+      })),
+    },
+  } }));
+  await page.setViewportSize({ width: 1440, height: 650 });
+  await page.goto('/');
+  await page.getByRole('menuitem', { name: '用户画像' }).click();
+  const table = page.locator('.ant-table');
+  await expect(table.getByRole('columnheader', { name: '最近活跃间隔', exact: true })).toBeVisible();
+  for (const text of ['1.5 天', '1.5 小时', '1.5 分钟', '45 秒', '0 秒', '—', '1 天', '1 小时']) {
+    await expect(table.getByRole('cell', { name: text, exact: true })).toHaveCount(1);
+  }
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(100);
+  const sidebar = page.locator('.sidebar');
+  expect((await sidebar.boundingBox())!.y).toBeCloseTo(0);
+  await page.getByRole('menuitem', { name: '行为概览' }).click();
+  await expect(page.getByRole('heading', { name: '行为概览', exact: true })).toHaveCount(1);
+  await page.setViewportSize({ width: 1440, height: 280 });
+  await expect.poll(() => sidebar.evaluate(node => ({ height: node.clientHeight, scroll: node.scrollHeight, css: getComputedStyle(node).height }))).toMatchObject({ height: 280 });
+  expect(await sidebar.evaluate(node => node.scrollHeight > node.clientHeight)).toBeTruthy();
+  await sidebar.evaluate(node => { node.scrollTop = node.scrollHeight; });
+  await expect(page.getByRole('menuitem', { name: '数据质量' })).toBeVisible();
+  await page.setViewportSize({ width: 600, height: 650 });
+  expect(await sidebar.evaluate(node => getComputedStyle(node).position)).toBe('relative');
+});

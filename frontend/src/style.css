@@ -17,3 +17,10 @@ input[type=number] { width: 90px; }
 .chart { width: 100%; min-width: 0; }
 .chart-scroll { max-height: 520px; overflow-y: auto; }
 .chart-note { margin-bottom: 0 !important; }
+
+@media (min-width: 768px) {
+  .shell > .sidebar { position: sticky; top: 0; align-self: flex-start; height: 100vh; height: 100dvh; overflow-y: auto; }
+  .sidebar .ant-layout-sider-children { display: flex; flex-direction: column; min-height: 100%; height: auto; }
+  .sidebar .ant-layout-sider-children > * { flex-shrink: 0; }
+  .sidebar .sidebar-note { position: static; margin-top: auto; padding: 24px; }
+}
