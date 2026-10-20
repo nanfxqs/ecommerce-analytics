@@ -4,5 +4,11 @@
   "cluster_config": "config/demo-cluster.example.json",
   "cluster_start_script": "../hadoop-cluster/start-cluster.sh",
   "api_port": 8000,
-  "web_port": 5173
+  "web_port": 5173,
+  "cluster_stop_script": "../hadoop-cluster/stop-cluster.sh",
+  "cluster_vms": [
+    "vm-hadoop01",
+    "vm-hadoop02",
+    "vm-hadoop03"
+  ]
 }
